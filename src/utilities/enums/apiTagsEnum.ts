@@ -1,0 +1,16 @@
+export enum ApiTagsEnum {
+  Authentication = "Authentication",
+  Applicant = "Applicant",
+  ActivityLog = "ActivityLog",
+  Business = "Business",
+  LetterOfCredit = "LetterOfCredit",
+  AuditLog = "AuditLog",
+  EInvoice = "EInvoice",
+  Invoice = "Invoice",
+  InvoiceComment = "InvoiceComment",
+  Role = "Role",
+  User = "User",
+  Item = "Item",
+  SalesOrder = "SalesOrder",
+  Customer = "Customer",
+}
