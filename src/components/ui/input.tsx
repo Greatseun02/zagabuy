@@ -13,7 +13,7 @@ import Typography from "./typography";
 import { cn } from "@/lib/utils";
 import { IconType, IconRenderProps } from "@/utilities/types/iconTypes";
 import { renderIcon } from "@/utilities/helpers/iconRenderer";
-import type { Formik } from "@/utilities/types/index";
+import type { Formik } from "@/utilities/types";
 
 export interface InputProps<T extends FormikValues = any>
   extends Omit<React.InputHTMLAttributes<HTMLInputElement>, "name"> {

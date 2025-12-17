@@ -4,8 +4,8 @@ export type AppConfig = {
   stage: "Dev" | "Prod";
 };
 export const appConfig: AppConfig = {
-  baseUrlDev: "https://api-dev.nairainvoice.com/dev",
+  baseUrlDev: "https://z2gnw9043c.execute-api.us-east-1.amazonaws.com/api/dev",
   baseUrlProd:
-    "https://kvywacwvy2.execute-api.us-east-1.amazonaws.com/api/prod",
+    "https://z2gnw9043c.execute-api.us-east-1.amazonaws.com/api/prod",
   stage: "Dev",
 };

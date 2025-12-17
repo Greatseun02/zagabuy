@@ -11,14 +11,11 @@ import {
 import { appConfig } from "@/configs/appConfig";
 import { BaseResponse } from "@/utilities/types";
 import { BaseUtil } from "@/utilities/baseUtil";
-// import { toastUtil } from "@/utilities/toastUtil";
 import { RootState } from "@/stores";
 import { ApiTagsEnum } from "@/utilities/enums/apiTagsEnum";
 import { authStore } from "@/stores/authStore";
 import { RouteConstant } from "@/utilities/constants/routeConstant";
-// import { ModalUtil } from "qucoon-components";
-// import { ModalEnum } from "@/utilities/enums/modalEnum";
-// import RouterUtil from "@/utilities/routerUtil";
+import { toast } from "sonner";
 
 // Extended FetchArgs to include expected response codes
 interface ExtendedFetchArgs extends FetchArgs {
@@ -43,17 +40,17 @@ const handleApiError = (
     message.includes("JWT") ||
     message.toLowerCase().includes("invalid authorization token")
   ) {
-    // toastUtil.showUniqueToast(
-    //   "session-expired",
-    //   "Session expired, kindly login",
-    //   "error"
-    // );
+    // show a unique toast for session expiry
+    toast.error("Session expired, kindly login", { id: "session-expired" });
+    // clear auth state
     api.dispatch(authStore.action.logout());
+    // redirect to login when possible
     if (typeof window !== "undefined") {
-      // RouterUtil.navigate(RouteConstant.auth.login.path);
-      // console.log("window:", window)
-      // window.history.pushState(null, "", RouteConstant.authentication.login.path,)
-      // window.location.href = RouteConstant.authentication.login.path;
+      try {
+        window.location.href = RouteConstant.auth.login.path;
+      } catch (e) {
+        // fallback: no-op
+      }
     }
     return;
   }
@@ -64,27 +61,23 @@ const handleApiError = (
       // Don't show toast for validation errors - let form handle them
       break;
     case 403:
-      // toastUtil.showUniqueToast("forbidden", "Forbidden resource", "error");
+      toast.error("Forbidden resource", { id: "forbidden" });
       break;
     case 404:
-      // toastUtil.showUniqueToast("not-found", "Resource not found", "error");
+      toast.error("Resource not found", { id: "not-found" });
       break;
     case 500:
-      // toastUtil.showUniqueToast("server-error", "Server error", "error");
+      toast.error("Server error", { id: "server-error" });
       break;
     case "FETCH_ERROR":
-      // toastUtil.showUniqueToast(
-      //   "network-error",
-      //   "Network error, please check your connection",
-      //   "error"
-      // );
+      toast.error("Network error, please check your connection", {
+        id: "network-error",
+      });
       break;
     case "TIMEOUT_ERROR":
-      // toastUtil.showUniqueToast(
-      //   "timeout-error",
-      //   "Request timed out, try again later",
-      //   "error"
-      // );
+      toast.error("Request timed out, try again later", {
+        id: "timeout-error",
+      });
       break;
     default:
       if (
@@ -96,11 +89,9 @@ const handleApiError = (
           expectedResponseCodes.includes(responseCode)
         )
       ) {
-        // ModalUtil.getInstance().open(ModalEnum.AppErrorModal, {
-        //   message: message,
-        //   title: "Error Occurred",
-        // });
-        // toastUtil.showUniqueToast(`error-${status}`, message, "error");
+        toast.error(message, {
+          id: `error-${status}`,
+        });
       }
   }
 };
@@ -111,7 +102,13 @@ const baseQuery = fetchBaseQuery({
     const authState = (getState() as RootState).auth;
     const token = authState?.token || "";
 
-    headers.set("Authorization", `${token}`);
+    // Ensure the Authorization header uses Bearer scheme unless already present
+    const authHeader = token
+      ? token.startsWith("Bearer ")
+        ? token
+        : `Bearer ${token}`
+      : "";
+    if (authHeader) headers.set("Authorization", authHeader);
 
     headers.set("Content-Type", "application/json");
     headers.set("Accept", "application/json");
@@ -130,7 +127,6 @@ const baseQueryWithErrorHandling: BaseQueryFn<
 
   // Extract our custom properties
   let expectedResponseCodes: string[] | undefined;
-  // let skipGlobalErrorHandling = false;
   let cleanArgs = args;
 
   if (typeof args === "object" && "expectedResponseCodes" in args) {
@@ -144,11 +140,6 @@ const baseQueryWithErrorHandling: BaseQueryFn<
   }
 
   const result = await baseQuery(cleanArgs, api, extraOptions);
-
-  // Skip all error handling if requested
-  // if (skipGlobalErrorHandling) {
-  //     return result;
-  // }
 
   // Handle API errors
   if (result.error) {

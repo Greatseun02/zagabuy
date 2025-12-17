@@ -34,11 +34,7 @@ export const authenticationService = BaseService.appClient.injectEndpoints({
           if (BaseUtil.isApiResponseSuccessful(data)) {
             dispatch(authStore.mutation.setCoreAuthState(data));
           }
-          //   else {
-
-          //   }
         } catch (error) {
-          // Handle login error
           BaseUtil.logger("Login failed:", error);
         }
       },

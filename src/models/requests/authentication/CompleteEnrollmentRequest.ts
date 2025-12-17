@@ -1,10 +1,8 @@
 export type CompleteEnrollmentRequest = {
-    userEmail: string,
-    userPassword: string,
-    userPasswordConfirmation: string
-}
+  userEmail: string;
+  otp: string;
+};
 export const completeEnrollmentRequestInit = {
-    userEmail: "",
-    userPassword: "",
-    userPasswordConfirmation: ""
-}
+  userEmail: "",
+  otp: "",
+};

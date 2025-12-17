@@ -16,7 +16,12 @@ export default function VerifyOtpForm() {
   const [otp, setOtp] = useState<string>("");
 
   return (
-    <form onSubmit={() => config?.onValidOtpEntered(otp)}>
+    <form
+      onSubmit={(e) => {
+        e.preventDefault();
+        config?.onValidOtpEntered(otp);
+      }}
+    >
       <InputOTP
         maxLength={config?.numberOfInputs ?? otpDefaultConfig.numberOfInputs}
         pattern={REGEXP_ONLY_DIGITS}

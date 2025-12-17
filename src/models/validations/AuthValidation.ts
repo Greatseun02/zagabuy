@@ -10,6 +10,7 @@ export class AuthValidation {
     userRoleId: Yup.number()
       .required("Role Is Required.")
       .typeError("RoleId is a number"),
+    userDisplayName: Yup.string(),
   });
 
   static login = Yup.object().shape({

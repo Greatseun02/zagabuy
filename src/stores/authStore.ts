@@ -1,16 +1,20 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { LoginResponse } from "@/models/responses/authentication/LoginResponse";
+import { userInfo } from "os";
 
 export type AuthState = {
   token: string;
   loading: boolean;
-  userInfo: Omit<LoginResponse, "responseCode" | "responseMessage">;
+  userInfo: Omit<LoginResponse, "responseCode" | "responseMessage" | "token">;
 };
 
 const initialState: AuthState = {
   token: "",
   loading: false,
-  userInfo: {} as Omit<LoginResponse, "responseCode" | "responseMessage">,
+  userInfo: {} as Omit<
+    LoginResponse,
+    "responseCode" | "responseMessage" | "token"
+  >,
 };
 
 const action = {
@@ -47,8 +51,9 @@ const slice = createSlice({
         payload: LoginResponse;
       }
     ) => {
+      const {token, responseCode, responseMessage, ...userInfo} = payload;
       state.token = payload.token;
-      state.userInfo = payload;
+      state.userInfo = userInfo;
     },
   },
 });

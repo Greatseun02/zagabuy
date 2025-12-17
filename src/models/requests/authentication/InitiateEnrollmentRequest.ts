@@ -4,6 +4,7 @@ export type InitiateEnrollmentRequest = {
   userFirstName: string;
   userLastName: string;
   userRoleId: string;
+  userDisplayName: string;
 };
 
 export const initiateEnrollmentRequestInit: InitiateEnrollmentRequest = {
@@ -12,4 +13,5 @@ export const initiateEnrollmentRequestInit: InitiateEnrollmentRequest = {
   userFirstName: "",
   userLastName: "",
   userRoleId: "",
+  userDisplayName: "",
 };

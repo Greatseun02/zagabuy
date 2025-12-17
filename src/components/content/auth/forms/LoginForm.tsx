@@ -9,12 +9,16 @@ import {
 import { AuthValidation } from "@/models/validations/AuthValidation";
 import { useLoginMutation } from "@/services/authService";
 import { BaseUtil } from "@/utilities/baseUtil";
+import { RouteConstant } from "@/utilities/constants/routeConstant";
+import { RoleEnum } from "@/utilities/enums/roleEnum";
 import { Formik } from "@/utilities/types";
 import { useFormik } from "formik";
+import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
 export default function LoginForm() {
   const [login] = useLoginMutation();
+  const router = useRouter();
 
   const handleLoginSubmit = async (data: LoginRequest) => {
     const response = await login(data).unwrap();
@@ -22,6 +26,14 @@ export default function LoginForm() {
     if (BaseUtil.isApiResponseSuccessful(response)) {
       toast.success("Login successful!");
       //perform redirect logic
+      if (response.userRoleId === RoleEnum.ADMIN) {
+        router.push(RouteConstant.admin.dashboard.path);
+      } else if (
+        response.userRoleId === RoleEnum.MERCHANT ||
+        response.userRoleId === RoleEnum.AFFILIATE
+      ) {
+        router.push(RouteConstant.merchant.dashboard.path);
+      }
     }
   };
 
@@ -36,7 +48,7 @@ export default function LoginForm() {
         label="Email"
         placeholder="Enter Email:"
         formik={formik}
-        name=""
+        name="userEmail"
         type="email"
       />
       <Input

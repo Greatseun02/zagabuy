@@ -1,3 +1,5 @@
+import path from "path";
+
 /**
  * Route configuration type with optional access control
  */
@@ -104,13 +106,55 @@ export const RouteConstant = {
   },
 
   // ==================== Dashboard ====================
-  dashboard: {
-    home: {
-      path: "/dashboard",
-      name: "Dashboard Overview Screen",
-      moduleName: "Dashboard",
-      // No access rules = all authenticated users can access
+  admin: {
+    dashboard: {
+      path: "/admin/dashboard",
+      name: "Dashboard",
+      moduleName: "admin",
     } as RouteConfig,
+    moderation: {
+      path: "/admin/moderation",
+      name: "Moderation Queue",
+      moduleName: "admin",
+    } as RouteConfig,
+    merchants: {
+      path: "/admin/merchants",
+      name: "Merchants",
+      moduleName: "admin",
+    } as RouteConfig,
+    affiliates: {
+      path: "/admin/affiliates",
+      name: "Affiliates",
+      moduleName: "admin",
+    } as RouteConfig,
+  },
+  merchant: {
+    dashboard: {
+      path: "/merchant/dashboard",
+      name: "Dashboard",
+      moduleName: "merchant",
+    } as RouteConfig,
+    deals: {
+      path: "/merchant/deals",
+      name: "My Deals",
+      moduleName: "merchant",
+    } as RouteConfig,
+    analytics: {
+      path: "/merchant/analytics",
+      name: "Analytics",
+      moduleName: "merchant",
+    } as RouteConfig,
+    profile: {
+      path: "/merchant/profile",
+      name: "Profile",
+      moduleName: "merchant",
+    } as RouteConfig,
+  },
+
+  deals: {
+    path: "/deals",
+    name: "Deals",
+    moduleName: "deals",
   },
 
   // ==================== Sales Module ====================

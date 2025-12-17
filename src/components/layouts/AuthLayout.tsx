@@ -77,7 +77,7 @@ export default function AuthLayout({
                 </div>
               )}
             </div>
-            {children}
+            <div className="flex flex-col gap-3">{children}</div>
           </div>
         </div>
       </div>
