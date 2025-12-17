@@ -1,6 +1,18 @@
 import { FormikValues, useFormik } from "formik";
 import { CSSProperties } from "react";
 
+// Re-export icon types for convenient access
+export type {
+  IconType,
+  IconRenderProps,
+  IconConfig,
+  IconPosition,
+  IconPositionProps,
+  IconPropKey,
+  UniversalSVGProps,
+  SmartSVGProps,
+} from "./iconTypes";
+
 export type Formik<Values extends FormikValues = FormikValues> = ReturnType<
   typeof useFormik<Values>
 >;

@@ -1,61 +1,15 @@
 export type InitiateEnrollmentRequest = {
-    entityCompanyName: string,
-    entitySector: string,
-    entityFirsId?: string,
-    entityReference?: string,
-    entityTin: string,
-    postalAddressCityName: string,
-    postalAddressCountry: string,
-    postalAddressLga: string,
-    postalAddressPostalCode: string,
-    postalAddressState: string,
-    postalAddressStreetName: string,
-    requestType?: string,
-    userEmail: string,
-    userFirstName: string,
-    userLastName: string,
-    userPhoneNumber: string,
-    userPassword: string,
-    businessApiKey: string,
-    businessApiSecret: string,
-    businessFirsId: string,
-}
-// {
-//     "entityCompanyName": "string",
-//     "entityFirsId": "string",
-//     "entityReference": "string",
-//     "entitySector": "string",
-//     "entityTin": "string",
-//     "postalAddressCityName": "string",
-//     "postalAddressCountry": "string",
-//     "postalAddressPostalCode": "string",
-//     "postalAddressStreetName": "string",
-//     "requestType": "string",
-//     "userEmail": "string",
-//     "userFirstName": "string",
-//     "userLastName": "string",
-//     "userPassword": "string",
-//     "userPhoneNumber": "string"
-// }
+  userEmail: string;
+  userPassword: string;
+  userFirstName: string;
+  userLastName: string;
+  userRoleId: string;
+};
+
 export const initiateEnrollmentRequestInit: InitiateEnrollmentRequest = {
-    entityCompanyName: "",
-    entitySector: "",
-    entityTin: "",
-    entityFirsId: "",
-    entityReference: "",
-    userPassword: "",
-    postalAddressCityName: "",
-    postalAddressCountry: "NG",
-    postalAddressLga: "",
-    postalAddressPostalCode: "",
-    postalAddressState: "",
-    postalAddressStreetName: "",
-    requestType: "",
-    userEmail: "",
-    userFirstName: "",
-    userLastName: "",
-    userPhoneNumber: "",
-    businessApiKey: "",
-    businessApiSecret: "",
-    businessFirsId: "",
-}
+  userEmail: "",
+  userPassword: "",
+  userFirstName: "",
+  userLastName: "",
+  userRoleId: "",
+};
