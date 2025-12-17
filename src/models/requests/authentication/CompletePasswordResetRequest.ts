@@ -1,11 +1,11 @@
 export type CompletePasswordResetRequest = {
-    otp: string,
-    userEmail: string
-    userPassword: string
-}
+  otp: string;
+  userEmail: string;
+  userPassword: string;
+};
 
 export const completePasswordResetRequestInit: CompletePasswordResetRequest = {
-    otp: "",
-    userEmail: "",
-    userPassword: ""
-}
+  otp: "",
+  userEmail: "",
+  userPassword: "",
+};

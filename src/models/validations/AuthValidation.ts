@@ -20,11 +20,17 @@ export class AuthValidation {
     userPassword: Yup.string().required("Password Is Required."),
   });
 
-  static resetPassword = Yup.object().shape({
+  static completePasswordReset = Yup.object().shape({
     userPassword: Yup.string().required("Password Is Required."),
     userPasswordConfirmation: Yup.string()
       .equals([Yup.ref("userPassword"), null], "Passcode Does Not Match")
       .required("Confirm Password Is Required."),
+    // otp: Yup.string().required("OTP is Required."),
+    userEmail: Yup.string().required("User Email is Required"),
+  });
+
+  static initiatePasswordReset = Yup.object().shape({
+    userEmail: Yup.string().required("User Email is Required"),
   });
 
   static changePassword = Yup.object().shape({

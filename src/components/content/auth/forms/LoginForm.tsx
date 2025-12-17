@@ -2,6 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import Typography from "@/components/ui/typography";
 import {
   LoginRequest,
   loginRequestInit,
@@ -13,6 +14,7 @@ import { RouteConstant } from "@/utilities/constants/routeConstant";
 import { RoleEnum } from "@/utilities/enums/roleEnum";
 import { Formik } from "@/utilities/types";
 import { useFormik } from "formik";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
@@ -58,9 +60,16 @@ export default function LoginForm() {
         name="userPassword"
         type="password"
       />
-      <Button isLoading={formik.isSubmitting} type="submit">
-        Login
-      </Button>
+      <div className="flex flex-col gap-1">
+        <Button isLoading={formik.isSubmitting} type="submit">
+          Login
+        </Button>
+        <Link href={RouteConstant.auth.forgotPassword.path}>
+          <Typography size="sm" weight="regular" color="muted-foreground">
+            Forgot Password?
+          </Typography>
+        </Link>
+      </div>
     </form>
   );
 }

@@ -25,13 +25,13 @@ export default function AuthLayout({
   showLogo = true,
   pageTitle,
   actionable = {
-    linkHref: RouteConstant.auth.newSignup.path,
+    linkHref: RouteConstant.auth.signup.path,
     linkText: "Create an account",
     text: "New to Zagabuy?",
   },
 }: AuthLayoutProps) {
   return (
-    <div className="flex h-dvh relative">
+    <div className="flex h-dvh relative ">
       {showLogo && (
         <ZagabuyLogo
           showText={true}
