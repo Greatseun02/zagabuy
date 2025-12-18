@@ -1,3 +1,5 @@
+import { MerchantLayout } from "@/components/layouts/MerchantLayout";
+
 export default function layout({ children }: { children: React.ReactNode }) {
-  return <div>{children}</div>;
+  return <MerchantLayout>{children}</MerchantLayout>;
 }

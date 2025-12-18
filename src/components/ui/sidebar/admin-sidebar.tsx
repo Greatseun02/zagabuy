@@ -38,29 +38,7 @@ import {
 } from "lucide-react";
 import ZagabuyLogo from "@/components/custom/ZagabuyLogo";
 
-const navigationItems = [
-  {
-    label: "Dashboard",
-    href: ROUTES.admin.dashboard.path,
-    icon: LayoutDashboard,
-  },
-  {
-    label: "Moderation Queue",
-    href: ROUTES.admin.moderation.path,
-    icon: ClipboardCheck,
-    showBadge: true,
-  },
-  {
-    label: "Merchants",
-    href: ROUTES.admin.merchants.path,
-    icon: Store,
-  },
-  {
-    label: "Affiliates",
-    href: ROUTES.admin.affiliates.path,
-    icon: Users,
-  },
-];
+import { adminSideBarData } from "@/utilities/data/admin-sidebarData";
 
 export function AdminSidebar() {
   const location = usePathname();
@@ -85,7 +63,7 @@ export function AdminSidebar() {
           <SidebarGroupLabel>Management</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
-              {navigationItems.map((item) => {
+              {adminSideBarData.map((item) => {
                 const isActive = location.includes(item.href);
 
                 return (

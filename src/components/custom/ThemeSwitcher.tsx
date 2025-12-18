@@ -26,7 +26,7 @@ export default function ThemeSwitcher() {
       }}
       width={"fit"}
       size={"icon-lg"}
-      className="absolute top-3 right-5"
+      // className="absolute top-3 right-5"
     ></Button>
   );
 }

@@ -1,5 +1,7 @@
 import { FormikValues, useFormik } from "formik";
+import { LucideIcon } from "lucide-react";
 import { CSSProperties } from "react";
+import { IconType } from "./iconTypes";
 
 // Re-export icon types for convenient access
 export type {
@@ -93,53 +95,9 @@ export type formJson = [
   }
 ];
 
-/**
- * Normalized user object for application use
- */
-export interface AppUser {
-  id: string;
-  email: string;
-  firstName: string;
-  lastName: string;
-  fullName: string;
-  phoneNumber: string;
-  status: string;
-
-  // Role information
-  // role: string;
-  // roleId: number;
-  // roleLevel: number; // Computed from role hierarchy
-
-  // Permissions (from privileges field)
-  permissions: string[];
-
-  // Entity (company) information
-  entity: {
-    id: string;
-    firsId: string;
-    companyName: string;
-    tin: string;
-    sector: string;
-  };
-
-  // Current business context
-  currentBusiness: {
-    id: number;
-    reference: string;
-    firsId: string;
-    tin: string;
-  };
-
-  // All businesses user has access to
-  businesses: Array<{
-    id: number;
-    reference: string;
-    firsId: string;
-    tin: string;
-    status: string;
-  }>;
-
-  // Metadata
-  createdAt: string;
-  updatedAt: string;
-}
+export type sidebarDataType = {
+  label: string;
+  href: string;
+  icon: LucideIcon;
+  showBadge?: boolean;
+};

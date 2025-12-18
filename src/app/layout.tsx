@@ -42,7 +42,7 @@ export default function RootLayout({
             <ToastProvider />
             <ReduxProvider>
               <GlobalModalProvider>{children}</GlobalModalProvider>
-              <ThemeSwitcher />
+              {/* <ThemeSwitcher /> */}
             </ReduxProvider>
           </OtpProvider>
         </ThemeProvider>

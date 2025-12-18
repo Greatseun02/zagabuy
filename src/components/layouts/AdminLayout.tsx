@@ -22,7 +22,6 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
-// import { useLocation } from "wouter";
 import { usePathname } from "next/navigation";
 import { RouteConstant as ROUTES } from "@/utilities/constants/routeConstant";
 
