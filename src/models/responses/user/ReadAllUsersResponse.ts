@@ -1,17 +1,20 @@
 export type ReadAllUsersResponse = {
-    data:
-        {
-            userCreatedAt: string,
-            userEmail: string,
-            userFirstName: string,
-            userId: number,
-            userLastName: string,
-            userPassword: string,
-            userPhoneNumber: string,
-            userRoleId: number,
-            userStatus: string,
-            userUpdatedAt: string
-        }[],
-    responseCode: string,
-    responseMessage: string
-}
+  data: {
+    userCreatedAt: string;
+    userDisplayName: string;
+    userEmail: string;
+    userFirstName: string;
+    userId: number;
+    userLastName: string;
+    userMerchantScore: number;
+    userPassword: string;
+    userPhoneNumber: string;
+    userProfilePictureUrl: string;
+    userRoleId: number;
+    userStatus: string;
+    userUpdatedAt: string;
+    userUsername: string;
+  }[];
+  responseCode: string;
+  responseMessage: string;
+};

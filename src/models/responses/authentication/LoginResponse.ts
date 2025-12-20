@@ -10,7 +10,7 @@ export type LoginResponse = {
   userId: number;
   userLastName: string;
   userPhoneNumber: string;
-  userRoleName: string;
+  // userRoleName: string;
   userRoleId: number;
   userStatus: string;
   userUpdatedAt: string;

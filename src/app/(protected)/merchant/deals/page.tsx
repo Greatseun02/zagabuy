@@ -1,3 +1,5 @@
+import MerchantDealsContent from "@/components/content/merchant/MerchantDealsContent";
+
 export default function page() {
-  return <div>page</div>;
+  return <MerchantDealsContent />;
 }

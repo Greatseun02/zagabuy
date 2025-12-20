@@ -24,14 +24,15 @@ import {
 } from "@/components/ui/breadcrumb";
 import { usePathname } from "next/navigation";
 import { RouteConstant as ROUTES } from "@/utilities/constants/routeConstant";
+import LogoutButton from "../custom/LogoutButton";
 
 const breadcrumbMap: Record<string, string> = {
   [ROUTES.merchant.dashboard.path]: "Dashboard",
   [ROUTES.merchant.deals.path]: "My Deals",
-  //   [ROUTES.merchant.dashboard.path]: "Create Deal",
+  [ROUTES.merchant.deals.createDeal.path]: "Create Deal",
   [ROUTES.merchant.analytics.path]: "Analytics",
   //   [ROUTES.merchant.]: "Wallet & Billing",
-  //   [ROUTES.merchant.]: "Notifications",
+
   [ROUTES.merchant.profile.path]: "Profile",
 };
 
@@ -42,7 +43,8 @@ interface MerchantLayoutProps {
 export function MerchantLayout({ children }: MerchantLayoutProps) {
   const location = usePathname();
 
-  const currentPage = breadcrumbMap[location] || "Dashboard";
+  const currentPage =
+    breadcrumbMap[location] || location.split("/").pop() || "Dashboard";
 
   return (
     <SidebarProvider>
@@ -67,8 +69,9 @@ export function MerchantLayout({ children }: MerchantLayoutProps) {
               </BreadcrumbItem>
             </BreadcrumbList>
           </Breadcrumb>
-          <div className="ml-auto">
+          <div className="ml-auto flex items-center ">
             <ThemeSwitcher />
+            <LogoutButton />
           </div>
         </header>
         <main className="flex-1 overflow-auto p-6">{children}</main>

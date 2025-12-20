@@ -24,6 +24,7 @@ import {
 } from "@/components/ui/breadcrumb";
 import { usePathname } from "next/navigation";
 import { RouteConstant as ROUTES } from "@/utilities/constants/routeConstant";
+import LogoutButton from "../custom/LogoutButton";
 
 const breadcrumbMap: Record<string, string> = {
   [ROUTES.admin.dashboard.path]: "Dashboard",
@@ -64,8 +65,9 @@ export function AdminLayout({ children }: AdminLayoutProps) {
               </BreadcrumbItem>
             </BreadcrumbList>
           </Breadcrumb>
-          <div className="ml-auto">
+          <div className="ml-auto flex items-center ">
             <ThemeSwitcher />
+            <LogoutButton />
           </div>
         </header>
         <main className="flex-1 overflow-auto p-6">{children}</main>

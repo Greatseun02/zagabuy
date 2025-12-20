@@ -1,3 +1,5 @@
+import AdminMerchantContent from "@/components/content/admin/AdminMerchantContent";
+
 export default function page() {
-  return <div>page</div>;
+  return <AdminMerchantContent />;
 }

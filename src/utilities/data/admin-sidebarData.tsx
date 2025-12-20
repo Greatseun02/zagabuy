@@ -24,4 +24,14 @@ export const adminSideBarData: sidebarDataType[] = [
     href: RouteConstant.admin.affiliates.path,
     icon: Users,
   },
+  {
+    label: "Categories",
+    href: RouteConstant.admin.categories.path,
+    icon: Users,
+  },
+  {
+    label: "Tags",
+    href: RouteConstant.admin.tags.path,
+    icon: Users,
+  },
 ];

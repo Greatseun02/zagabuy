@@ -79,7 +79,7 @@ export function MerchantSidebar() {
         {/* Quick Actions */}
         <SidebarGroup>
           <SidebarGroupContent>
-            <Link href={RouteConstant.merchant.dashboard.path}>
+            <Link href={RouteConstant.merchant.deals.createDeal.path}>
               {/* work on */}
               <Button
                 className="w-full justify-start gap-2"

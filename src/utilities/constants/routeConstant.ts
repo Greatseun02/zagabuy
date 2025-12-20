@@ -78,6 +78,16 @@ export const RouteConstant = {
       name: "Affiliates",
       moduleName: "admin",
     } as RouteConfig,
+    categories: {
+      path: "/admin/categories",
+      name: "Categories",
+      moduleName: "admin",
+    } as RouteConfig,
+    tags: {
+      path: "/admin/tags",
+      name: "Tags",
+      moduleName: "admin",
+    } as RouteConfig,
   },
   merchant: {
     dashboard: {
@@ -89,7 +99,13 @@ export const RouteConstant = {
       path: "/merchant/deals",
       name: "My Deals",
       moduleName: "merchant",
-    } as RouteConfig,
+      createDeal: {
+        path: "/merchant/deals/new",
+        name: "Create Deal",
+        moduleName: "merchant",
+      } as RouteConfig,
+    },
+
     analytics: {
       path: "/merchant/analytics",
       name: "Analytics",
