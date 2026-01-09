@@ -16,4 +16,5 @@ export type AdminDashboardEntity = {
   totalAffiliates: number;
   totalMerchants: number;
   totalPending: number;
+  totalDeals: number;
 };

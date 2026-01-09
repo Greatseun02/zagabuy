@@ -24,7 +24,11 @@ export const clickService = BaseService.appClient.injectEndpoints({
         method: ApiRequestMethodsEnum.POST,
         body: data,
       }),
-      invalidatesTags: [{ type: ApiTagsEnum.Click, id: "LIST" }],
+      invalidatesTags: (_, __, args) => [
+        { type: ApiTagsEnum.Click, id: "LIST" },
+        { type: ApiTagsEnum.Deal, id: "LIST" },
+        { type: ApiTagsEnum.Deal, id: args?.clickEventDealId },
+      ],
     }),
     readClick: builder.query<ReadClickResponse, void>({
       query: () => ({

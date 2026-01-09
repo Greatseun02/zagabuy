@@ -42,28 +42,46 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { useReadAdminDashboardQuery } from "@/services/adminDashboardService";
 
 export default function AdminDashboardContent() {
-  const { data: adminDashboardData } = useReadAdminDashboardQuery();
+  const { data: adminDashboardData, isLoading: isLoadingAdminDashboard } =
+    useReadAdminDashboardQuery();
 
   const dashboardOverviewCardsConfig: DashboardOverviewCardsProps[] = [
     {
       header: "Total Deals",
-      text: String(adminDashboardData?.data?.[0].totalPending),
-      footer: `${adminDashboardData?.data?.[0].totalPending} pending`,
+      text: isLoadingAdminDashboard
+        ? "Loading..."
+        : adminDashboardData?.data?.[0].totalDeals &&
+          StringUtil.compact(adminDashboardData?.data?.[0].totalDeals),
+      footer: isLoadingAdminDashboard
+        ? "Loading..."
+        : adminDashboardData?.data?.[0].totalPending &&
+          `${StringUtil.compact(
+            adminDashboardData?.data?.[0].totalPending
+          )} pending`,
       Icon: ShoppingBag,
     },
     {
       header: "Total Merchants",
-      text: String(adminDashboardData?.data?.[0].totalMerchants),
+      text: isLoadingAdminDashboard
+        ? "Loading..."
+        : adminDashboardData?.data?.[0].totalMerchants &&
+          StringUtil.compact(adminDashboardData?.data?.[0].totalMerchants),
       Icon: Store,
     },
     {
       header: "Total Affiliates",
-      text: String(adminDashboardData?.data?.[0].totalAffiliates),
+      text: isLoadingAdminDashboard
+        ? "Loading..."
+        : adminDashboardData?.data?.[0].totalAffiliates &&
+          StringUtil.compact(adminDashboardData?.data?.[0].totalAffiliates),
       Icon: Users,
     },
     {
       header: "Pending Review",
-      text: String(adminDashboardData?.data?.[0].totalPending),
+      text: isLoadingAdminDashboard
+        ? "Loading..."
+        : adminDashboardData?.data?.[0].totalPending &&
+          StringUtil.compact(adminDashboardData?.data?.[0].totalPending),
       Icon: Clock,
     },
   ];
@@ -81,7 +99,11 @@ export default function AdminDashboardContent() {
               children: "Today",
             },
             text: {
-              children: adminDashboardData?.data?.[0].clicksToday,
+              children: isLoadingAdminDashboard
+                ? "Loading..."
+                : adminDashboardData?.data?.[0].clicksToday
+                ? StringUtil.compact(adminDashboardData?.data?.[0].clicksToday)
+                : 0,
             },
           },
           {
@@ -89,7 +111,13 @@ export default function AdminDashboardContent() {
               children: "This Month",
             },
             text: {
-              children: adminDashboardData?.data?.[0].clicksThisMonth,
+              children: isLoadingAdminDashboard
+                ? "Loading..."
+                : adminDashboardData?.data?.[0].clicksThisMonth
+                ? StringUtil.compact(
+                    adminDashboardData?.data?.[0].clicksThisMonth
+                  )
+                : 0,
             },
           },
         ],

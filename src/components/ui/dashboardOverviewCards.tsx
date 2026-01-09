@@ -3,9 +3,9 @@ import { Card, CardProps } from "./card";
 import Typography from "./typography";
 
 export type DashboardOverviewCardsProps = {
-  header: string;
-  text: string;
-  footer?: string;
+  header: string | number;
+  text?: string | number;
+  footer?: string | number;
   Icon?: LucideIcon;
   variant?: CardProps["variant"];
   width?: CardProps["width"];
