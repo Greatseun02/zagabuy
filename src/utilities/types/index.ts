@@ -2,6 +2,7 @@ import { FormikValues, useFormik } from "formik";
 import { LucideIcon } from "lucide-react";
 import { CSSProperties } from "react";
 import { IconType } from "./iconTypes";
+import { DealStatusEnum } from "../enums/appEnum";
 
 // Re-export icon types for convenient access
 export type {
@@ -101,3 +102,23 @@ export type sidebarDataType = {
   icon: LucideIcon;
   showBadge?: boolean;
 };
+
+export interface DateDataPoint {
+  date: string;
+  value: number;
+}
+
+export interface DealFilters {
+  search?: string;
+  categoryId?: string;
+  tagIds?: string[];
+  minPrice?: number;
+  maxPrice?: number;
+  merchantId?: string;
+  sortBy?: "newest" | "trending" | "price_low" | "price_high" | "discount";
+}
+
+export interface DateRange {
+  from: string;
+  to: string;
+}

@@ -2,26 +2,28 @@
 
 import React, { useMemo } from "react";
 import { useParams, useRouter } from "next/navigation";
-import { useReaddealQuery } from "@/services/dealService";
+import {
+  useReadDealByDealIdQuery,
+  useReadDealQuery,
+} from "@/services/dealService";
 import NotFound from "@/components/ui/NotFound";
 import CreateOrUpdateDealForm from "@/components/forms/CreateOrUpdateDealForm";
 import DashboardPageLayout from "@/components/layouts/DashboardPageLayout";
 import { toast } from "sonner";
+import Loader from "@/components/ui/loader";
 
 export default function MerchantEditDealContent() {
   const params = useParams();
   const router = useRouter();
   const dealId = params?.dealId ?? "";
 
-  const { data: dealsResp } = useReaddealQuery();
+  const { data, isLoading } = useReadDealByDealIdQuery(dealId as string);
 
-  const deal = useMemo(() => {
-    return dealsResp?.data?.find(
-      (d: any) => String(d.dealId) === String(dealId)
-    );
-  }, [dealsResp, dealId]);
+  if (isLoading) {
+    return <Loader />;
+  }
 
-  if (!deal) {
+  if (!data?.data) {
     return (
       <DashboardPageLayout title="Deal not found">
         <NotFound
@@ -33,20 +35,13 @@ export default function MerchantEditDealContent() {
   }
 
   return (
-    <DashboardPageLayout title={`Edit: ${deal.dealTitle}`}>
+    <DashboardPageLayout title={`Edit: ${data?.data?.dealTitle}`}>
       <div className="mt-6 max-w-3xl">
         <CreateOrUpdateDealForm
           isUpdate
           initialValues={{
-            title: deal.dealTitle,
-            price: deal.dealPrice ?? deal.dealOldPrice ?? 0,
-            quantity: 1,
-            images: [],
-          }}
-          onSubmit={async (values) => {
-            // map and call update mutation here if needed
-            toast.success("Deal updated (mock)");
-            router.push("/merchant/deals");
+            ...data?.data,
+            dealImagesUrl: data?.data?.dealImages,
           }}
         />
       </div>

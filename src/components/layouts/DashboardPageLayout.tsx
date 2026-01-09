@@ -103,7 +103,7 @@ export default function DashboardPageLayout({
         </div>
       </div>
 
-      <div className="w-full">{children}</div>
+      <div className="w-full space-y-6">{children}</div>
     </div>
   );
 }

@@ -8,7 +8,7 @@ export type UpdateTagRequest = {
   tagId: number;
   tagName: string;
   tagSlug: string;
-  //   tagStatus: string;
+  tagStatus: string;
 };
 
 export type DeleteTagRequest = {
@@ -25,5 +25,5 @@ export const UpdateTagInit: UpdateTagRequest = {
   tagId: 0,
   tagName: "",
   tagSlug: "",
-  //   tagStatus: "active",
+  tagStatus: "",
 };

@@ -1,3 +1,5 @@
+import MerchantProfileContent from "@/components/content/merchant/MerchantProfileContent";
+
 export default function page() {
-  return <div>page</div>;
+  return <MerchantProfileContent />;
 }

@@ -21,7 +21,7 @@ const BaseDropzone = ({
   onDrop,
   label,
   showCloudIcon = true,
-  helperText = `<p><span class=${"text-primary font-medium"}>Click to upload </span> or drag and drop </p> <p class="text-xs">SVG, PNG, JPG, or GIF (max. 800px x 400px)</p>`,
+  helperText = `<p><span class=${"text-primary-foreground font-medium"}>Click to upload </span> or drag and drop </p> <p class="text-xs">SVG, PNG, JPG, or GIF (max. 800px x 400px)</p>`,
   helperTextStyle,
   dropzoneOptions,
   previewContent,
@@ -50,9 +50,7 @@ const BaseDropzone = ({
           <div className={"flex flex-col items-center gap-2.5"}>
             {showCloudIcon && <CloudUploadIcon className="text-foreground" />}
             <Typography
-              className={
-                "text-center flex flex-col gap text-accent-foreground "
-              }
+              className={"text-center flex flex-col gap  "}
               style={helperTextStyle}
               dangerouslySetInnerHTML={{ __html: helperText }}
               // dangerouslySetInnerHTML={{__html: DOMPurify.sanitize(helperText)}}

@@ -1,3 +1,5 @@
+import MerchantAnalyticsContent from "@/components/content/merchant/MerchantAnalyticsContent";
+
 export default function page() {
-  return <div>page</div>;
+  return <MerchantAnalyticsContent />;
 }

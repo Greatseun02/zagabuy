@@ -629,7 +629,7 @@ const BaseFileUpload = <T extends FormikValues>({
             border:
               currentError && isTouched
                 ? ".0625rem solid var(--color-red-300)"
-                : ".0625rem solid var(--color-gray-100)",
+                : ".0625rem solid var(--color-border)",
             borderRadius: ".25rem",
             ...containerStyle,
           }}

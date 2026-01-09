@@ -8,5 +8,5 @@ export function normalizeColumns<T>(
     header:
       c.header ?? (typeof c.id === "string" ? c.id.replace(/_/g, " ") : ""),
     cell: c.cell ?? ((info) => info.getValue()),
-  }));
+  })) as ColumnDef<T, any>[];
 }

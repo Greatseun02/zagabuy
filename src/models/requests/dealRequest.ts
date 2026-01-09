@@ -11,19 +11,20 @@ export type CreateDealRequest = {
 };
 
 export type UpdateDealRequest = {
-  dealApprovedBy: number;
-  dealDescription: string;
-  dealExpiryDate: string;
+  dealApprovedBy?: number;
+  dealDescription?: string;
+  dealExpiryDate?: string;
   dealId: number;
-  dealImagesUrl: string[];
-  dealOldPrice: number;
-  dealPrice: number;
-  dealPromoCode: string;
-  dealStatus: string;
-  dealTitle: string;
-  dealUrl: string;
-  dealUserId: number;
-  dealVisibility: string;
+  dealImagesUrl?: string[];
+  dealOldPrice?: number;
+  dealPrice?: number;
+  dealPromoCode?: string;
+  dealStatus?: string;
+  dealTitle?: string;
+  dealUrl?: string;
+  dealUserId?: number;
+  dealViews?: number;
+  dealVisibility?: string;
 };
 
 export type DeleteDealRequest = {
@@ -55,6 +56,7 @@ export const UpdateDealInit: UpdateDealRequest = {
   dealTitle: "",
   dealUrl: "",
   dealUserId: 0,
+  dealViews: 0,
   dealVisibility: "",
 };
 

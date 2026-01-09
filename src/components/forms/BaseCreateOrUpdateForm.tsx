@@ -78,7 +78,7 @@ const BaseCreateOrUpdateForm = <
         : await createAction(castedValues as CreateRequest);
 
       if (response && BaseUtil.isApiResponseSuccessful(response)) {
-        toast.success("Operation successful");
+        // toast.success("Operation successful");
         formikHelper.resetForm();
         if (readAction) await readAction();
         onSuccessfulSubmission?.();

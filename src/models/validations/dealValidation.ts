@@ -1,7 +1,11 @@
 import * as yup from "yup";
 
 export const CreateDealValidationSchema = yup.object({
-  dealDescription: yup.string().required(),
+  dealDescription: yup
+    .string()
+    .required()
+    .min(2, "Description must be at least 2 characters")
+    .max(250, "Description cannot exceed 250 characters"),
   dealExpiryDate: yup.date().required(),
   dealImagesUrl: yup.array().of(yup.string()).required(),
   dealOldPrice: yup.number().required(),
@@ -13,7 +17,11 @@ export const CreateDealValidationSchema = yup.object({
 });
 
 export const UpdateDealValidationSchema = yup.object({
-  dealDescription: yup.string().required(),
+  dealDescription: yup
+    .string()
+    .required()
+    .min(2, "Description must be at least 2 characters")
+    .max(250, "Description cannot exceed 250 characters"),
   dealExpiryDate: yup.string().required(),
   dealId: yup.number().required(),
   dealOldPrice: yup.number().required(),

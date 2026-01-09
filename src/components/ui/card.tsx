@@ -3,6 +3,8 @@
 import * as React from "react";
 import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
+import Typography, { TypographyProps } from "./typography";
+import { Skeleton } from "./skeleton";
 
 // Card variants using CVA
 const cardVariants = cva("relative transition-all duration-200", {
@@ -59,6 +61,7 @@ const cardVariants = cva("relative transition-all duration-200", {
 export type CardProps = React.ComponentProps<"div"> &
   VariantProps<typeof cardVariants> & {
     asChild?: boolean; // reserved for future slot usage
+    isLoading?: boolean;
   };
 
 const Card = React.forwardRef<HTMLDivElement, CardProps>(
@@ -71,6 +74,7 @@ const Card = React.forwardRef<HTMLDivElement, CardProps>(
       shadow = "sm",
       rounded = "md",
       withHover = "disabled",
+      isLoading = false,
       children,
       ...props
     },
@@ -92,7 +96,15 @@ const Card = React.forwardRef<HTMLDivElement, CardProps>(
         )}
         {...props}
       >
-        {children}
+        {isLoading ? (
+          <div className="space-y-3">
+            <Skeleton className="h-4 w-3/4" />
+            <Skeleton className="h-4 w-1/2" />
+            <Skeleton className="h-9 w-full rounded-md mt-4" />
+          </div>
+        ) : (
+          children
+        )}
       </div>
     );
   }
@@ -100,4 +112,48 @@ const Card = React.forwardRef<HTMLDivElement, CardProps>(
 
 Card.displayName = "Card";
 
-export { Card, cardVariants };
+// CardHeader - Container for card header content
+const CardHeader = React.forwardRef<
+  HTMLDivElement,
+  React.ComponentProps<"div">
+>(({ className, ...props }, ref) => (
+  <div
+    ref={ref}
+    className={cn("flex flex-col space-y-2", className)}
+    {...props}
+  />
+));
+CardHeader.displayName = "CardHeader";
+
+// CardTitle - Consistent title styling for cards
+const CardTitle = React.forwardRef<HTMLHeadingElement, TypographyProps>(
+  ({ className, weight = "semibold", size = "md", ...props }, ref) => (
+    <Typography
+      ref={ref}
+      as="h3"
+      component="h3"
+      weight={weight}
+      size={size}
+      className={cn("text-base leading-snug", className)}
+      {...props}
+    />
+  )
+);
+CardTitle.displayName = "CardTitle";
+
+// CardDescription - Consistent description styling for cards
+const CardDescription = React.forwardRef<HTMLParagraphElement, TypographyProps>(
+  ({ className, color = "muted-foreground", size = "sm", ...props }, ref) => (
+    <Typography
+      ref={ref}
+      component="p"
+      color={color}
+      size={size}
+      className={cn("text-sm", className)}
+      {...props}
+    />
+  )
+);
+CardDescription.displayName = "CardDescription";
+
+export { Card, cardVariants, CardHeader, CardTitle, CardDescription };

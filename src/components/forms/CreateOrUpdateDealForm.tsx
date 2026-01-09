@@ -64,7 +64,13 @@ export default function CreateOrUpdateDealForm({
 
   const { uploadFileHandler } = useUploadFileHandler(handleGetPresignedUrl);
 
-  const [files, setFiles] = useState<FileItem[]>([]);
+  const [files, setFiles] = useState<FileItem[]>(
+    initialValues?.dealImagesUrl?.map((url, index) => ({
+      url,
+      id: String(index),
+      name: `image-${index}`,
+    })) || []
+  );
 
   const renderFields = (
     formik: Formik<CreateDealRequest | UpdateDealRequest>
@@ -81,6 +87,7 @@ export default function CreateOrUpdateDealForm({
         placeholder="Enter description"
         formik={formik}
         name={"dealDescription"}
+        maxLength={250}
       />
       <Input
         label="Price"
@@ -121,14 +128,21 @@ export default function CreateOrUpdateDealForm({
         autoUpload={false}
         error={formik.errors.dealImagesUrl as string}
         onUploadComplete={(result) => {
-          const { url } = result as { url: string };
-          formik.setFieldValue("dealImagesUrl", [
-            ...formik.values.dealImagesUrl,
-            url,
-          ]);
+          FileUploadUtil.handleUploadComplete(
+            result,
+            formik as Formik<CreateOrUdpdateDealFormRequest>,
+            "dealImagesUrl"
+          );
         }}
         value={files}
         onChange={(files) => setFiles([...files])}
+        onFileRemove={(file) => {
+          FileUploadUtil.handleFileRemove<CreateOrUdpdateDealFormRequest>(
+            file,
+            formik as Formik<CreateOrUdpdateDealFormRequest>,
+            "dealImagesUrl"
+          );
+        }}
         validate={(value) => {
           try {
             FileUploadUtil.baseFileValidation(1, 3).validateSync(value);

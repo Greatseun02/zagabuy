@@ -211,4 +211,19 @@ export class StringUtil {
       ? word.replace(/(\r\n|\n|\r)/gm, "").slice(0, length) + replace
       : word.replace(/(\r\n|\n|\r)/gm, "");
   }
+
+  /**
+   * Format a number as a compact representation (1.2K, 3.4M)
+   */
+  static compact(value: number): string {
+    if (value < 1000) return value.toString();
+    return new Intl.NumberFormat("en-US", {
+      notation: "compact",
+      maximumFractionDigits: 1,
+    }).format(value);
+  }
+
+  static percentage(value: number, decimals = 1): string {
+    return `${value.toFixed(decimals)}%`;
+  }
 }

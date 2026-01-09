@@ -15,29 +15,16 @@ import * as yup from "yup";
 import { Input } from "@/components/ui/input";
 import { FormikValues } from "formik";
 import { Formik } from "@/utilities/types";
+import {
+  CreateCategoryValidationSchema,
+  UpdateCategoryValidationSchema,
+} from "@/models/validations/categoryValidation";
 
 interface CreateOrUpdateCategoryFormProps {
   initialValues?: UpdateCategoryRequest;
   isUpdate?: boolean;
   onSuccessfulSubmission?: () => void;
 }
-
-const validationSchema = yup.object().shape({
-  categoryName: yup
-    .string()
-    .required("Category name is required")
-    .min(2, "Category name must be at least 2 characters")
-    .max(50, "Category name must be at most 50 characters"),
-  categorySlug: yup
-    .string()
-    .required("Category slug is required")
-    .min(2, "Category slug must be at least 2 characters")
-    .max(50, "Category slug must be at most 50 characters")
-    .matches(
-      /^[a-z0-9-]+$/,
-      "Category slug must contain only lowercase letters, numbers, and hyphens"
-    ),
-});
 
 export const CreateOrUpdateCategoryForm = ({
   initialValues,
@@ -71,7 +58,11 @@ export const CreateOrUpdateCategoryForm = ({
         initialValues || (CreateCategoryInit as UpdateCategoryRequest)
       }
       isUpdate={isUpdate}
-      validationSchema={validationSchema}
+      validationSchema={
+        isUpdate
+          ? UpdateCategoryValidationSchema
+          : CreateCategoryValidationSchema
+      }
       createAction={handleCreateCategory}
       updateAction={handleUpdateCategory}
       createBtnText="Create Category"

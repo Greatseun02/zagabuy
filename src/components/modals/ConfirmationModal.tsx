@@ -2,6 +2,7 @@
 
 import { createAppModal } from "@/utilities/modalUtils/createAppModal";
 import { Button } from "@/components/ui/button";
+import Typography from "@/components/ui/typography";
 import { useAppModal } from "@/hooks/useAppModal";
 import { Info, AlertTriangle, Trash2, CheckCircle } from "lucide-react";
 
@@ -32,6 +33,8 @@ export interface ConfirmationModalProps {
   onConfirm?: () => void | Promise<void>;
   onCancel?: () => void;
   maxWidth?: "sm" | "md" | "lg";
+  confirmButtonProps?: React.ComponentProps<typeof Button>;
+  cancelButtonProps?: React.ComponentProps<typeof Button>;
 }
 
 const IconForVariant = ({
@@ -66,6 +69,8 @@ export const ConfirmationModal = createAppModal<ConfirmationModalProps>(
       onConfirm,
       onCancel,
       maxWidth,
+      confirmButtonProps,
+      cancelButtonProps,
     },
     modal
   ) => {
@@ -82,23 +87,31 @@ export const ConfirmationModal = createAppModal<ConfirmationModalProps>(
         {title && (
           <div className="flex items-start gap-3">
             <IconForVariant variant={resolvedVariant} />
-            <h3 className="text-lg font-semibold">{title}</h3>
+            <Typography as="h3" component="h3" weight="semibold" size="lg">
+              {title}
+            </Typography>
           </div>
         )}
 
         {description && (
-          <p className="mt-3 text-sm text-slate-600 dark:text-slate-300">
+          <Typography
+            component="p"
+            color="muted-foreground"
+            size="sm"
+            className="mt-3"
+          >
             {description}
-          </p>
+          </Typography>
         )}
 
-        <div className="flex gap-3 justify-end pt-4 border-t border-slate-200 dark:border-slate-700">
+        <div className="flex gap-3 justify-end pt-4">
           <Button
             variant="ghost"
             onClick={() => {
               onCancel?.();
               modal.hide();
             }}
+            {...cancelButtonProps}
           >
             {cancelText ?? "Cancel"}
           </Button>
@@ -118,6 +131,7 @@ export const ConfirmationModal = createAppModal<ConfirmationModalProps>(
               await onConfirm?.();
               modal.hide();
             }}
+            {...confirmButtonProps}
           >
             {confirmText ?? "Confirm"}
           </Button>

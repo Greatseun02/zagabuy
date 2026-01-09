@@ -1,3 +1,5 @@
+import DealsContent from "@/components/content/public-facing/DealsContent";
+
 export default function deals() {
-  return <div>deals</div>;
+  return <DealsContent />;
 }

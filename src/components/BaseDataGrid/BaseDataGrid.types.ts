@@ -1,4 +1,5 @@
 import type { ColumnDef } from "@tanstack/react-table";
+import { LucideIcon } from "lucide-react";
 
 export type SortDirection = "asc" | "desc";
 
@@ -39,17 +40,36 @@ export interface ColActions<T = any> {
 
 export interface RowOption<T = any> {
   label: string;
-  icon?: string | React.ReactNode;
-  onClick: (row: T) => void | Promise<void>;
+  icon?: LucideIcon;
+  onClick: (row: T, actions: BaseDataGridRef) => void | Promise<void>;
   danger?: boolean;
   disabled?: (row: T) => boolean;
 }
 
 export interface BaseDataGridProps<TData extends object = any> {
   data?: TData[];
-  fetchData?: (
-    query: ServerQueryState
-  ) => Promise<{ rows: TData[]; total?: number }>;
+  /**
+   * External state bindings (RTK-friendly)
+   */
+  filters?: Record<string, string>;
+  onFiltersChange?: (f: Record<string, string>) => void;
+  search?: string;
+  onSearchChange?: (s: string) => void;
+  sort?: { sortBy: string; sortDir: string } | null;
+  onSortChange?: (s: { sortBy: string; sortDir: string } | null) => void;
+  /**
+   * Pagination can be passed as a useState tuple or managed via `onPaginationChange`.
+   * Example: `pagination={useState({ pageIndex: 0, pageSize: 10 })}`
+   * Or just the state: `pagination={pagination}` with `onPaginationChange={setPagination}`
+   */
+  pagination?:
+    | PaginationState
+    | [PaginationState, React.Dispatch<React.SetStateAction<PaginationState>>];
+  onPaginationChange?: (p: PaginationState) => void;
+  /**
+   * Called when the toolbar refresh button is clicked.
+   */
+  onRefresh?: () => void;
   columns?: ColumnDef<TData>[];
   autoGenerateColumns?: boolean;
   mode?: "client" | "server" | "auto";

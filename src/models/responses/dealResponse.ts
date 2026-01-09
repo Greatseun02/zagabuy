@@ -8,19 +8,29 @@ export type DeleteDealResponse = BaseResponse<null>;
 
 export type ReadDealResponse = BaseResponse<DealEntity[]>;
 
+export type ReadDealResponseByDealId = BaseResponse<DealEntity>;
+
 export type DealEntity = {
+  clickCount: number;
+  dealApprovedBy: number;
+  dealCreatedAt: string;
   dealDescription: string;
   dealExpiryDate: string;
   dealId: number;
+  dealImages: string[];
   dealOldPrice: number;
   dealPrice: number;
+  dealPromoCode: string;
   dealStatus: string;
   dealTitle: string;
+  dealUrl: string;
+  dealUserId: number;
+  dealViews: number;
+  dealVisibility: string;
   userDisplayName: string;
   userEmail: string;
   userFirstName: string;
   userLastName: string;
-  userUsername: string;
 };
 
 export type GetDealImagesPresignedUrlResponse = {

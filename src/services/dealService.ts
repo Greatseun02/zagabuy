@@ -7,9 +7,11 @@ import {
 } from "@/models/requests/dealRequest";
 import {
   CreateDealResponse,
+  DealEntity,
   DeleteDealResponse,
   GetDealImagesPresignedUrlResponse,
   ReadDealResponse,
+  ReadDealResponseByDealId,
   UpdateDealResponse,
 } from "@/models/responses/dealResponse";
 import { ApiRequestMethodsEnum } from "@/utilities/enums/apiRequestMethodsEnum";
@@ -44,7 +46,50 @@ export const dealService = BaseService.appClient.injectEndpoints({
             ]
           : [{ type: ApiTagsEnum.Deal, id: "LIST" }],
     }),
-
+    readDealByUser: builder.query<ReadDealResponse, void>({
+      query: () => ({
+        url: `/${controller}/read-by-deal-user-id/`,
+        method: ApiRequestMethodsEnum.GET,
+      }),
+      providesTags: (results) =>
+        results && results.data
+          ? [
+              ...results.data.map((result) => ({
+                type: ApiTagsEnum.Deal,
+                id: result.dealId,
+              })),
+              { type: ApiTagsEnum.Deal, id: "LIST" },
+            ]
+          : [{ type: ApiTagsEnum.Deal, id: "LIST" }],
+    }),
+    readDealByStatus: builder.query<ReadDealResponse, string>({
+      query: (dealStatus) => ({
+        url: `/${controller}/read-by-deal-status/${dealStatus}`,
+        method: ApiRequestMethodsEnum.GET,
+      }),
+      providesTags: (results) =>
+        results && results.data
+          ? [
+              ...results.data.map((result) => ({
+                type: ApiTagsEnum.Deal,
+                id: result.dealId,
+              })),
+              { type: ApiTagsEnum.Deal, id: "LIST" },
+            ]
+          : [{ type: ApiTagsEnum.Deal, id: "LIST" }],
+    }),
+    readDealByDealId: builder.query<ReadDealResponseByDealId, string | number>({
+      query: (args) => ({
+        url: `${controller}/read-by-deal-id/${args}`,
+      }),
+      providesTags: (result) => [
+        {
+          type: ApiTagsEnum.Deal,
+          id: result?.data?.dealId,
+        },
+        { type: ApiTagsEnum.Deal, id: "LIST" },
+      ],
+    }),
     updateDeal: builder.mutation<UpdateDealResponse, UpdateDealRequest>({
       query: (data) => ({
         url: `/${controller}/update`,
@@ -81,6 +126,9 @@ export const {
   useUpdateDealMutation,
   useReadDealQuery,
   useLazyReadDealQuery,
+  useReadDealByUserQuery,
+  useReadDealByDealIdQuery,
+  useReadDealByStatusQuery,
   useDeleteDealMutation,
   useGetDealImagesPresignedUrlMutation,
 } = dealService;

@@ -1,10 +1,10 @@
 "use client";
 import { useTheme } from "next-themes";
-import { Button } from "../ui/button";
+import { Button, ButtonProps } from "../ui/button";
 import { themesEnum } from "@/utilities/enums/themesEnum";
 import { SunMoon } from "lucide-react";
 
-export default function ThemeSwitcher() {
+export default function ThemeSwitcher({ ...rest }: ButtonProps) {
   const { theme, setTheme } = useTheme();
 
   const handleThemeSwitch = () => {
@@ -27,6 +27,7 @@ export default function ThemeSwitcher() {
       width={"fit"}
       size={"icon-lg"}
       // className="absolute top-3 right-5"
+      {...rest}
     ></Button>
   );
 }

@@ -13,6 +13,7 @@ export type CategoryEntity = {
   categoryId: number;
   categoryName: string;
   categorySlug: string;
+  categoryIcon: string;
   categoryStatus: string;
   categoryUpdatedAt: string;
 };

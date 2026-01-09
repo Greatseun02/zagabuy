@@ -1,5 +1,7 @@
 import { FileItem } from "@/components/custom/BaseFileUpload";
 import * as yup from "yup";
+import { Formik } from "./types";
+import { FormikValues } from "formik";
 
 /**
  * File action handlers - for download, view, and preview functionality
@@ -147,5 +149,35 @@ export class FileUploadUtil {
       .min(min, "Please upload a profile image")
       .max(max, "Please upload a profile image")
       .required();
+  }
+
+  static handleUploadComplete<T extends FormikValues = FormikValues>(
+    result: FileItem,
+    formik: Formik<T>,
+    name: keyof T
+  ) {
+    const { url } = result as { url: string };
+    formik.setFieldValue(name as string, (prevValue: any) => {
+      if (Array.isArray(prevValue)) {
+        return [...prevValue, url];
+      }
+      return [url];
+    });
+  }
+
+  static handleFileRemove<T extends FormikValues = FormikValues>(
+    file: FileItem,
+    formik: Formik<T>,
+    name: keyof T
+  ) {
+    const removedItemIndex = formik.values.dealImagesUrl.findIndex(
+      (url: string) => url === file.url
+    );
+    if (removedItemIndex != -1) {
+      const updatedUrls = formik.values?.dealImagesUrl?.filter(
+        (_: string, index: number) => index !== removedItemIndex
+      );
+      formik.setFieldValue("dealImagesUrl", updatedUrls);
+    }
   }
 }

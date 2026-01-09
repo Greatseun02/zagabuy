@@ -40,6 +40,11 @@ export type TypographyProps = {
   style?: CSSProperties;
   className?: string;
   asChild?: boolean;
+  startButton?: ReactNode;
+  endButton?: ReactNode;
+  startIcon?: ReactNode;
+  endIcon?: ReactNode;
+  gap?: "xs" | "sm" | "md" | "lg";
 } & Omit<React.HTMLProps<HTMLParagraphElement>, "size" | "color" | "ref">;
 
 // Size mappings for display variant
@@ -90,6 +95,14 @@ const fontMap: Record<TypographyFont, string> = {
   mono: "font-mono",
 };
 
+// Gap mappings for spacing between text and buttons/icons
+const gapMap: Record<"xs" | "sm" | "md" | "lg", string> = {
+  xs: "gap-1",
+  sm: "gap-2",
+  md: "gap-3",
+  lg: "gap-4",
+};
+
 const Typography = forwardRef<HTMLElement, TypographyProps>(
   (
     {
@@ -103,6 +116,11 @@ const Typography = forwardRef<HTMLElement, TypographyProps>(
       className,
       style,
       asChild,
+      startButton,
+      endButton,
+      startIcon,
+      endIcon,
+      gap = "sm",
       ...props
     },
     ref
@@ -118,6 +136,11 @@ const Typography = forwardRef<HTMLElement, TypographyProps>(
         ? { color }
         : undefined;
 
+    // Check if we need a flex wrapper for buttons/icons
+    const hasStartContent = startButton || startIcon;
+    const hasEndContent = endButton || endIcon;
+    const hasButtonContent = hasStartContent || hasEndContent;
+
     const combinedClassName = cn(
       "transition-colors duration-200",
       sizeClass,
@@ -127,7 +150,7 @@ const Typography = forwardRef<HTMLElement, TypographyProps>(
       className
     );
 
-    return (
+    const content = (
       <Component
         ref={ref}
         className={combinedClassName}
@@ -137,6 +160,48 @@ const Typography = forwardRef<HTMLElement, TypographyProps>(
         {children}
       </Component>
     );
+
+    // If there are buttons/icons, wrap in a flex container
+    if (hasButtonContent) {
+      const wrapperClass = cn(
+        "inline-flex items-center",
+        gapMap[gap],
+        className
+      );
+
+      return (
+        <div className={wrapperClass} style={style}>
+          {hasStartContent && (
+            <span className="inline-flex items-center">
+              {startIcon && <span>{startIcon}</span>}
+              {startButton && <span>{startButton}</span>}
+            </span>
+          )}
+          <Component
+            ref={ref}
+            className={cn(
+              "transition-colors duration-200",
+              sizeClass,
+              weightMap[weight],
+              colorClass || "text-foreground",
+              fontMap[font]
+            )}
+            style={textColorStyle}
+            {...props}
+          >
+            {children}
+          </Component>
+          {hasEndContent && (
+            <span className="inline-flex items-center">
+              {endIcon && <span>{endIcon}</span>}
+              {endButton && <span>{endButton}</span>}
+            </span>
+          )}
+        </div>
+      );
+    }
+
+    return content;
   }
 );
 

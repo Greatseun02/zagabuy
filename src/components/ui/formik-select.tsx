@@ -121,8 +121,8 @@ const FormikSelect = React.forwardRef<HTMLDivElement, FormikSelectProps>(
       onValueChange?.(newValue, prevValue);
 
       if (formik && name) {
-        formik.setFieldValue(name, newValue);
-        formik.setFieldTouched(name, true);
+        formik.setFieldValue(name, newValue, true); // validate immediately
+        formik.setFieldTouched(name, true, false); // mark touched, don't revalidate again
       }
     };
 

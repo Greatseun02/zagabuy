@@ -47,6 +47,12 @@
 
   --color-success: hsl(var(--success));
   --color-success-foreground: hsl(var(--success-foreground));
+
+  /* screen sizes */
+  --breakpoint-laptop: 80rem;
+  --breakpoint-laptop-large: 90rem;
+  --breakpoint-desktop: 100rem;
+  --breakpoint-desktop-large: 120rem;
 }
 
 /* LIGHT MODE - Zagabuy Deals Marketplace */
@@ -400,5 +406,43 @@
   }
   body {
     @apply bg-background text-foreground;
+  }
+}
+
+@layer utilities {
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  @keyframes slide-up {
+    from {
+      opacity: 0;
+      transform: translateY(16px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .animate-fade-in {
+    animation: fade-in 0.5s ease-out;
+  }
+
+  .animate-slide-up {
+    animation: slide-up 0.5s ease-out;
+  }
+
+  .customContainer {
+    @apply mx-auto w-full sm:max-w-160 md:max-w-3xl lg:max-w-5xl laptop:max-w-7xl laptop-large:max-w-360 desktop:max-w-400 desktop-large:max-w-480;
+  }
+
+  .padding {
+    @apply px-5 laptop-large:px-10;
   }
 }

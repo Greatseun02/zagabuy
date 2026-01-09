@@ -4,4 +4,7 @@ export enum ApiTagsEnum {
   Category = "Category",
   Tags = "Tags",
   Deal = "Deal",
+  AuditLog = "AuditLog",
+  Click = "Click",
+  AdminDashboard = "AdminDashboard",
 }

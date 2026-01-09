@@ -1,43 +1,55 @@
+import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import Typography from "@/components/ui/typography";
 import React, { useState } from "react";
+import { RowOption } from "../BaseDataGrid.types";
 
 export default function RowOptionsMenu({
   options = [],
   row,
+  actions,
 }: {
-  options?: any[];
+  options?: RowOption[];
   row: any;
+  actions: any;
 }) {
-  const [open, setOpen] = useState(false);
-
   if (!options || options.length === 0) return null;
 
   return (
     <div className="relative inline-block">
-      <button
-        onClick={() => setOpen(!open)}
-        className="px-2 py-1 border rounded hover:bg-gray-100"
-        title="Row options"
-      >
-        ⋮
-      </button>
-      {open && (
-        <div className="absolute right-0 mt-1 w-40 bg-white border rounded shadow-lg z-10">
+      <DropdownMenu>
+        <DropdownMenuTrigger>
+          <Button variant={"transparent"} title="Row options">
+            ⋮
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent className="p-1 divide-y ">
           {options.map((o, i) => (
-            <button
-              key={i}
-              onClick={() => {
-                o.onClick(row);
-                setOpen(false);
-              }}
-              className={`w-full text-left px-3 py-2 text-sm hover:bg-gray-50 ${
-                o.danger ? "text-red-600" : "text-gray-700"
-              }`}
-            >
-              {o.label}
-            </button>
+            <DropdownMenuItem>
+              <Button
+                {...(o.icon && { startIcon: <o.icon /> })}
+                key={i}
+                onClick={() => {
+                  o.onClick(row, actions);
+                }}
+                variant={"ghost"}
+                width={"fit"}
+                size={"x-small"}
+                className="gap-4 rounded-none px-1"
+              >
+                <Typography color={o.danger ? "error" : "foreground"}>
+                  {o.label}
+                </Typography>
+              </Button>
+            </DropdownMenuItem>
           ))}
-        </div>
-      )}
+        </DropdownMenuContent>
+      </DropdownMenu>
     </div>
   );
 }

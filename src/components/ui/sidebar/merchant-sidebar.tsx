@@ -124,7 +124,7 @@ export function MerchantSidebar() {
         </SidebarGroup>
 
         {/* Wallet Widget */}
-        <SidebarGroup>
+        {/* <SidebarGroup>
           <SidebarGroupLabel>Wallet Balance</SidebarGroupLabel>
           <SidebarGroupContent>
             <div className="px-2 py-3 rounded-md bg-sidebar-accent/50">
@@ -165,7 +165,7 @@ export function MerchantSidebar() {
               </Link>
             </div>
           </SidebarGroupContent>
-        </SidebarGroup>
+        </SidebarGroup> */}
 
         {/* Quick Link */}
         <SidebarGroup>

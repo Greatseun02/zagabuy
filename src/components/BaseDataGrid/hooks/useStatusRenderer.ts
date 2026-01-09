@@ -1,7 +1,10 @@
 import React from "react";
 
 export function useStatusRenderer() {
-  function render(value: any, mapping: Record<string, string> = {}) {
+  function render(
+    value: any,
+    mapping: Record<string, string> = {}
+  ): React.ReactNode {
     const v = String(value);
     const map = mapping[v] ?? v;
     const color =
@@ -15,7 +18,11 @@ export function useStatusRenderer() {
         ? "bg-yellow-100 text-yellow-800"
         : "bg-gray-100 text-gray-800";
 
-    return <span className={`px-2 py-1 rounded text-xs ${color}`}>{map}</span>;
+    return React.createElement(
+      "span",
+      { className: `px-2 py-1 rounded text-xs ${color}` },
+      map
+    );
   }
 
   return { render };

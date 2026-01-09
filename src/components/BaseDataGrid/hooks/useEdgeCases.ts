@@ -21,17 +21,17 @@ export function useEdgeCases<TData extends object = any>(
       );
     }
 
-    // Warning 3: Missing fetchData in server mode
-    if (props.mode === "server" && !props.fetchData) {
+    // Warning 3: Missing onQueryChange in server mode
+    if (props.mode === "server" && !props.onQueryChange) {
       warnings.push(
-        '⚠️ BaseDataGrid: mode="server" but no fetchData function provided. Switching to client mode.'
+        '⚠️ BaseDataGrid: mode="server" but no onQueryChange function provided. Switching to client mode.'
       );
     }
 
-    // Warning 4: Both data and fetchData provided
-    if (props.data?.length && props.fetchData && props.mode !== "server") {
+    // Warning 4: Both data and onQueryChange provided
+    if (props.data?.length && props.onQueryChange && props.mode !== "server") {
       warnings.push(
-        "⚠️ BaseDataGrid: Both data and fetchData provided. Using mode detection."
+        "⚠️ BaseDataGrid: Both data and onQueryChange provided. Using mode detection."
       );
     }
 
@@ -53,7 +53,7 @@ export function useEdgeCases<TData extends object = any>(
     props.data?.length,
     props.autoGenerateColumns,
     props.mode,
-    props.fetchData,
+    props.onQueryChange,
     props.pageSizeOptions,
   ]);
 }

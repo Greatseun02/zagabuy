@@ -104,6 +104,21 @@ export const RouteConstant = {
         name: "Create Deal",
         moduleName: "merchant",
       } as RouteConfig,
+      viewDeal: {
+        path: "/merchant/deals/view",
+        name: "View Deal",
+        moduleName: "merchant",
+      } as RouteConfig,
+      viewDealAnalytics: {
+        path: "/merchant/deals/analytics/",
+        name: "View Deal Analytics",
+        moduleName: "merchant",
+      } as RouteConfig,
+      editDeal: {
+        path: "/merchant/deals/edit",
+        name: "Edit Deal",
+        moduleName: "merchant",
+      },
     },
 
     analytics: {
