@@ -7,7 +7,7 @@ export default function page() {
   return (
     <>
       <HeroSection />
-      <CategoryNavSection />
+      {/* <CategoryNavSection /> */}
       <TopDealsSection />
       <TrendingDealsSection />
     </>
