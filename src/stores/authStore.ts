@@ -51,7 +51,7 @@ const slice = createSlice({
         payload: LoginResponse;
       }
     ) => {
-      const {token, responseCode, responseMessage, ...userInfo} = payload;
+      const { token, responseCode, responseMessage, ...userInfo } = payload;
       state.token = payload.token;
       state.userInfo = userInfo;
     },

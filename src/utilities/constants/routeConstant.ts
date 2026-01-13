@@ -1,5 +1,3 @@
-import path from "path";
-
 /**
  * Route configuration type with optional access control
  */
