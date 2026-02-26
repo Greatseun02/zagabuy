@@ -57,12 +57,14 @@ export const FundWalletModal = createAppModal<FundWalletModalProps>(
             <div className="flex items-center justify-between rounded-md border p-3">
               <div className="space-y-1">
                 <p className="text-xs text-muted-foreground">Account Name</p>
-                <p className="text-sm font-semibold">{wallet.accountName ?? "--"}</p>
+                <p className="text-sm font-semibold">
+                  {wallet.accountName ?? "--"}
+                </p>
               </div>
               {wallet.accountName && (
                 <Button
                   variant="ghost"
-                  size="sm"
+                  size="small"
                   className="h-8 w-8 p-0"
                   onClick={() => copyToClipboard(wallet.accountName ?? "")}
                 >
@@ -82,7 +84,7 @@ export const FundWalletModal = createAppModal<FundWalletModalProps>(
               {wallet.accountNumber && (
                 <Button
                   variant="ghost"
-                  size="sm"
+                  size="small"
                   className="h-8 w-8 p-0"
                   onClick={() => copyToClipboard(wallet.accountNumber ?? "")}
                 >
