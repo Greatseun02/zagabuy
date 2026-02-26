@@ -1,14 +1,15 @@
 import { BaseResponse } from "@/utilities/types";
 
-export type ReadWalletUserIdResponse = BaseResponse<
-  {
-    walletAccountNumber: string;
-    walletBalance: number;
-    walletCreatedAt: string;
-    walletExternalCustomerId: string;
-    walletId: number;
-    walletStatus: string;
-    walletUpdatedAt: string;
-    walletUserId: number;
-  }[]
->;
+export type ReadWalletUserIdResponse = {
+  accountBalance?: string;
+  accountLedgerBalance?: string;
+  accountBankCode?: string;
+  accountBankName?: string;
+  accountBranchCode?: string;
+  accountCurrency?: string;
+  accountCustomerPhone?: string;
+  accountName?: string;
+  accountNumber?: string;
+  responseCode: string;
+  responseMessage: string;
+};

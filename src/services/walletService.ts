@@ -17,19 +17,9 @@ export const walletService = BaseService.appClient.injectEndpoints({
     >({
       query: ({ walletUserId }) => ({
         url: `/${controller}/read-by-wallet-user-id/${walletUserId}`,
-        // url: `/${controller}/read`,
         method: ApiRequestMethodsEnum.GET,
       }),
-      providesTags: (result) => {
-        if (!result?.data) return [{ type: ApiTagsEnum.Wallet, id: "LIST" }];
-        return [
-          ...result.data.map((wallet) => ({
-            type: ApiTagsEnum.Wallet as const,
-            id: wallet.walletId,
-          })),
-          { type: ApiTagsEnum.Wallet, id: "LIST" },
-        ];
-      },
+      providesTags: [{ type: ApiTagsEnum.Wallet, id: "LIST" }],
     }),
     validateBvn: builder.mutation<ValidateBvnResponse, ValidateBvnRequest>({
       query: (payload) => ({
