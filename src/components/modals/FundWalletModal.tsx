@@ -11,7 +11,7 @@ export interface FundWalletModalProps {
 
 export const FundWalletModal = createAppModal<FundWalletModalProps>(
   ({ wallet }, modal) => {
-    const copyToClipboard = (text: string, label: string) => {
+    const copyToClipboard = (text: string) => {
       navigator.clipboard.writeText(text);
       // You could add a toast notification here
     };
@@ -37,14 +37,16 @@ export const FundWalletModal = createAppModal<FundWalletModalProps>(
             <div className="flex items-center justify-between rounded-md border p-3">
               <div className="space-y-1">
                 <p className="text-xs text-muted-foreground">Bank Name</p>
-                <p className="text-sm font-semibold">{wallet.accountBankName}</p>
+                <p className="text-sm font-semibold">
+                  {wallet.accountBankName ?? "--"}
+                </p>
               </div>
               {wallet.accountBankName && (
                 <Button
                   variant="ghost"
                   size="sm"
                   className="h-8 w-8 p-0"
-                  onClick={() => copyToClipboard(wallet.accountBankName!, "Bank name")}
+                  onClick={() => copyToClipboard(wallet.accountBankName ?? "")}
                 >
                   <Copy className="h-4 w-4" />
                 </Button>
@@ -55,14 +57,14 @@ export const FundWalletModal = createAppModal<FundWalletModalProps>(
             <div className="flex items-center justify-between rounded-md border p-3">
               <div className="space-y-1">
                 <p className="text-xs text-muted-foreground">Account Name</p>
-                <p className="text-sm font-semibold">{wallet.accountName}</p>
+                <p className="text-sm font-semibold">{wallet.accountName ?? "--"}</p>
               </div>
               {wallet.accountName && (
                 <Button
                   variant="ghost"
                   size="sm"
                   className="h-8 w-8 p-0"
-                  onClick={() => copyToClipboard(wallet.accountName!, "Account name")}
+                  onClick={() => copyToClipboard(wallet.accountName ?? "")}
                 >
                   <Copy className="h-4 w-4" />
                 </Button>
@@ -73,14 +75,16 @@ export const FundWalletModal = createAppModal<FundWalletModalProps>(
             <div className="flex items-center justify-between rounded-md border p-3">
               <div className="space-y-1">
                 <p className="text-xs text-muted-foreground">Account Number</p>
-                <p className="text-sm font-semibold tracking-wider">{wallet.accountNumber}</p>
+                <p className="text-sm font-semibold tracking-wider">
+                  {wallet.accountNumber ?? "--"}
+                </p>
               </div>
               {wallet.accountNumber && (
                 <Button
                   variant="ghost"
                   size="sm"
                   className="h-8 w-8 p-0"
-                  onClick={() => copyToClipboard(wallet.accountNumber!, "Account number")}
+                  onClick={() => copyToClipboard(wallet.accountNumber ?? "")}
                 >
                   <Copy className="h-4 w-4" />
                 </Button>
@@ -92,8 +96,9 @@ export const FundWalletModal = createAppModal<FundWalletModalProps>(
         {/* Instructions */}
         <div className="rounded-lg border border-dashed p-4">
           <p className="text-sm text-muted-foreground">
-            <strong>Note:</strong> Use the account details above to transfer funds.
-            Your wallet will be credited automatically after confirmation.
+            <strong>Note:</strong> Use the account details above to transfer
+            funds. Your wallet will be credited automatically after
+            confirmation.
           </p>
         </div>
       </div>
