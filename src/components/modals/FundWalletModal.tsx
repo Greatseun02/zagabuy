@@ -44,7 +44,7 @@ export const FundWalletModal = createAppModal<FundWalletModalProps>(
               {wallet.accountBankName && (
                 <Button
                   variant="ghost"
-                  size="sm"
+                  size="small"
                   className="h-8 w-8 p-0"
                   onClick={() => copyToClipboard(wallet.accountBankName ?? "")}
                 >
