@@ -19,7 +19,7 @@ export const ValidateBvnValidationSchema = yup.object().shape({
     .min(2, "Last name must be at least 2 characters"),
   reference: yup
     .string()
-    .optional()
+    .required()
     .min(3, "Reference must be at least 3 characters"),
 });
 
@@ -42,6 +42,6 @@ export const ValidateNinValidationSchema = yup.object().shape({
     .min(2, "Last name must be at least 2 characters"),
   reference: yup
     .string()
-    .optional()
+    .required()
     .min(3, "Reference must be at least 3 characters"),
 });
