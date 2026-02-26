@@ -1,7 +1,10 @@
 "use client";
 
 import { useFormik } from "formik";
-import { ValidateBvnRequest, ValidateBvnInit } from "@/models/requests/wallet/ValidateBvnRequest";
+import {
+  ValidateBvnRequest,
+  ValidateBvnInit,
+} from "@/models/requests/wallet/ValidateBvnRequest";
 import { useValidateBvnMutation } from "@/services/walletService";
 import { ValidateBvnValidationSchema } from "@/models/validations/walletValidation";
 import { Input } from "@/components/ui/input";
@@ -104,22 +107,6 @@ export const ValidateBvnForm = ({
         error={
           formik.touched.lastName && formik.errors.lastName
             ? (formik.errors.lastName as string)
-            : undefined
-        }
-      />
-
-      <Input
-        id="reference"
-        name="reference"
-        label="Reference"
-        type="text"
-        placeholder="Enter a reference"
-        value={formik.values.reference}
-        onChange={formik.handleChange}
-        onBlur={formik.handleBlur}
-        error={
-          formik.touched.reference && formik.errors.reference
-            ? (formik.errors.reference as string)
             : undefined
         }
       />

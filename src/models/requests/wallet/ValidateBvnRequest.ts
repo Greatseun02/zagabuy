@@ -11,5 +11,5 @@ export const ValidateBvnInit: ValidateBvnRequest = {
   dob: "",
   firstName: "",
   lastName: "",
-  reference: "",
+  reference: "Zagabuy",
 };

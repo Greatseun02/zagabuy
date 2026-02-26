@@ -11,5 +11,5 @@ export const ValidateNinInit: ValidateNinRequest = {
   dob: "",
   firstName: "",
   lastName: "",
-  reference: "",
+  reference: "Zagabuy",
 };

@@ -111,22 +111,6 @@ export const ValidateNinForm = ({
         }
       />
 
-      <Input
-        id="reference"
-        name="reference"
-        label="Reference"
-        type="text"
-        placeholder="Enter a reference"
-        value={formik.values.reference}
-        onChange={formik.handleChange}
-        onBlur={formik.handleBlur}
-        error={
-          formik.touched.reference && formik.errors.reference
-            ? (formik.errors.reference as string)
-            : undefined
-        }
-      />
-
       <Button type="submit" className="w-full" disabled={isLoading}>
         {isLoading ? "Validating..." : "Validate NIN"}
       </Button>
