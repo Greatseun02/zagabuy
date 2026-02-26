@@ -47,6 +47,7 @@ import { adminSideBarData } from "@/utilities/data/admin-sidebarData";
 import { Button } from "../button";
 import { merchantSideBarData } from "@/utilities/data/merchant-sidebarData";
 import { StringUtil } from "@/utilities/stringUtil";
+import { BaseUtil } from "@/utilities/baseUtil";
 import { Progress } from "../progress";
 import { useReadWalletByUserIdQuery } from "@/services/walletService";
 import { useState } from "react";
@@ -54,16 +55,18 @@ import { ReadWalletUserIdResponse } from "@/models/responses/wallet/ReadWalletUs
 import { BILLING } from "@/utilities/constants";
 import { useAppModal } from "@/hooks/useAppModal";
 import { ValidateKYCModal } from "@/components/modals/ValidateKYCModal";
+import { FundWalletModal } from "@/components/modals/FundWalletModal";
 
 export function MerchantSidebar() {
   const location = usePathname();
   const user = useAppSelector((state) => state.auth.userInfo);
   const validateKYCModal = useAppModal(ValidateKYCModal);
+  const fundWalletModal = useAppModal(FundWalletModal);
   // const [wallet, setWallet] = useState<ReadWalletUserIdResponse["data"] | null>(
   //   null,
   // );
 
-  const { data: walletData } = useReadWalletByUserIdQuery(
+  const { data: wallet } = useReadWalletByUserIdQuery(
     {
       walletUserId: user?.userId || 0,
     },
@@ -74,11 +77,12 @@ export function MerchantSidebar() {
     user?.userDisplayName ||
     `${user?.userFirstName} ${user?.userLastName.substring(0, 1)}` ||
     "Merchant";
-  const wallet = walletData?.data?.[0];
-  const walletBalance = wallet?.walletBalance ?? 0;
+  const walletBalance = Number(wallet?.accountBalance ?? 0);
   const lowBalanceThreshold = BILLING.LOW_BALANCE_THRESHOLD;
-  const accountNumber = wallet?.walletAccountNumber || "N/A";
-  const isWalletValid = !!walletData?.data && walletData.data.length > 0;
+  const isWalletValid =
+    wallet &&
+    BaseUtil.isApiResponseSuccessful(wallet) &&
+    !!wallet?.accountNumber;
 
   const balancePercentage = Math.min((walletBalance / 1000) * 100, 100);
   const isLowBalance = walletBalance < lowBalanceThreshold;
@@ -154,7 +158,7 @@ export function MerchantSidebar() {
                       )}
                       data-testid="text-sidebar-balance"
                     >
-                      {StringUtil.formatCurrency(String(walletBalance), "USD")}
+                      {StringUtil.formatCurrency(String(walletBalance), "NGN")}
                     </span>
                     {isLowBalance && (
                       <span className="text-xs text-destructive font-medium">
@@ -169,20 +173,22 @@ export function MerchantSidebar() {
                       isLowBalance && "[&>div]:bg-destructive",
                     )}
                   />
-                  <p className="text-xs text-muted-foreground mt-2 mb-3">
-                    Account: {accountNumber}
-                  </p>
-                  <Link href={RouteConstant.merchant.dashboard.path}>
-                    <Button
-                      variant="outline"
-                      size="small"
-                      width={"full"}
-                      data-testid="button-top-up"
-                    >
-                      <Wallet className="h-3.5 w-3.5 mr-1.5" />
-                      Top Up
-                    </Button>
-                  </Link>
+                  <Button
+                    variant="outline"
+                    size="small"
+                    width={"full"}
+                    className="mt-3"
+                    data-testid="button-top-up"
+                    onClick={() =>
+                      fundWalletModal.show({
+                        title: "Fund Wallet",
+                        wallet,
+                      })
+                    }
+                  >
+                    <Wallet className="h-3.5 w-3.5 mr-1.5" />
+                    Top Up
+                  </Button>
                 </>
               ) : (
                 <>
