@@ -7,4 +7,5 @@ export enum ApiTagsEnum {
   AuditLog = "AuditLog",
   Click = "Click",
   AdminDashboard = "AdminDashboard",
+  Wallet = "Wallet",
 }

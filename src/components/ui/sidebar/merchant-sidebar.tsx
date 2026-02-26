@@ -48,21 +48,37 @@ import { Button } from "../button";
 import { merchantSideBarData } from "@/utilities/data/merchant-sidebarData";
 import { StringUtil } from "@/utilities/stringUtil";
 import { Progress } from "../progress";
+import { useReadWalletByUserIdQuery } from "@/services/walletService";
+import { useState } from "react";
+import { ReadWalletUserIdResponse } from "@/models/responses/wallet/ReadWalletUserIdResponse";
+import { BILLING } from "@/utilities/constants";
+import { useAppModal } from "@/hooks/useAppModal";
+import { ValidateKYCModal } from "@/components/modals/ValidateKYCModal";
 
 export function MerchantSidebar() {
   const location = usePathname();
-  const { userInfo: user } = useAppSelector((state) => state.auth);
-  //   const { data: wallet } = useGetWalletQuery();
+  const user = useAppSelector((state) => state.auth.userInfo);
+  const validateKYCModal = useAppModal(ValidateKYCModal);
+  // const [wallet, setWallet] = useState<ReadWalletUserIdResponse["data"] | null>(
+  //   null,
+  // );
+
+  const { data: walletData } = useReadWalletByUserIdQuery(
+    {
+      walletUserId: user?.userId || 0,
+    },
+    { skip: !user?.userId },
+  );
 
   const merchantName =
     user?.userDisplayName ||
     `${user?.userFirstName} ${user?.userLastName.substring(0, 1)}` ||
     "Merchant";
-  //   const walletBalance = wallet?.balance ?? 0;
-  const walletBalance = 0;
-  //   const lowBalanceThreshold =
-  //     wallet?.lowBalanceThreshold ?? BILLING.LOW_BALANCE_THRESHOLD;
-  const lowBalanceThreshold = 0;
+  const wallet = walletData?.data?.[0];
+  const walletBalance = wallet?.walletBalance ?? 0;
+  const lowBalanceThreshold = BILLING.LOW_BALANCE_THRESHOLD;
+  const accountNumber = wallet?.walletAccountNumber || "N/A";
+  const isWalletValid = !!walletData?.data && walletData.data.length > 0;
 
   const balancePercentage = Math.min((walletBalance / 1000) * 100, 100);
   const isLowBalance = walletBalance < lowBalanceThreshold;
@@ -124,48 +140,80 @@ export function MerchantSidebar() {
         </SidebarGroup>
 
         {/* Wallet Widget */}
-        {/* <SidebarGroup>
+        <SidebarGroup>
           <SidebarGroupLabel>Wallet Balance</SidebarGroupLabel>
           <SidebarGroupContent>
             <div className="px-2 py-3 rounded-md bg-sidebar-accent/50">
-              <div className="flex items-center justify-between mb-2">
-                <span
-                  className={cn(
-                    "text-lg font-bold tabular-nums",
-                    isLowBalance && "text-destructive"
-                  )}
-                  data-testid="text-sidebar-balance"
-                >
-                  {StringUtil.formatCurrency(String(walletBalance), "USD")}
-                </span>
-                {isLowBalance && (
-                  <span className="text-xs text-destructive font-medium">
-                    Low
-                  </span>
-                )}
-              </div>
-              <Progress
-                value={balancePercentage}
-                className={cn(
-                  "h-1.5",
-                  isLowBalance && "[&>div]:bg-destructive"
-                )}
-              />
-              <Link href={RouteConstant.merchant.dashboard.path}>
-                <Button
-                  variant="outline"
-                  size="small"
-                  width={"full"}
-                  className="mt-3"
-                  data-testid="button-top-up"
-                >
-                  <Wallet className="h-3.5 w-3.5 mr-1.5" />
-                  Top Up
-                </Button>
-              </Link>
+              {isWalletValid ? (
+                <>
+                  <div className="flex items-center justify-between mb-2">
+                    <span
+                      className={cn(
+                        "text-lg font-bold tabular-nums",
+                        isLowBalance && "text-destructive",
+                      )}
+                      data-testid="text-sidebar-balance"
+                    >
+                      {StringUtil.formatCurrency(String(walletBalance), "USD")}
+                    </span>
+                    {isLowBalance && (
+                      <span className="text-xs text-destructive font-medium">
+                        Low
+                      </span>
+                    )}
+                  </div>
+                  <Progress
+                    value={balancePercentage}
+                    className={cn(
+                      "h-1.5",
+                      isLowBalance && "[&>div]:bg-destructive",
+                    )}
+                  />
+                  <p className="text-xs text-muted-foreground mt-2 mb-3">
+                    Account: {accountNumber}
+                  </p>
+                  <Link href={RouteConstant.merchant.dashboard.path}>
+                    <Button
+                      variant="outline"
+                      size="small"
+                      width={"full"}
+                      data-testid="button-top-up"
+                    >
+                      <Wallet className="h-3.5 w-3.5 mr-1.5" />
+                      Top Up
+                    </Button>
+                  </Link>
+                </>
+              ) : (
+                <>
+                  <p className="text-sm font-medium mb-3">
+                    Wallet Not Activated
+                  </p>
+                  <p className="text-xs text-muted-foreground mb-3">
+                    Please activate your wallet to start receiving payments.
+                  </p>
+                  <Button
+                    variant="outline"
+                    size="small"
+                    width={"full"}
+                    data-testid="button-setup-wallet"
+                    onClick={() =>
+                      validateKYCModal.show({
+                        title: "Validate Your Identity",
+                        onSuccess: () => {
+                          // Refetch wallet data after successful validation
+                        },
+                      })
+                    }
+                  >
+                    <Wallet className="h-3.5 w-3.5 mr-1.5" />
+                    Setup Wallet
+                  </Button>
+                </>
+              )}
             </div>
           </SidebarGroupContent>
-        </SidebarGroup> */}
+        </SidebarGroup>
 
         {/* Quick Link */}
         <SidebarGroup>
