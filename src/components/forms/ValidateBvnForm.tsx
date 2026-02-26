@@ -45,104 +45,84 @@ export const ValidateBvnForm = ({
 
   return (
     <form onSubmit={formik.handleSubmit} className="space-y-4">
-      <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">
-          BVN (11 digits)
-        </label>
-        <Input
-          id="bvn"
-          name="bvn"
-          type="text"
-          placeholder="Enter your BVN"
-          value={formik.values.bvn}
-          onChange={formik.handleChange}
-          onBlur={formik.handleBlur}
-          error={
-            formik.touched.bvn && formik.errors.bvn
-              ? (formik.errors.bvn as string)
-              : undefined
-          }
-        />
-      </div>
+      <Input
+        id="bvn"
+        name="bvn"
+        label="BVN (11 digits)"
+        type="text"
+        placeholder="Enter your BVN"
+        value={formik.values.bvn}
+        onChange={formik.handleChange}
+        onBlur={formik.handleBlur}
+        error={
+          formik.touched.bvn && formik.errors.bvn
+            ? (formik.errors.bvn as string)
+            : undefined
+        }
+      />
 
-      <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">
-          Date of Birth
-        </label>
-        <Input
-          id="dob"
-          name="dob"
-          type="date"
-          value={formik.values.dob}
-          onChange={formik.handleChange}
-          onBlur={formik.handleBlur}
-          error={
-            formik.touched.dob && formik.errors.dob
-              ? (formik.errors.dob as string)
-              : undefined
-          }
-        />
-      </div>
+      <Input
+        id="dob"
+        name="dob"
+        label="Date of Birth"
+        type="date"
+        value={formik.values.dob}
+        onChange={formik.handleChange}
+        onBlur={formik.handleBlur}
+        error={
+          formik.touched.dob && formik.errors.dob
+            ? (formik.errors.dob as string)
+            : undefined
+        }
+      />
 
-      <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">
-          First Name
-        </label>
-        <Input
-          id="firstName"
-          name="firstName"
-          type="text"
-          placeholder="Enter your first name"
-          value={formik.values.firstName}
-          onChange={formik.handleChange}
-          onBlur={formik.handleBlur}
-          error={
-            formik.touched.firstName && formik.errors.firstName
-              ? (formik.errors.firstName as string)
-              : undefined
-          }
-        />
-      </div>
+      <Input
+        id="firstName"
+        name="firstName"
+        label="First Name"
+        type="text"
+        placeholder="Enter your first name"
+        value={formik.values.firstName}
+        onChange={formik.handleChange}
+        onBlur={formik.handleBlur}
+        error={
+          formik.touched.firstName && formik.errors.firstName
+            ? (formik.errors.firstName as string)
+            : undefined
+        }
+      />
 
-      <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">
-          Last Name
-        </label>
-        <Input
-          id="lastName"
-          name="lastName"
-          type="text"
-          placeholder="Enter your last name"
-          value={formik.values.lastName}
-          onChange={formik.handleChange}
-          onBlur={formik.handleBlur}
-          error={
-            formik.touched.lastName && formik.errors.lastName
-              ? (formik.errors.lastName as string)
-              : undefined
-          }
-        />
-      </div>
+      <Input
+        id="lastName"
+        name="lastName"
+        label="Last Name"
+        type="text"
+        placeholder="Enter your last name"
+        value={formik.values.lastName}
+        onChange={formik.handleChange}
+        onBlur={formik.handleBlur}
+        error={
+          formik.touched.lastName && formik.errors.lastName
+            ? (formik.errors.lastName as string)
+            : undefined
+        }
+      />
 
-      <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">
-          Reference
-        </label>
-        <Input
-          id="reference"
-          name="reference"
-          type="text"
-          placeholder="Enter a reference"
-          value={formik.values.reference}
-          onChange={formik.handleChange}
-          onBlur={formik.handleBlur}
-          error={
-            formik.touched.reference && formik.errors.reference
-              ? (formik.errors.reference as string)
-              : undefined
-          }
-        />
-      </div>
+      <Input
+        id="reference"
+        name="reference"
+        label="Reference"
+        type="text"
+        placeholder="Enter a reference"
+        value={formik.values.reference}
+        onChange={formik.handleChange}
+        onBlur={formik.handleBlur}
+        error={
+          formik.touched.reference && formik.errors.reference
+            ? (formik.errors.reference as string)
+            : undefined
+        }
+      />
 
       <Button type="submit" className="w-full" disabled={isLoading}>
         {isLoading ? "Validating..." : "Validate BVN"}

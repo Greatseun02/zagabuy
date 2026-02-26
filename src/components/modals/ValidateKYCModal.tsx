@@ -11,34 +11,42 @@ export interface ValidateKYCModalProps {
 
 export const ValidateKYCModal = createAppModal<ValidateKYCModalProps>(
   ({ onSuccess }, modal) => {
-    const tabs: BaseTabItem[] = [
-      {
-        id: "bvn",
-        label: "Validate BVN",
-        content: (
-          <ValidateBvnForm
-            onSuccessfulSubmission={() => {
-              onSuccess?.();
-              modal.hide();
-            }}
-          />
-        ),
-      },
-      {
-        id: "nin",
-        label: "Validate NIN",
-        content: (
-          <ValidateNinForm
-            onSuccessfulSubmission={() => {
-              onSuccess?.();
-              modal.hide();
-            }}
-          />
-        ),
-      },
-    ];
+    // const tabs: BaseTabItem[] = [
+    //   {
+    //     id: "bvn",
+    //     label: "Validate BVN",
+    //     content: (
+    //       <ValidateBvnForm
+    //         onSuccessfulSubmission={() => {
+    //           onSuccess?.();
+    //           modal.hide();
+    //         }}
+    //       />
+    //     ),
+    //   },
+    //   {
+    //     id: "nin",
+    //     label: "Validate NIN",
+    //     content: (
+    //       <ValidateNinForm
+    //         onSuccessfulSubmission={() => {
+    //           onSuccess?.();
+    //           modal.hide();
+    //         }}
+    //       />
+    //     ),
+    //   },
+    // ];
 
-    return <BaseTab tabs={tabs} />;
+    // return <BaseTab tabs={tabs} />;
+    return (
+      <ValidateNinForm
+        onSuccessfulSubmission={() => {
+          onSuccess?.();
+          modal.hide();
+        }}
+      />
+    );
   },
 );
 
