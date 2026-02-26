@@ -49,6 +49,7 @@ import { merchantSideBarData } from "@/utilities/data/merchant-sidebarData";
 import { StringUtil } from "@/utilities/stringUtil";
 import { BaseUtil } from "@/utilities/baseUtil";
 import { Progress } from "../progress";
+import { Skeleton } from "@/components/ui/skeleton";
 import { useReadWalletByUserIdQuery } from "@/services/walletService";
 import { useState } from "react";
 import { ReadWalletUserIdResponse } from "@/models/responses/wallet/ReadWalletUserIdResponse";
@@ -66,7 +67,7 @@ export function MerchantSidebar() {
   //   null,
   // );
 
-  const { data: wallet } = useReadWalletByUserIdQuery(
+  const { data: wallet, isLoading } = useReadWalletByUserIdQuery(
     {
       walletUserId: user?.userId || 0,
     },
@@ -148,7 +149,13 @@ export function MerchantSidebar() {
           <SidebarGroupLabel>Wallet Balance</SidebarGroupLabel>
           <SidebarGroupContent>
             <div className="px-2 py-3 rounded-md bg-sidebar-accent/50">
-              {isWalletValid ? (
+              {isLoading ? (
+                <>
+                  <Skeleton className="h-6 w-24 mb-2" />
+                  <Skeleton className="h-2 w-full mb-3" />
+                  <Skeleton className="h-8 w-full" />
+                </>
+              ) : isWalletValid ? (
                 <>
                   <div className="flex items-center justify-between mb-2">
                     <span
