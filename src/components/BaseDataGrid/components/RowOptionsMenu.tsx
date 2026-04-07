@@ -30,21 +30,19 @@ export default function RowOptionsMenu({
         </DropdownMenuTrigger>
         <DropdownMenuContent className="p-1 divide-y ">
           {options.map((o, i) => (
-            <DropdownMenuItem>
+            <DropdownMenuItem variant={o.danger ? "destructive" : "default"}>
               <Button
                 {...(o.icon && { startIcon: <o.icon /> })}
                 key={i}
                 onClick={() => {
                   o.onClick(row, actions);
                 }}
-                variant={"ghost"}
+                variant={o.danger ? "destructive" : "ghost"}
                 width={"fit"}
                 size={"x-small"}
                 className="gap-4 rounded-none px-1"
               >
-                <Typography color={o.danger ? "error" : "foreground"}>
-                  {o.label}
-                </Typography>
+                <Typography>{o.label}</Typography>
               </Button>
             </DropdownMenuItem>
           ))}

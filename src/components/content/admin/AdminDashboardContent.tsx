@@ -33,31 +33,34 @@ import {
 } from "@/components/ui/card";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { ReactNode } from "react";
+import { ReactNode, useMemo } from "react";
 import Typography from "@/components/ui/typography";
 import { useReadAuditLogQuery } from "@/services/auditLogService";
 import { TimeUtil } from "@/utilities/timeUtil";
 import { StringUtil } from "@/utilities/stringUtil";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useReadAdminDashboardQuery } from "@/services/adminDashboardService";
+import { useReadDealQuery } from "@/services/dealService";
 
 export default function AdminDashboardContent() {
   const { data: adminDashboardData, isLoading: isLoadingAdminDashboard } =
     useReadAdminDashboardQuery();
+  const { data: deals, isLoading: isLoadingDeals } = useReadDealQuery();
+
+  const pendingReviews = useMemo(() => {
+    return deals?.data?.filter(
+      (deal) => deal.dealStatus.toLowerCase().trim() === "pending",
+    ).length;
+  }, [deals?.data]);
 
   const dashboardOverviewCardsConfig: DashboardOverviewCardsProps[] = [
     {
       header: "Total Deals",
-      text: isLoadingAdminDashboard
-        ? "Loading..."
-        : adminDashboardData?.data?.[0].totalDeals &&
-          StringUtil.compact(adminDashboardData?.data?.[0].totalDeals),
-      footer: isLoadingAdminDashboard
-        ? "Loading..."
-        : adminDashboardData?.data?.[0].totalPending &&
-          `${StringUtil.compact(
-            adminDashboardData?.data?.[0].totalPending
-          )} pending`,
+      text:
+        isLoadingAdminDashboard || isLoadingDeals
+          ? "Loading..."
+          : deals?.data && StringUtil.compact(deals?.data?.length),
+
       Icon: ShoppingBag,
     },
     {
@@ -78,144 +81,53 @@ export default function AdminDashboardContent() {
     },
     {
       header: "Pending Review",
-      text: isLoadingAdminDashboard
-        ? "Loading..."
-        : adminDashboardData?.data?.[0].totalPending &&
-          StringUtil.compact(adminDashboardData?.data?.[0].totalPending),
+      text:
+        isLoadingAdminDashboard || isLoadingDeals
+          ? "Loading..."
+          : StringUtil.compact(pendingReviews || 0),
       Icon: Clock,
     },
   ];
 
-  const dashboardPerformanceStatsCardConfig: DashboardPerformanceStatsCardProps[] =
-    [
-      {
-        header: {
-          children: "Click Performance",
-          startIcon: <MousePointerClick />,
-        },
-        contents: [
-          {
-            label: {
-              children: "Today",
-            },
-            text: {
-              children: isLoadingAdminDashboard
-                ? "Loading..."
-                : adminDashboardData?.data?.[0].clicksToday
-                ? StringUtil.compact(adminDashboardData?.data?.[0].clicksToday)
-                : 0,
-            },
-          },
-          {
-            label: {
-              children: "This Month",
-            },
-            text: {
-              children: isLoadingAdminDashboard
-                ? "Loading..."
-                : adminDashboardData?.data?.[0].clicksThisMonth
-                ? StringUtil.compact(
-                    adminDashboardData?.data?.[0].clicksThisMonth
-                  )
-                : 0,
-            },
-          },
-        ],
-      },
-      // {
-      //   header: {
-      //     children: "CTR",
-      //     startIcon: <TrendingUpIcon />,
-      //   },
-      //   contents: [
-      //     {
-      //       label: {
-      //         children: "Today",
-      //       },
-      //       text: {
-      //         children: adminDashboardData?.data?.,
-      //       },
-      //     },
-      //     {
-      //       label: {
-      //         children: "This Month",
-      //       },
-      //       text: {
-      //         children: "60%",
-      //       },
-      //     },
-      //   ],
-      // },
-    ];
-
-  // const recentActivities: RecentActivityItemProps[] = [
-  //   {
-  //     title: "New merchant registered",
-  //     description: "A new merchant has been registered.",
-  //     time: "2 min ago",
-  //     type: "merchant",
-  //   },
-  //   {
-  //     title: "New merchant registered",
-  //     description: "A new merchant has been registered.",
-  //     time: "2 min ago",
-  //     type: "merchant",
-  //   },
-  //   {
-  //     title: "New merchant registered",
-  //     description: "A new merchant has been registered.",
-  //     time: "2 min ago",
-  //     type: "merchant",
-  //   },
-  //   {
-  //     title: "New merchant registered",
-  //     description: "A new merchant has been registered.",
-  //     time: "2 min ago",
-  //     type: "merchant",
-  //   },
-  //   {
-  //     title: "New merchant registered",
-  //     description: "A new merchant has been registered.",
-  //     time: "2 min ago",
-  //     type: "merchant",
-  //   },
-  //   {
-  //     title: "New merchant registered",
-  //     description: "A new merchant has been registered.",
-  //     time: "2 min ago",
-  //     type: "merchant",
-  //   },
-  //   {
-  //     title: "New merchant registered",
-  //     description: "A new merchant has been registered.",
-  //     time: "2 min ago",
-  //     type: "merchant",
-  //   },
-  //   {
-  //     title: "New merchant registered",
-  //     description: "A new merchant has been registered.",
-  //     time: "2 min ago",
-  //     type: "merchant",
-  //   },
-  //   {
-  //     title: "New merchant registered",
-  //     description: "A new merchant has been registered.",
-  //     time: "2 min ago",
-  //     type: "merchant",
-  //   },
-  //   {
-  //     title: "Deal approved",
-  //     description: "Your deal has been approved.",
-  //     time: "1 hour ago",
-  //     type: "approved",
-  //   },
-  //   {
-  //     title: "Payment received",
-  //     description: "Payment received from a customer.",
-  //     time: "3 hours ago",
-  //     type: "payment",
-  //   },
-  // ];
+  // const dashboardPerformanceStatsCardConfig: DashboardPerformanceStatsCardProps[] =
+  //   [
+  //     {
+  //       header: {
+  //         children: "Click Performance",
+  //         startIcon: <MousePointerClick />,
+  //       },
+  //       contents: [
+  //         {
+  //           label: {
+  //             children: "Today",
+  //           },
+  //           text: {
+  //             children: isLoadingAdminDashboard
+  //               ? "Loading..."
+  //               : adminDashboardData?.data?.[0].clicksToday
+  //                 ? StringUtil.compact(
+  //                     adminDashboardData?.data?.[0].clicksToday,
+  //                   )
+  //                 : 0,
+  //           },
+  //         },
+  //         {
+  //           label: {
+  //             children: "This Month",
+  //           },
+  //           text: {
+  //             children: isLoadingAdminDashboard
+  //               ? "Loading..."
+  //               : adminDashboardData?.data?.[0].clicksThisMonth
+  //                 ? StringUtil.compact(
+  //                     adminDashboardData?.data?.[0].clicksThisMonth,
+  //                   )
+  //                 : 0,
+  //           },
+  //         },
+  //       ],
+  //     },
+  //   ];
 
   const { data: recentActivities, isLoading: isLoadingAuditLogs } =
     useReadAuditLogQuery();
@@ -228,7 +140,7 @@ export default function AdminDashboardContent() {
   }[] = [
     {
       title: "Review Pending Deals",
-      description: `${1} deal awaiting approval`,
+      description: `${pendingReviews || 0} deal awaiting approval`,
       icon: Clock3,
       link: RouteConstant.admin.moderation.path,
     },
@@ -254,7 +166,7 @@ export default function AdminDashboardContent() {
       description="Platform overview and management"
       actionConfigs={[
         {
-          text: `Review Queue ${1}`,
+          text: `Review Queue ${pendingReviews || 0}`,
           startIcon: <ClipboardCheck />,
           variant: "primary",
           size: "medium",
@@ -269,11 +181,11 @@ export default function AdminDashboardContent() {
           <DashboardOverviewCards key={index} {...config} />
         ))}
       </div>
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      {/* <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         {dashboardPerformanceStatsCardConfig.map((card, index) => (
           <DashboardPerformanceStatsCard key={index} {...card} />
         ))}
-      </div>
+      </div> */}
       <div className="flex gap-8">
         {/* Recent Activities Card */}
 
@@ -293,7 +205,7 @@ export default function AdminDashboardContent() {
               <RecentActivityItem
                 key={index}
                 title={StringUtil.convertToSentenceCase(
-                  activity.auditLogAction
+                  activity.auditLogAction,
                 )}
                 description={activity.auditLogModule}
                 time={TimeUtil.timeAgo(activity.auditLogCreatedAt)}

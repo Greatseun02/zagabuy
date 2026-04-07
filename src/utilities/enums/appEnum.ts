@@ -9,6 +9,12 @@ export enum AccountStatusEnum {
   REJECTED = "rejected", // Application denied
 }
 
+export enum UserStatusEnum {
+  PENDING = "PENDING",
+  ACTIVE = "ACTIVE",
+  INACTIVE = "INACTIVE",
+}
+
 /**
  * Deal lifecycle status.
  * Determines visibility and actions available.

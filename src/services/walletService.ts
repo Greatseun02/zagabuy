@@ -18,6 +18,7 @@ export const walletService = BaseService.appClient.injectEndpoints({
       query: ({ walletUserId }) => ({
         url: `/${controller}/read-by-wallet-user-id/${walletUserId}`,
         method: ApiRequestMethodsEnum.GET,
+        expectedResponseCodes: ["22"],
       }),
       providesTags: [{ type: ApiTagsEnum.Wallet, id: "LIST" }],
     }),

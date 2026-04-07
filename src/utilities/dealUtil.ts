@@ -38,7 +38,7 @@ export class DealUtil {
     deals: DealEntity[],
     dealType: DealType,
     length: number,
-    fallback: boolean = false
+    fallback: boolean = false,
   ): DealEntity[] {
     let filteredDeals: DealEntity[] = [];
 
@@ -136,7 +136,7 @@ export class DealUtil {
    */
   static sortDeals(
     deals: DealEntity[],
-    sortBy: string = "trending"
+    sortBy: string = "trending",
   ): DealEntity[] {
     const sorted = [...deals];
 
@@ -222,7 +222,7 @@ export class DealUtil {
     deals: DealEntity[],
     minPrice?: number,
     maxPrice?: number,
-    sortBy: string = "trending"
+    sortBy: string = "trending",
   ): DealEntity[] {
     // Apply price range filter
     let result = filterDealsByPriceRange(deals, minPrice, maxPrice);
@@ -259,7 +259,7 @@ export class DealUtil {
   static getMultipleTypes(
     deals: DealEntity[],
     config: Partial<Record<DealType, number>>,
-    fallback: boolean = false
+    fallback: boolean = false,
   ): Partial<Record<DealType, DealEntity[]>> {
     const result: Partial<Record<DealType, DealEntity[]>> = {};
 
@@ -274,7 +274,7 @@ export class DealUtil {
         deals,
         "trending",
         config.trending,
-        fallback
+        fallback,
       );
     }
 

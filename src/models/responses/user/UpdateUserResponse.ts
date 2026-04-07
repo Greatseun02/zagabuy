@@ -1,4 +1,3 @@
-export type UpdateUserResponse = {
-    responseCode: string,
-    responseMessage: string
-}
+import { BaseResponse } from "@/utilities/types";
+
+export type UpdateUserResponse = BaseResponse;

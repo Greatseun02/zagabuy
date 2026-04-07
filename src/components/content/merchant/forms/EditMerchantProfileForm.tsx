@@ -8,11 +8,14 @@ import { useAppSelector } from "@/configs/storeConfig";
 import { updateUserRequestInit } from "@/models/requests/user/UpdateUserRequest";
 import { UserEntity } from "@/models/responses/user/ReadAllUsersResponse";
 import { UserValidation } from "@/models/validations/UserValidation";
-import { useUpdateUserMutation } from "@/services/userService";
+import {
+  useReadAllUsersQuery,
+  useReadUsersByUserIdQuery,
+  useUpdateUserMutation,
+} from "@/services/userService";
 import { BaseUtil } from "@/utilities/baseUtil";
 import { useFormik } from "formik";
-import { isNullOrUndefined } from "node:util";
-import { useEffect } from "react";
+import { useMemo } from "react";
 import { toast } from "sonner";
 
 type EditMerchantProfileFormProps = {
@@ -21,8 +24,12 @@ type EditMerchantProfileFormProps = {
 
 export default function EditMerchantProfileForm({}: //   user,
 EditMerchantProfileFormProps) {
+  const userId = useAppSelector((state) => state.auth.userInfo.userId);
+
   const [updateUser] = useUpdateUserMutation();
-  const user = useAppSelector((state) => state.auth.userInfo);
+  const { data } = useReadUsersByUserIdQuery(userId);
+
+  const user = useMemo(() => data?.data, [data?.data]);
 
   const formik = useFormik({
     initialValues: {
@@ -38,7 +45,7 @@ EditMerchantProfileFormProps) {
 
         if (BaseUtil.isApiResponseSuccessful(response)) {
           toast.success(
-            response?.responseMessage || "Profile updated successfully"
+            response?.responseMessage || "Profile updated successfully",
           );
         } else {
           toast.error(response?.responseMessage || "Failed to update profile");
@@ -49,17 +56,14 @@ EditMerchantProfileFormProps) {
       }
     },
     validationSchema: UserValidation.EditUserProfileSchema,
+    enableReinitialize: true,
   });
-
-  useEffect(() => {
-    console.log(formik.values);
-  }, [formik.values]);
 
   return (
     <BaseFormLayout
       onSubmit={formik.handleSubmit}
       title="Edit Merchant Profile"
-      className="max-w-xl  mx-auto rounded-xl shadow-[0px_0px_24px_-4px_rgba(0,0,0,0.1)] px-8 pt-8 pb-14"
+      className="max-w-xl mx-auto rounded-xl shadow-[0px_0px_32px_-6px_rgba(0,0,0,0.25)] dark:shadow-[0px_0px_32px_-6px_rgba(0,0,0,0.7)] dark:border  px-14 pt-14 pb-20"
     >
       <BaseAvatar
         text={
@@ -70,18 +74,21 @@ EditMerchantProfileFormProps) {
         size="lg"
         className="mx-auto mb-5"
       />
-      <Input
-        name="userFirstName"
-        formik={formik}
-        label="First Name"
-        placeholder="Enter First Name e.g John"
-      />
-      <Input
-        name="userLastName"
-        formik={formik}
-        label="Last Name"
-        placeholder="Enter Last Name e.g Doe"
-      />
+      <div className="grid gap-4 grid-cols-2">
+        <Input
+          name="userFirstName"
+          formik={formik}
+          label="First Name"
+          placeholder="Enter First Name e.g John"
+        />
+        <Input
+          name="userLastName"
+          formik={formik}
+          label="Last Name"
+          placeholder="Enter Last Name e.g Doe"
+        />
+      </div>
+
       <Input
         name="userPhoneNumber"
         formik={formik}
