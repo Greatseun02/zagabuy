@@ -2,14 +2,22 @@ import {
   TopDealsChart,
   TopDealsChartProps,
 } from "@/components/ui/charts/TopDealsChart";
+import { useReadDealByUserQuery } from "@/services/dealService";
+import { DealUtil } from "@/utilities/dealUtil";
 
 export default function MerchantAnalyticsTopDealsTab() {
-  const topDealsChartData: TopDealsChartProps["deals"] = [
-    { title: "Summer Sale - 50% Off", clicks: 5000 },
-    { title: "Buy One Get One Free", clicks: 3500 },
-    { title: "Holiday Special Discounts", clicks: 2700 },
-    { title: "Clearance Sale - Up to 70% Off", clicks: 2200 },
-    { title: "New Arrivals - Shop Now", clicks: 1800 },
-  ];
+  const { data } = useReadDealByUserQuery();
+
+  // Filter and sort the top deals using DealUtil
+  const topDeals = DealUtil.getDealsByType(data?.data || [], "top", 5, true);
+
+  // Transform to match TopDealsChartProps format
+  const topDealsChartData: TopDealsChartProps["deals"] = topDeals.map(
+    (deal) => ({
+      title: deal.dealTitle,
+      clicks: deal.clickCount,
+    }),
+  );
+
   return <TopDealsChart deals={topDealsChartData} />;
 }

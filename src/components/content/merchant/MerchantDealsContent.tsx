@@ -19,7 +19,7 @@ import { DealEntity } from "@/models/responses/dealResponse";
 import Typography from "@/components/ui/typography";
 import { StringUtil } from "@/utilities/stringUtil";
 
-import { BarChart2, Globe } from "lucide-react";
+import { BarChart2, Globe, PlusIcon } from "lucide-react";
 import { RouteConstant } from "@/utilities/constants/routeConstant";
 import { ExpiryDisplay } from "@/components/custom/countdown/ExpiryDisplay";
 import { CreateDealRequest } from "@/models/requests/dealRequest";
@@ -136,19 +136,19 @@ export default function MerchantDealsContent() {
               status === "ACTIVE"
                 ? "success"
                 : status === "PENDING"
-                ? "warning"
-                : status === "REJECTED"
-                ? "error"
-                : "primary"
+                  ? "warning"
+                  : status === "REJECTED"
+                    ? "error"
+                    : "primary"
             }
             className={`${
               status === "ACTIVE"
                 ? "bg-green-100"
                 : status === "PENDING"
-                ? "bg-orange-100"
-                : status === "REJECTED"
-                ? "bg-red-100"
-                : ""
+                  ? "bg-orange-100"
+                  : status === "REJECTED"
+                    ? "bg-red-100"
+                    : ""
             } px-2 text-center`}
           >
             {status}
@@ -162,7 +162,7 @@ export default function MerchantDealsContent() {
     edit: {
       onClick(row: DealEntity) {
         router.push(
-          `${RouteConstant.merchant.deals.editDeal.path}/${row.dealId}`
+          `${RouteConstant.merchant.deals.editDeal.path}/${row.dealId}`,
         );
       },
     },
@@ -190,7 +190,7 @@ export default function MerchantDealsContent() {
     view: {
       onClick(row) {
         router.push(
-          `${RouteConstant.merchant.deals.viewDeal.path}/${row.dealId}`
+          `${RouteConstant.merchant.deals.viewDeal.path}/${row.dealId}`,
         );
       },
     },
@@ -202,7 +202,7 @@ export default function MerchantDealsContent() {
       icon: BarChart2,
       onClick(row) {
         router.push(
-          `${RouteConstant.merchant.deals.viewDealAnalytics.path}/${row.dealId}`
+          `${RouteConstant.merchant.deals.viewDealAnalytics.path}/${row.dealId}`,
         );
       },
     },
@@ -216,7 +216,18 @@ export default function MerchantDealsContent() {
   ];
 
   return (
-    <DashboardPageLayout title="My Deals" description="Manage your deals">
+    <DashboardPageLayout
+      title="My Deals"
+      description="Manage your deals"
+      actionConfigs={[
+        {
+          text: "Create Deal",
+          startIcon: <PlusIcon />,
+          onClick: () =>
+            router.push(RouteConstant.merchant.deals.createDeal.path),
+        },
+      ]}
+    >
       <div className="mt-6">
         <BaseDataGrid
           ref={gridRef}
