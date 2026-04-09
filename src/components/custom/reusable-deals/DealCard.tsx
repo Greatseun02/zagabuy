@@ -14,7 +14,7 @@ import { RouteConstant } from "@/utilities/constants/routeConstant";
 import { DiscountBadge } from "../status-badge";
 import Typography from "@/components/ui/typography";
 import { PriceDisplay } from "../PriceDisplay";
-import { Button } from "@/components/ui/button";
+import { Button as BaseButton } from "@/components/ui/button";
 import { ExpiryDisplay } from "../countdown/ExpiryDisplay";
 
 interface DealCardProps {
@@ -33,7 +33,7 @@ export function DealCard({
   const discountPercentage =
     deal.dealOldPrice && deal.dealPrice
       ? Math.round(
-          ((deal.dealOldPrice - deal.dealPrice) / deal.dealOldPrice) * 100
+          ((deal.dealOldPrice - deal.dealPrice) / deal.dealOldPrice) * 100,
         )
       : 0;
 
@@ -43,7 +43,7 @@ export function DealCard({
         <Card
           className={cn(
             "overflow-hidden hover-elevate active-elevate-2 cursor-pointer transition-all",
-            className
+            className,
           )}
           data-testid={`card-deal-compact-${deal.dealId}`}
         >
@@ -98,7 +98,7 @@ export function DealCard({
         <Card
           className={cn(
             "overflow-hidden hover-elevate active-elevate-2 cursor-pointer transition-all group",
-            className
+            className,
           )}
           data-testid={`card-deal-horizontal-${deal.dealId}`}
         >
@@ -163,7 +163,7 @@ export function DealCard({
       <Card
         className={cn(
           "overflow-hidden hover-elevate active-elevate-2 cursor-pointer transition-all group p-0 rounded-xl",
-          className
+          className,
         )}
         data-testid={`card-deal-${deal.dealId}`}
       >
@@ -237,12 +237,15 @@ export function DealCard({
             </div>
 
             <div className="flex items-center  ">
-              <Button variant={"transparent"} startIcon={<MousePointerClick />}>
+              <BaseButton
+                variant={"transparent"}
+                startIcon={<MousePointerClick />}
+              >
                 {deal?.clickCount}
-              </Button>
-              <Button variant={"transparent"} startIcon={<EyeIcon />}>
+              </BaseButton>
+              <BaseButton variant={"transparent"} startIcon={<EyeIcon />}>
                 {deal?.dealViews}
-              </Button>
+              </BaseButton>
             </div>
           </div>
         </div>

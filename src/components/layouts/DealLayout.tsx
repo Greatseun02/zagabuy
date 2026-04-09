@@ -14,7 +14,7 @@ import { Clock, ExternalLink } from "lucide-react";
 import { CountdownTimer } from "../custom/countdown/CountdownTimer";
 import { TimeUtil } from "@/utilities/timeUtil";
 import BaseAvatar from "../ui/BaseAvatar";
-import { Button } from "../ui/button";
+import { Button as BaseButton } from "../ui/button";
 import Link from "next/link";
 import { UI_TEXT } from "@/utilities/constants";
 import { ImageGallery } from "../custom/ImageGallery";
@@ -134,16 +134,16 @@ export default function DealLayout({
             rel="noopener noreferrer"
             passHref
           >
-            <Button
+            <BaseButton
               size="large"
               className="w-full text-base"
               data-testid="button-visit-deal"
               startIcon={<ExternalLink />}
             >
               {UI_TEXT.CTA.VISIT_DEAL}
-            </Button>
+            </BaseButton>
           </Link> */}
-          <Button
+          <BaseButton
             size="large"
             className="w-full text-base"
             data-testid="button-visit-deal"
@@ -152,7 +152,7 @@ export default function DealLayout({
             isLoading={isLoadingVisitLink}
           >
             {UI_TEXT.CTA.VISIT_DEAL}
-          </Button>
+          </BaseButton>
           <ShareButton size={"large"} variant={"secondary"} />
         </div>
 
@@ -161,7 +161,7 @@ export default function DealLayout({
         
         <div className="flex items-center justify-between p-4 rounded-md bg-card border">
           <div className="flex items-center gap-4">
-            <Button
+            <BaseButton
               variant={hasVoted === "up" ? "default" : "ghost"}
               size="sm"
               onClick={handleUpvote}
@@ -169,8 +169,8 @@ export default function DealLayout({
             >
               <ThumbsUp className="h-4 w-4 mr-1" />
               {deal.upvotes}
-            </Button>
-            <Button
+            </BaseButton>
+            <BaseButton
               variant={hasVoted === "down" ? "secondary" : "ghost"}
               size="sm"
               onClick={handleDownvote}
@@ -178,7 +178,7 @@ export default function DealLayout({
             >
               <ThumbsDown className="h-4 w-4 mr-1" />
               {deal.downvotes}
-            </Button>
+            </BaseButton>
           </div>
 
           <div className="flex items-center gap-2">

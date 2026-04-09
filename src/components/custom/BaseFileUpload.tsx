@@ -7,7 +7,7 @@ import Typography from "../ui/typography";
 import { FormikValues } from "formik";
 import { Formik } from "@/utilities/types";
 import { cn } from "@/lib/utils";
-import { Button } from "../ui/button";
+import { Button as BaseButton } from "../ui/button";
 
 /**
  * Base file representation - works for both new uploads and existing files
@@ -687,14 +687,14 @@ const BaseFileUpload = <T extends FormikValues>({
             "flex justify-start p-4 border border-dashed rounded-xl bg-sidebar"
           }
         >
-          <Button
+          <BaseButton
             type="button"
             onClick={() => triggerUpload()}
             disabled={disabled}
             variant={"primary"}
           >
             Upload All Files
-          </Button>
+          </BaseButton>
         </div>
       )}
 

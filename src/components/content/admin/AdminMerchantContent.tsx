@@ -4,7 +4,7 @@ import {
   BaseDataGrid,
   BaseDataGridRef,
   RowOption,
-} from "@/components/BaseDataGrid";
+} from "@/components/ui/datagrid/baseDataGrid";
 import DashboardPageLayout from "@/components/layouts/DashboardPageLayout";
 import {
   useReadUsersByRoleIdQuery,

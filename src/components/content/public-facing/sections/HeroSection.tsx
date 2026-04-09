@@ -4,7 +4,7 @@
  * Landing page hero with featured deals showcase.
  */
 
-import { Button } from "@/components/ui/button";
+import { Button as BaseButton } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import {
@@ -35,7 +35,7 @@ export function HeroSection({ className }: HeroSectionProps) {
     <section
       className={cn(
         "relative overflow-hidden bg-linear-to-br from-primary/10 via-background to-accent/10",
-        className
+        className,
       )}
       data-testid="hero-section"
     >
@@ -76,26 +76,26 @@ export function HeroSection({ className }: HeroSectionProps) {
 
             <div className="flex flex-col sm:flex-row gap-4">
               <Link href={RouteConstant.deals.path}>
-                <Button
+                <BaseButton
                   size="large"
                   className="w-full sm:w-auto text-base"
                   data-testid="button-browse-deals"
                   startIcon={<ArrowRight className="ml-2 h-5 w-5" />}
                 >
                   Browse Deals
-                </Button>
+                </BaseButton>
               </Link>
 
               {/* <Link href={ROUTES.MERCHANT.ROOT}> */}
               <Link href={RouteConstant.merchant.dashboard.path}>
-                <Button
+                <BaseButton
                   size="large"
                   variant="outline"
                   className="w-full sm:w-auto text-base px-8"
                   data-testid="button-become-merchant"
                 >
                   Become a Merchant
-                </Button>
+                </BaseButton>
               </Link>
             </div>
 
@@ -200,14 +200,14 @@ export function SectionHeader({
       </div>
       {action && (
         <Link href={action.href}>
-          <Button
+          <BaseButton
             variant="ghost"
             className="gap-2"
             data-testid="button-section-action"
           >
             {action.label}
             <ArrowRight className="h-4 w-4" />
-          </Button>
+          </BaseButton>
         </Link>
       )}
     </div>

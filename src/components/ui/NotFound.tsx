@@ -1,6 +1,6 @@
 import React from "react";
 import Typography from "@/components/ui/typography";
-import { Button } from "@/components/ui/button";
+import { Button as BaseButton } from "@/components/ui/button";
 import type { ButtonProps } from "@/components/ui/button";
 
 type ActionButtonProps = Omit<ButtonProps, "children"> & {
@@ -59,11 +59,13 @@ export default function NotFound({
         {description}
       </Typography>
       <div className="flex gap-3 mt-4">
-        {actionButton && <Button {...actionButton}>{actionButton.text}</Button>}
+        {actionButton && (
+          <BaseButton {...actionButton}>{actionButton.text}</BaseButton>
+        )}
         {secondaryActionButton && (
-          <Button {...secondaryActionButton}>
+          <BaseButton {...secondaryActionButton}>
             {secondaryActionButton.text}
-          </Button>
+          </BaseButton>
         )}
       </div>
       {children && <div className="mt-4">{children}</div>}

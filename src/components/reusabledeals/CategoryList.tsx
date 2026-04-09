@@ -18,7 +18,7 @@ import {
   Wrench,
   type LucideIcon,
 } from "lucide-react";
-import { Button } from "../ui/button";
+import { Button as BaseButton } from "../ui/button";
 
 const categoryIcons: Record<string, LucideIcon> = {
   Smartphone,
@@ -51,7 +51,7 @@ export function CategoryList({
         const isActive = activeCategory === category.categoryId.toString();
 
         return (
-          <Button
+          <BaseButton
             key={category.categoryId}
             onClick={() => onSelect?.(category.categoryId.toString())}
             className={cn(
@@ -74,7 +74,7 @@ export function CategoryList({
             >
               {category.dealCount}
             </span>
-          </Button>
+          </BaseButton>
         );
       })}
     </div>

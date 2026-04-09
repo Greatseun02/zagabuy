@@ -1,4 +1,4 @@
-import { Button } from "@/components/ui/button";
+import { Button as BaseButton } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -24,9 +24,9 @@ export default function RowOptionsMenu({
     <div className="relative inline-block">
       <DropdownMenu>
         <DropdownMenuTrigger>
-          <Button variant={"transparent"} title="Row options">
+          <BaseButton variant={"transparent"} title="Row options">
             ⋮
-          </Button>
+          </BaseButton>
         </DropdownMenuTrigger>
         <DropdownMenuContent className="p-1 divide-y ">
           {options.map((o, i) => (

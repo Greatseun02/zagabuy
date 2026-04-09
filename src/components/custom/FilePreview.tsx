@@ -16,7 +16,7 @@ import { FileUploadUtil } from "@/utilities/fileUploadUtil";
 import { FileItem, FileUploadState } from "./BaseFileUpload";
 import FileFormatsIcon, { FileFormatTypes } from "../icons/FileFormatsIcon";
 import { cn } from "@/lib/utils"; // Assuming you have a class merger, if not, standard template literals work
-import { Button } from "../ui/button";
+import { Button as BaseButton } from "../ui/button";
 
 export interface FilePreviewProps {
   // Core data
@@ -332,7 +332,7 @@ const FilePreview: React.FC<FilePreviewProps> = ({
             )}
 
             {actionButtons.map((button) => (
-              <Button
+              <BaseButton
                 startIcon={button.icon}
                 key={button.key}
                 type="button"
@@ -359,7 +359,7 @@ const FilePreview: React.FC<FilePreviewProps> = ({
                       : ""
                   }
                 `}
-              ></Button>
+              ></BaseButton>
             ))}
           </div>
         </div>

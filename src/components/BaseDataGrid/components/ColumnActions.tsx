@@ -1,7 +1,7 @@
 import React from "react";
 import { useAppModal } from "@/hooks/useAppModal";
 import { ConfirmationModal } from "@/components/modals/ConfirmationModal";
-import { Button } from "@/components/ui/button";
+import { Button as BaseButton } from "@/components/ui/button";
 
 export default function ColumnActions({ actions }: { actions: any[] }) {
   const confirm = useAppModal(ConfirmationModal);

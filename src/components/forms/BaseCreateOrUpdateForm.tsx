@@ -8,7 +8,7 @@ import { BaseUtil } from "@/utilities/baseUtil";
 import { ReactNode, useEffect, useState } from "react";
 import { BaseResponse } from "@/utilities/types";
 import { toast } from "sonner";
-import { Button } from "@/components/ui/button";
+import { Button as BaseButton } from "@/components/ui/button";
 import { Formik } from "@/utilities/types";
 import { AnyObjectSchema } from "yup";
 
@@ -113,7 +113,7 @@ const BaseCreateOrUpdateForm = <
       {renderFields ? renderFields(formik) : children}
 
       <div className="flex items-center gap-3">
-        <Button
+        <BaseButton
           type="submit"
           isLoading={isLoading}
           {...submitBtnProps}
@@ -121,16 +121,16 @@ const BaseCreateOrUpdateForm = <
           width={submitBtnProps?.width ?? "auto"}
         >
           {isUpdate ? updateBtnText ?? "Update" : createBtnText ?? "Create"}
-        </Button>
+        </BaseButton>
 
         {submitBtnProps?.variant !== "ghost" && (
-          <Button
+          <BaseButton
             type="button"
             variant="ghost"
             onClick={() => formik.resetForm()}
           >
             Reset
-          </Button>
+          </BaseButton>
         )}
       </div>
     </BaseFormLayout>

@@ -1,6 +1,6 @@
 "use client";
 
-import { BaseDataGrid, BaseDataGridProps } from "@/components/BaseDataGrid";
+import { BaseDataGrid, BaseDataGridProps } from "@/components/ui/datagrid/baseDataGrid";
 import DashboardPageLayout from "@/components/layouts/DashboardPageLayout";
 import { useReadUsersByRoleIdQuery } from "@/services/userService";
 import { RoleEnum } from "@/utilities/enums/roleEnum";

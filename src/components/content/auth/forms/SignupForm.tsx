@@ -1,8 +1,8 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
+import { Button as BaseButton } from "@/components/ui/button";
 import FormikSelect from "@/components/ui/formik-select";
-import { Input } from "@/components/ui/input";
+import { Input as BaseInput } from "@/components/ui/input";
 import {
   InitiateEnrollmentRequest,
   initiateEnrollmentRequestInit,
@@ -74,14 +74,14 @@ export default function SignupForm() {
   return (
     <>
       <div className="flex gap-2">
-        <Input
+        <BaseInput
           label="First Name"
           placeholder="John"
           formik={formik}
           name="userFirstName"
           containerClassName="flex-1"
         />
-        <Input
+        <BaseInput
           label="Last Name"
           placeholder="Doe"
           formik={formik}
@@ -89,7 +89,7 @@ export default function SignupForm() {
           containerClassName="flex-1"
         />
       </div>
-      <Input
+      <BaseInput
         label="Email"
         placeholder="johndoe@gmail.com"
         formik={formik}
@@ -97,7 +97,7 @@ export default function SignupForm() {
         type="email"
       />
 
-      <Input
+      <BaseInput
         label="Password"
         placeholder="**********"
         formik={formik}
@@ -120,15 +120,15 @@ export default function SignupForm() {
         ]}
         name="userRoleId"
       />
-      <Input
+      <BaseInput
         label="Merchant display name (optional)"
         placeholder="Enter display name (e.g Zagabuy Store)"
         formik={formik}
         name="userDisplayName"
       />
-      <Button onClick={formik.submitForm} isLoading={formik.isSubmitting}>
+      <BaseButton onClick={formik.submitForm} isLoading={formik.isSubmitting}>
         Sign up
-      </Button>
+      </BaseButton>
     </>
   );
 }

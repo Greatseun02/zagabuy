@@ -1,0 +1,10 @@
+import type {SVGProps} from 'react';
+
+export function AngleLeftIcon(props: SVGProps<SVGSVGElement>) {
+    return (<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 32 32" {...props}
+                 className={`icon ${props.className}`}>
+        <path fill="currentColor" d="m19.03 4.28l-11 11l-.686.72l.687.72l11 11l1.44-1.44L10.187 16l10.28-10.28z"></path>
+    </svg>);
+}
+
+export default AngleLeftIcon

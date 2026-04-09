@@ -6,7 +6,7 @@
 
 "use client";
 
-import { Input } from "@/components/ui/input";
+import { Input as BaseInput } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 
 interface PriceRangeFilterProps {
@@ -31,7 +31,7 @@ export function PriceRangeFilter({
     >
       <label className="text-sm font-medium">Price Range</label>
       <div className="flex items-center gap-2">
-        <Input
+        <BaseInput
           type="number"
           placeholder="Min"
           value={minPrice ?? ""}
@@ -43,7 +43,7 @@ export function PriceRangeFilter({
           data-testid="input-min-price"
         />
         <span className="text-muted-foreground">—</span>
-        <Input
+        <BaseInput
           type="number"
           placeholder="Max"
           value={maxPrice ?? ""}

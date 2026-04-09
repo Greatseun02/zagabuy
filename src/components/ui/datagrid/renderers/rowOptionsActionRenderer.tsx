@@ -2,9 +2,10 @@
 
 import React, {useEffect, useRef, useState} from 'react';
 import {ICellRendererParams} from 'ag-grid-community';
-import ThreeDotsMenuIcon from "@/components/icon/threeDotsMenuIcon";
+import { MoreVertical } from "lucide-react";
 import MenuOptionsPopup, {MenuOption} from "@/components/ui/popup/menuOptionsPopup";
 import {BaseUtil} from "@/utilities/baseUtil";
+import { cn } from "@/lib/utils";
 
 export type RowOptionsActionRendererProps = ICellRendererParams & {
     rowOptions: MenuOption[] | ((data: any, actions?: any) => MenuOption[]);
@@ -110,14 +111,16 @@ const RowOptionsActionRenderer: React.FC<RowOptionsActionRendererProps> = (props
 
     return (
         <button
-            className="h-full flex items-center justify-center w-full bg-transparent border-0 p-0 cursor-pointer hover:bg-muted rounded text-muted-foreground transition-colors duration-150"
+            className={cn(
+                "h-full flex items-center justify-center w-full bg-transparent border-0 p-0 cursor-pointer hover:bg-muted rounded text-muted-foreground transition-colors duration-150"
+            )}
             onClick={handleOpen}
             aria-label="Row options"
             aria-expanded={isOpen}
             aria-haspopup="true"
             type="button"
         >
-            <ThreeDotsMenuIcon style={{width: "1.5em", height: "1.5em"}}/>
+            <MoreVertical style={{width: "1.5em", height: "1.5em"}}/>
             <MenuOptionsPopup
                 referenceElement={containerRef.current}
                 isOpen={isOpen}

@@ -7,8 +7,8 @@ import React, {
   useRef,
   useState,
 } from "react";
-import { Button } from "../ui/button";
-import { Input } from "../ui/input";
+import { Button as BaseButton } from "../ui/button";
+import { Input as BaseInput } from "../ui/input";
 
 export interface FileItem {
   id: string;
@@ -160,14 +160,14 @@ export default function BaseFileUpload({
       {label && <div className="text-sm font-medium mb-2">{label}</div>}
       <div className="border rounded p-3">
         <div className="flex gap-3 items-center">
-          <Button
+          <BaseButton
             type="button"
             size="small"
             onClick={() => inputRef.current?.click()}
             variant="secondary"
           >
             Select all Files
-          </Button>
+          </BaseButton>
           <input
             ref={inputRef}
             type="file"
@@ -201,13 +201,13 @@ export default function BaseFileUpload({
                   </div>
                 )}
                 <div className="absolute top-1 right-1 flex gap-1">
-                  <Button
+                  <BaseButton
                     size="small"
                     onClick={() => removeFile(f.id)}
                     variant="ghost"
                   >
                     Delete
-                  </Button>
+                  </BaseButton>
                 </div>
               </div>
             ))}
@@ -216,9 +216,9 @@ export default function BaseFileUpload({
 
         <div className="mt-3 flex gap-2 justify-end">
           {uploadHandler && (
-            <Button size="small" onClick={uploadAll}>
+            <BaseButton size="small" onClick={uploadAll}>
               Upload
-            </Button>
+            </BaseButton>
           )}
         </div>
       </div>

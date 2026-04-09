@@ -2,7 +2,7 @@
 
 import { createAppModal } from "@/utilities/modalUtils/createAppModal";
 import { Copy, Wallet } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Button as BaseButton } from "@/components/ui/button";
 import { ReadWalletUserIdResponse } from "@/models/responses/wallet/ReadWalletUserIdResponse";
 
 export interface FundWalletModalProps {
@@ -41,7 +41,7 @@ export const FundWalletModal = createAppModal<FundWalletModalProps>(
                   {wallet.accountBankName ?? "Rubies MFB"}
                 </p>
               </div>
-              <Button
+              <BaseButton
                 variant="ghost"
                 size="small"
                 className="h-8 w-8 p-0"
@@ -50,7 +50,7 @@ export const FundWalletModal = createAppModal<FundWalletModalProps>(
                 }
               >
                 <Copy className="h-4 w-4" />
-              </Button>
+              </BaseButton>
             </div>
 
             {/* Account Name */}
@@ -62,14 +62,14 @@ export const FundWalletModal = createAppModal<FundWalletModalProps>(
                 </p>
               </div>
               {wallet.accountName && (
-                <Button
+                <BaseButton
                   variant="ghost"
                   size="small"
                   className="h-8 w-8 p-0"
                   onClick={() => copyToClipboard(wallet.accountName ?? "")}
                 >
                   <Copy className="h-4 w-4" />
-                </Button>
+                </BaseButton>
               )}
             </div>
 
@@ -82,14 +82,14 @@ export const FundWalletModal = createAppModal<FundWalletModalProps>(
                 </p>
               </div>
               {wallet.accountNumber && (
-                <Button
+                <BaseButton
                   variant="ghost"
                   size="small"
                   className="h-8 w-8 p-0"
                   onClick={() => copyToClipboard(wallet.accountNumber ?? "")}
                 >
                   <Copy className="h-4 w-4" />
-                </Button>
+                </BaseButton>
               )}
             </div>
           </div>

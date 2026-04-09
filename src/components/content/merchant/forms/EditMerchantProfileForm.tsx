@@ -2,8 +2,8 @@
 
 import BaseFormLayout from "@/components/layouts/baseFormLayout";
 import BaseAvatar from "@/components/ui/BaseAvatar";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { Button as BaseButton } from "@/components/ui/button";
+import { Input as BaseInput } from "@/components/ui/input";
 import { useAppSelector } from "@/configs/storeConfig";
 import { updateUserRequestInit } from "@/models/requests/user/UpdateUserRequest";
 import { UserEntity } from "@/models/responses/user/ReadAllUsersResponse";
@@ -75,13 +75,13 @@ EditMerchantProfileFormProps) {
         className="mx-auto mb-5"
       />
       <div className="grid gap-4 grid-cols-2">
-        <Input
+        <BaseInput
           name="userFirstName"
           formik={formik}
           label="First Name"
           placeholder="Enter First Name e.g John"
         />
-        <Input
+        <BaseInput
           name="userLastName"
           formik={formik}
           label="Last Name"
@@ -89,21 +89,21 @@ EditMerchantProfileFormProps) {
         />
       </div>
 
-      <Input
+      <BaseInput
         name="userPhoneNumber"
         formik={formik}
         label="Phone Number"
         placeholder="Enter Phone Number e.g 1234567890"
       />
-      <Input
+      <BaseInput
         name="userUsername"
         formik={formik}
         label="Username"
         placeholder="Enter Username e.g john_doe"
       />
-      <Button type="submit" className="mt-6" isLoading={formik.isSubmitting}>
+      <BaseButton type="submit" className="mt-6" isLoading={formik.isSubmitting}>
         Save
-      </Button>
+      </BaseButton>
     </BaseFormLayout>
   );
 }

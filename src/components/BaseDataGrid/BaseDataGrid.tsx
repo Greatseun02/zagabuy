@@ -12,7 +12,7 @@ import ColumnVisibilityPanel from "./components/ColumnVisibilityPanel";
 import { Eye, Edit, Trash } from "lucide-react";
 import { useRowActions } from "./hooks/useRowActions";
 import RowOptionsMenu from "./components/RowOptionsMenu";
-import { Button } from "../ui/button";
+import { Button as BaseButton } from "../ui/button";
 
 function BaseDataGridInner<TData extends object = any>(
   props: BaseDataGridProps<TData>,
@@ -126,7 +126,7 @@ function BaseDataGridInner<TData extends object = any>(
                     <td className="px-4 py-2 text-sm whitespace-nowrap">
                       <div className="flex items-center gap-4">
                         {colActions?.view && (
-                          <Button
+                          <BaseButton
                             title={colActions.view.tooltip ?? "View"}
                             onClick={(e) => {
                               e.stopPropagation();
@@ -138,10 +138,10 @@ function BaseDataGridInner<TData extends object = any>(
                             variant={"secondary"}
                           >
                             <Eye size={16} />
-                          </Button>
+                          </BaseButton>
                         )}
                         {colActions?.edit && (
-                          <Button
+                          <BaseButton
                             title={colActions.edit.tooltip ?? "Edit"}
                             onClick={(e) => {
                               e.stopPropagation();
@@ -153,10 +153,10 @@ function BaseDataGridInner<TData extends object = any>(
                             variant={"primary"}
                           >
                             <Edit size={16} />
-                          </Button>
+                          </BaseButton>
                         )}
                         {colActions?.delete && (
-                          <Button
+                          <BaseButton
                             title={colActions.delete.tooltip ?? "Delete"}
                             onClick={(e) => {
                               e.stopPropagation();
@@ -169,7 +169,7 @@ function BaseDataGridInner<TData extends object = any>(
                             className="text-white"
                           >
                             <Trash size={16} />
-                          </Button>
+                          </BaseButton>
                         )}
                         {/* Row overflow menu — include dynamic row options and also colActions as options */}
                         <RowOptionsMenu

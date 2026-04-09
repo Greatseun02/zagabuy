@@ -6,12 +6,12 @@ import {
   BaseDataGrid,
   BaseDataGridProps,
   type BaseDataGridRef,
-} from "@/components/BaseDataGrid";
+} from "@/components/ui/datagrid/baseDataGrid";
 import { ColumnDef } from "@tanstack/react-table";
 import { TagsEntity } from "@/models/responses/tagResponse";
 import { UpdateTagRequest } from "@/models/requests/tagRequest";
 import DashboardPageLayout from "@/components/layouts/DashboardPageLayout";
-import { Button } from "@/components/ui/button";
+import { Button as BaseButton } from "@/components/ui/button";
 import { PlusIcon } from "lucide-react";
 import { useAppModal } from "@/hooks/useAppModal";
 import { CreateTagModal, UpdateTagModal } from "@/components/modals/TagModals";
@@ -119,7 +119,7 @@ export default function AdminTagsContent() {
       title="Tags"
       description="Manage your product tags here."
       actions={[
-        <Button
+        <BaseButton
           startIcon={<PlusIcon />}
           className="rounded-sm"
           onClick={() => {
@@ -132,7 +132,7 @@ export default function AdminTagsContent() {
           key="add-tag"
         >
           Add Tag
-        </Button>,
+        </BaseButton>,
       ]}
     >
       <div className="mt-6">

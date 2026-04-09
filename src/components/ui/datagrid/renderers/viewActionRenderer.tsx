@@ -1,8 +1,8 @@
 "use client";
 
 import React from "react";
-import {EyeIcon} from "@/components/icon/eyeVisibleIcon";
-import {cn} from "@/utilities/helpers/cn";
+import { Eye } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 /**
  * Props for the ViewActionRenderer component.
@@ -43,7 +43,7 @@ export function ViewActionRenderer<TData = Record<string, unknown>>({
             onClick={handleClick}
             title={title}
         >
-            <EyeIcon type="visible" className="w-5 h-5"/>
+            <Eye className="w-5 h-5"/>
         </div>
     );
 }

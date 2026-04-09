@@ -1,16 +1,16 @@
 "use client";
 
 import * as React from "react";
-import { Button } from "@/components/ui/button";
+import { Button as BaseButton } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
 export type ActionConfig = {
   key?: string | number;
   text?: React.ReactNode;
   onClick?: () => void;
-  variant?: React.ComponentProps<typeof Button>["variant"];
-  size?: React.ComponentProps<typeof Button>["size"];
-  width?: React.ComponentProps<typeof Button>["width"];
+  variant?: React.ComponentProps<typeof BaseButton>["variant"];
+  size?: React.ComponentProps<typeof BaseButton>["size"];
+  width?: React.ComponentProps<typeof BaseButton>["width"];
   startIcon?: any;
   endIcon?: any;
   isLoading?: boolean;
@@ -48,7 +48,7 @@ export default function DashboardPageLayout({
       <div
         className={cn(
           "mb-6 flex items-start justify-between gap-4",
-          headerClassName
+          headerClassName,
         )}
       >
         <div className="flex min-w-0 flex-col gap-1">
@@ -86,7 +86,7 @@ export default function DashboardPageLayout({
                 return <React.Fragment key={key}>{cfg.asNode}</React.Fragment>;
 
               return (
-                <Button
+                <BaseButton
                   key={key}
                   onClick={cfg.onClick}
                   variant={cfg.variant ?? "primary"}
@@ -97,7 +97,7 @@ export default function DashboardPageLayout({
                   isLoading={cfg.isLoading}
                 >
                   {cfg.text}
-                </Button>
+                </BaseButton>
               );
             })}
         </div>

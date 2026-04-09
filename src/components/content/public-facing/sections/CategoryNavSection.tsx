@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useReadcategoryQuery } from "@/services/categoryService";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
-import { Button } from "@/components/ui/button";
+import { Button as BaseButton } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import {
@@ -59,7 +59,7 @@ export function CategoryNav({
       <div className="flex items-center gap-2 pb-3" data-testid="category-nav">
         {/* All Deals Button */}
         <Link href={RouteConstant.deals.path}>
-          <Button
+          <BaseButton
             variant={!activeCategory ? "primary" : "outline"}
             size="medium"
             onClick={() => handleCategoryClick(null)}
@@ -68,7 +68,7 @@ export function CategoryNav({
           >
             <LayoutGrid className="h-4 w-4 mr-2" />
             All Deals
-          </Button>
+          </BaseButton>
         </Link>
 
         {/* Category Buttons */}
@@ -80,7 +80,7 @@ export function CategoryNav({
             <Link
               href={`${RouteConstant.deals.path}?category=${category.categorySlug}`}
             >
-              <Button
+              <BaseButton
                 key={category.categoryId}
                 variant={isActive ? "primary" : "outline"}
                 size="medium"
@@ -92,7 +92,7 @@ export function CategoryNav({
               >
                 <Icon className="h-4 w-4" />
                 {category.categoryName}
-              </Button>
+              </BaseButton>
             </Link>
           );
         })}

@@ -1,5 +1,5 @@
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { Button as BaseButton } from "@/components/ui/button";
+import { Input as BaseInput } from "@/components/ui/input";
 import { completeEnrollmentRequestInit } from "@/models/requests/authentication/CompleteEnrollmentRequest";
 import { completePasswordResetRequestInit } from "@/models/requests/authentication/CompletePasswordResetRequest";
 import { AuthValidation } from "@/models/validations/AuthValidation";
@@ -67,14 +67,14 @@ export default function CompleteForgotPasswordForm({
   });
   return (
     <>
-      <Input
+      <BaseInput
         name={"userPassword"}
         formik={formik}
         label="Enter Password"
         placeholder="********"
         type="password"
       />
-      <Input
+      <BaseInput
         name={"userPasswordConfirmation"}
         formik={formik}
         label="Confirm Password"
@@ -82,7 +82,7 @@ export default function CompleteForgotPasswordForm({
         type="password"
       />
       <div className="flex gap-2">
-        <Button
+        <BaseButton
           className="flex-1"
           onClick={() => setEmail("")}
           isLoading={formik.isSubmitting}
@@ -90,14 +90,14 @@ export default function CompleteForgotPasswordForm({
           startIcon={<ArrowLeft />}
         >
           Back
-        </Button>
-        <Button
+        </BaseButton>
+        <BaseButton
           className="flex-1"
           onClick={() => formik.submitForm()}
           isLoading={formik.isSubmitting}
         >
           Submit
-        </Button>
+        </BaseButton>
       </div>
     </>
   );

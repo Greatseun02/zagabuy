@@ -7,8 +7,8 @@ import {
 } from "@/models/requests/wallet/ValidateNinRequest";
 import { useValidateNinMutation } from "@/services/walletService";
 import { ValidateNinValidationSchema } from "@/models/validations/walletValidation";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
+import { Input as BaseInput } from "@/components/ui/input";
+import { Button as BaseButton } from "@/components/ui/button";
 import { useState } from "react";
 import { BaseUtil } from "@/utilities/baseUtil";
 import { toast } from "sonner";
@@ -48,7 +48,7 @@ export const ValidateNinForm = ({
 
   return (
     <form onSubmit={formik.handleSubmit} className="space-y-4">
-      <Input
+      <BaseInput
         id="idNumber"
         name="idNumber"
         label="NIN (11 digits)"
@@ -64,7 +64,7 @@ export const ValidateNinForm = ({
         }
       />
 
-      <Input
+      <BaseInput
         id="dob"
         name="dob"
         label="Date of Birth"
@@ -79,7 +79,7 @@ export const ValidateNinForm = ({
         }
       />
 
-      <Input
+      <BaseInput
         id="firstName"
         name="firstName"
         label="First Name"
@@ -95,7 +95,7 @@ export const ValidateNinForm = ({
         }
       />
 
-      <Input
+      <BaseInput
         id="lastName"
         name="lastName"
         label="Last Name"
@@ -111,9 +111,9 @@ export const ValidateNinForm = ({
         }
       />
 
-      <Button type="submit" className="w-full" disabled={isLoading}>
+      <BaseButton type="submit" className="w-full" disabled={isLoading}>
         {isLoading ? "Validating..." : "Validate NIN"}
-      </Button>
+      </BaseButton>
     </form>
   );
 };

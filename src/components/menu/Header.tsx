@@ -8,7 +8,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Button } from "@/components/ui/button";
+import { Button as BaseButton } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -76,7 +76,7 @@ export function Header({ onSearch, className }: MarketplaceHeaderProps) {
     <header
       className={cn(
         "sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/60",
-        className
+        className,
       )}
       data-testid="marketplace-header"
     >
@@ -91,14 +91,14 @@ export function Header({ onSearch, className }: MarketplaceHeaderProps) {
           <nav className="hidden md:flex items-center gap-2">
             {navItems.map((item) => (
               <Link key={item.href} href={item.href}>
-                <Button
+                <BaseButton
                   variant={pathName === item.href ? "secondary" : "ghost"}
                   size="small"
                   data-testid={`link-${item.label.toLowerCase()}`}
                 >
                   <item.icon className="h-4 w-4 mr-2" />
                   {item.label}
-                </Button>
+                </BaseButton>
               </Link>
             ))}
           </nav>
@@ -110,7 +110,7 @@ export function Header({ onSearch, className }: MarketplaceHeaderProps) {
             {userInfo && token && !loading ? (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button
+                  <BaseButton
                     variant="transparent"
                     className="gap-2"
                     data-testid="button-user-menu"
@@ -129,7 +129,7 @@ export function Header({ onSearch, className }: MarketplaceHeaderProps) {
                         ? userInfo.userDisplayName
                         : userInfo.userEmail.split("@")[0]}
                     </span>
-                  </Button>
+                  </BaseButton>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" className="w-56">
                   <div className="px-2 py-1.5">
@@ -145,8 +145,8 @@ export function Header({ onSearch, className }: MarketplaceHeaderProps) {
                       userInfo.userRoleId === RoleEnum.AFFILIATE
                         ? "Merchant"
                         : userInfo.userRoleId === RoleEnum.ADMIN
-                        ? "Admin"
-                        : "Customer"}
+                          ? "Admin"
+                          : "Customer"}
                     </Typography>
                   </div>
                   <DropdownMenuSeparator />
@@ -181,22 +181,22 @@ export function Header({ onSearch, className }: MarketplaceHeaderProps) {
             ) : (
               <div className="hidden md:flex items-center gap-2">
                 <Link href={RouteConstant.auth.login.path}>
-                  <Button
+                  <BaseButton
                     variant="secondary"
                     size="large"
                     data-testid="button-login"
                   >
                     Login
-                  </Button>
+                  </BaseButton>
                 </Link>
                 <Link href={RouteConstant.auth.signup.path}>
-                  <Button
+                  <BaseButton
                     variant="primary"
                     size="large"
                     data-testid="button-register"
                   >
                     Sign Up
-                  </Button>
+                  </BaseButton>
                 </Link>
               </div>
             )}
@@ -204,20 +204,20 @@ export function Header({ onSearch, className }: MarketplaceHeaderProps) {
             {/* Mobile Menu Trigger */}
             <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
               <SheetTrigger asChild className="md:hidden">
-                <Button
+                <BaseButton
                   variant="ghost"
                   size="icon"
                   data-testid="button-mobile-menu"
                 >
                   <Menu className="h-5 w-5" />
-                </Button>
+                </BaseButton>
               </SheetTrigger>
               <SheetContent side="right" className="w-80">
                 <div className="flex flex-col gap-4 mt-4 pt-7 px-4">
                   <nav className="flex flex-col gap-1">
                     {navItems.map((item) => (
                       <Link key={item.href} href={item.href}>
-                        <Button
+                        <BaseButton
                           variant={
                             pathName === item.href ? "secondary" : "ghost"
                           }
@@ -226,7 +226,7 @@ export function Header({ onSearch, className }: MarketplaceHeaderProps) {
                         >
                           <item.icon className="h-4 w-4 mr-2" />
                           {item.label}
-                        </Button>
+                        </BaseButton>
                       </Link>
                     ))}
                   </nav>
@@ -248,39 +248,39 @@ export function Header({ onSearch, className }: MarketplaceHeaderProps) {
                             userInfo.userRoleId === RoleEnum.AFFILIATE
                               ? "Merchant"
                               : userInfo.userRoleId === RoleEnum.ADMIN
-                              ? "Admin"
-                              : "Customer"}
+                                ? "Admin"
+                                : "Customer"}
                           </Typography>
                         </div>
 
                         {userInfo.userRoleId && (
                           <Link href={getDashboardRoute()}>
-                            <Button
+                            <BaseButton
                               variant="ghost"
                               className="w-full justify-start"
                               onClick={() => setMobileMenuOpen(false)}
                             >
                               <LayoutDashboard className="h-4 w-4 mr-2" />
                               Dashboard
-                            </Button>
+                            </BaseButton>
                           </Link>
                         )}
 
                         {userInfo.userRoleId === RoleEnum.MERCHANT ||
                           (userInfo.userRoleId === RoleEnum.AFFILIATE && (
                             <Link href={RouteConstant.merchant.profile.path}>
-                              <Button
+                              <BaseButton
                                 variant="ghost"
                                 className="w-full justify-start"
                                 onClick={() => setMobileMenuOpen(false)}
                               >
                                 <User className="h-4 w-4 mr-2" />
                                 Profile
-                              </Button>
+                              </BaseButton>
                             </Link>
                           ))}
 
-                        <Button
+                        <BaseButton
                           variant="ghost"
                           className="w-full justify-start text-destructive"
                           onClick={() => {
@@ -290,7 +290,7 @@ export function Header({ onSearch, className }: MarketplaceHeaderProps) {
                         >
                           <LogOut className="h-4 w-4 mr-2" />
                           Log out
-                        </Button>
+                        </BaseButton>
                       </div>
                     </>
                   ) : (
@@ -298,24 +298,24 @@ export function Header({ onSearch, className }: MarketplaceHeaderProps) {
                       <div className="border-t pt-4" />
                       <div className="flex flex-col gap-2">
                         <Link href={RouteConstant.auth.login.path}>
-                          <Button
+                          <BaseButton
                             variant="secondary"
                             className="w-full"
                             data-testid="button-login-mobile"
                             onClick={() => setMobileMenuOpen(false)}
                           >
                             Login
-                          </Button>
+                          </BaseButton>
                         </Link>
                         <Link href={RouteConstant.auth.signup.path}>
-                          <Button
+                          <BaseButton
                             variant="primary"
                             className="w-full"
                             data-testid="button-register-mobile"
                             onClick={() => setMobileMenuOpen(false)}
                           >
                             Sign Up
-                          </Button>
+                          </BaseButton>
                         </Link>
                       </div>
                     </>

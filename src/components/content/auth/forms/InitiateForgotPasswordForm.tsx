@@ -1,7 +1,7 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { Button as BaseButton } from "@/components/ui/button";
+import { Input as BaseInput } from "@/components/ui/input";
 import { initiatePasswordResetRequestInit } from "@/models/requests/authentication/InitiatePasswordResetRequest";
 import { AuthValidation } from "@/models/validations/AuthValidation";
 import { useInitiatePasswordResetMutation } from "@/services/authService";
@@ -34,18 +34,18 @@ export default function InitiateForgotPasswordForm({
   });
   return (
     <>
-      <Input
+      <BaseInput
         label="Email"
         placeholder="johndoe@gmail.com"
         formik={formik}
         name="userEmail"
       />
-      <Button
+      <BaseButton
         onClick={() => formik.handleSubmit()}
         isLoading={formik.isSubmitting}
       >
         Submit
-      </Button>
+      </BaseButton>
     </>
   );
 }

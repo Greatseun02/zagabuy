@@ -69,7 +69,7 @@ const buttonVariants = cva(
       size: "medium",
       width: "auto",
     },
-  }
+  },
 );
 
 export type ButtonProps = React.ComponentProps<"button"> &
@@ -83,6 +83,7 @@ export type ButtonProps = React.ComponentProps<"button"> &
     endIconProps?: IconRenderProps;
     loadingText?: string;
     loadingSpinnerColor?: string;
+    text?: string;
   };
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
@@ -102,9 +103,10 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       disabled,
       loadingText,
       loadingSpinnerColor,
+      text,
       ...props
     },
-    ref
+    ref,
   ) => {
     const Comp = asChild ? Slot : "button";
 
@@ -136,7 +138,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
             ...startIconProps,
             className: cn("shrink-0", startIconProps?.className),
           })}
-        {children}
+        {children || text}
         {EndIcon &&
           renderIcon(EndIcon, {
             ...endIconProps,
@@ -151,7 +153,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         className={cn(
           "cursor-pointer",
           buttonVariants({ variant, size, width }),
-          className
+          className,
         )}
         disabled={disabled || isLoading}
         {...props}
@@ -159,7 +161,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         {content}
       </Comp>
     );
-  }
+  },
 );
 
 Button.displayName = "Button";

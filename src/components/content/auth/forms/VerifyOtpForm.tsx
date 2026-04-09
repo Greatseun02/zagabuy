@@ -1,6 +1,6 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
+import { Button as BaseButton } from "@/components/ui/button";
 import {
   InputOTP,
   InputOTPGroup,
@@ -40,9 +40,9 @@ export default function VerifyOtpForm() {
           ))}
         </InputOTPGroup>
       </InputOTP>
-      <Button type="submit" width={"full"} variant={"primary"} className="mt-5">
+      <BaseButton type="submit" width={"full"} variant={"primary"} className="mt-5">
         Verify Otp
-      </Button>
+      </BaseButton>
     </form>
   );
 }

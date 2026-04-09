@@ -65,7 +65,7 @@ export class TimeUtil {
    */
   static format(
     value: string | number | Date,
-    format: string | Intl.DateTimeFormatOptions
+    format: string | Intl.DateTimeFormatOptions,
   ): string {
     const dt = this.parse(value);
     if (!dt.isValid) return "";
@@ -164,7 +164,7 @@ export class TimeUtil {
       | "days"
       | "weeks"
       | "months"
-      | "years"
+      | "years",
   ): number {
     const fromDt = this.parse(from);
     const toDt = this.parse(to);
@@ -179,7 +179,7 @@ export class TimeUtil {
    */
   static differenceInSeconds(
     from: string | number | Date,
-    to: string | number | Date
+    to: string | number | Date,
   ): number {
     return this.difference(from, to, "seconds");
   }
@@ -189,7 +189,7 @@ export class TimeUtil {
    */
   static differenceInDays(
     from: string | number | Date,
-    to: string | number | Date
+    to: string | number | Date,
   ): number {
     return this.difference(from, to, "days");
   }
@@ -199,7 +199,7 @@ export class TimeUtil {
    */
   static isBefore(
     a: string | number | Date,
-    b: string | number | Date
+    b: string | number | Date,
   ): boolean {
     return this.parse(a) < this.parse(b);
   }
@@ -209,8 +209,20 @@ export class TimeUtil {
    */
   static isAfter(
     a: string | number | Date,
-    b: string | number | Date
+    b: string | number | Date,
   ): boolean {
     return this.parse(a) > this.parse(b);
+  }
+
+  static isValidDate(dateInput: string | number): boolean {
+    if (!dateInput) return false;
+
+    const input = String(dateInput).trim();
+
+    // Must start with YYYY-MM-DD — all dates from this API follow this pattern
+    if (!/^\d{4}-\d{2}-\d{2}/.test(input)) return false;
+
+    const normalized = input.replace(" ", "T");
+    return DateTime.fromISO(normalized).isValid;
   }
 }

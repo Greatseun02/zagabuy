@@ -1,7 +1,7 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { Button as BaseButton } from "@/components/ui/button";
+import { Input as BaseInput } from "@/components/ui/input";
 import Typography from "@/components/ui/typography";
 import {
   LoginRequest,
@@ -46,14 +46,14 @@ export default function LoginForm() {
   });
   return (
     <form onSubmit={formik.handleSubmit} className="flex flex-col gap-4">
-      <Input
+      <BaseInput
         label="Email"
         placeholder="Enter Email:"
         formik={formik}
         name="userEmail"
         type="email"
       />
-      <Input
+      <BaseInput
         label="Password"
         placeholder="Enter Password:"
         formik={formik}
@@ -61,9 +61,9 @@ export default function LoginForm() {
         type="password"
       />
       <div className="flex flex-col gap-1">
-        <Button isLoading={formik.isSubmitting} type="submit">
+        <BaseButton isLoading={formik.isSubmitting} type="submit">
           Login
-        </Button>
+        </BaseButton>
         <Link href={RouteConstant.auth.forgotPassword.path}>
           <Typography size="sm" weight="regular" color="muted-foreground">
             Forgot Password?

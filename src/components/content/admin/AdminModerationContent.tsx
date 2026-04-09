@@ -1,10 +1,9 @@
 "use client";
 
-import {
-  BaseDataGrid,
+import BaseDataGrid, {
   BaseDataGridProps,
   BaseDataGridRef,
-} from "@/components/BaseDataGrid";
+} from "@/components/ui/datagrid/baseDataGrid";
 import { ExpiryDisplay } from "@/components/custom/countdown/ExpiryDisplay";
 import DashboardPageLayout from "@/components/layouts/DashboardPageLayout";
 import { ConfirmationModal } from "@/components/modals/ConfirmationModal";
@@ -24,6 +23,7 @@ import { CheckCircle, XCircle } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useRef, useState } from "react";
 import { toast } from "sonner";
+import { ColumnType } from "@/components/ui/datagrid/types";
 
 export default function AdminModerationContent() {
   const gridRef = useRef<BaseDataGridRef>(null);
@@ -40,121 +40,100 @@ export default function AdminModerationContent() {
   const confirm = useAppModal(ConfirmationModal);
   const router = useRouter();
 
-  const columns: BaseDataGridProps["columns"] = [
+  const columns: ColumnType[] = [
     {
-      id: "dealImageUrl" as keyof DealEntity,
-      accessorKey: "dealImageUrl" as keyof DealEntity,
-      header: "Image",
-      cell(props) {
-        const url = props.getValue<string>();
-        return (
-          <div className="w-12 h-12 overflow-hidden rounded-md ">
-            <img
-              src={`${url}`}
-              alt="Deal Image"
-              className="w-full h-full object-cover"
-            />
-          </div>
-        );
-      },
+      field: "dealImageUrl",
+      headerName: "Image",
+      cellRenderer: (row: DealEntity) => (
+        <div className="w-12 h-12 overflow-hidden rounded-md">
+          <img
+            src={`${row.dealUrl}`}
+            alt="Deal Image"
+            className="w-full h-full object-cover"
+          />
+        </div>
+      ),
     },
     {
-      id: "deal",
-      accessorKey: "deal",
-      header: "Deal",
-      cell(props) {
-        const title = props.row.original.dealTitle;
-        const description = props.row.original.dealDescription;
-        return (
-          <div>
-            <Typography weight="medium">{title}</Typography>
-            <Typography size="sm" color="muted-foreground">
-              {description}
-            </Typography>
-          </div>
-        );
-      },
-    },
-    {
-      id: "price",
-      accessorKey: "price",
-      header: "Price",
-      cell(props) {
-        const oldPrice = props.row.original.dealOldPrice;
-        const newPrice = props.row.original.dealPrice;
-
-        return (
-          <div>
-            <Typography weight="semibold">
-              {StringUtil.formatCurrency(newPrice)}
-            </Typography>
-            <Typography
-              weight="regular"
-              color="muted-foreground"
-              className="line-through leading-0 mt-2"
-              size="xs"
-            >
-              {StringUtil.formatCurrency(oldPrice)}
-            </Typography>
-          </div>
-        );
-      },
-    },
-
-    {
-      id: "dealExpiryDate" as keyof DealEntity,
-      accessorKey: "dealExpiryDate" as keyof DealEntity,
-      header: "Expiry Date",
-      cell(props) {
-        const expiry = props.getValue();
-        return <ExpiryDisplay expiresAt={expiry as string} />;
-      },
-    },
-    {
-      id: "dealVisibility",
-      accessorKey: "dealVisibility",
-      header: "Visibility",
-      cell(props) {
-        const visibility = props.getValue<"PUBLIC" | "PRIVATE">();
-        return (
-          <Typography
-            className="px-2 py-1 rounded-md text-center font-medium text-xs"
-            color={visibility === "PUBLIC" ? "success" : "warning"}
-            style={{
-              backgroundColor: visibility === "PUBLIC" ? "#dcfce7" : "#fef3c7",
-            }}
-          >
-            {visibility === "PUBLIC" ? "Public" : "Private"}
+      field: "dealTitle",
+      headerName: "Deal",
+      cellRenderer: (row: DealEntity) => (
+        <div>
+          <Typography weight="medium">{row.dealTitle}</Typography>
+          <Typography size="sm" color="muted-foreground">
+            {row.dealDescription}
           </Typography>
-        );
-      },
+        </div>
+      ),
     },
     {
-      id: "status",
-      accessorKey: "dealStatus",
-      header: "Status",
-      cell(props) {
-        const status = props.getValue<"PENDING" | "ACTIVE" | "REJECTED">();
-
+      field: "dealPrice",
+      headerName: "Price",
+      isCurrency: true,
+      cellRenderer: (row: DealEntity) => (
+        <div>
+          <Typography weight="semibold">
+            {StringUtil.formatCurrency(String(row.dealPrice))}
+          </Typography>
+          <Typography
+            weight="regular"
+            color="muted-foreground"
+            className="line-through leading-0 mt-2"
+            size="xs"
+          >
+            {StringUtil.formatCurrency(String(row.dealOldPrice))}
+          </Typography>
+        </div>
+      ),
+    },
+    {
+      field: "dealExpiryDate",
+      headerName: "Expiry Date",
+      isDate: true,
+      cellRenderer: (row: DealEntity) => (
+        <ExpiryDisplay expiresAt={row.dealExpiryDate} />
+      ),
+    },
+    {
+      field: "dealVisibility",
+      headerName: "Visibility",
+      cellRenderer: (row: DealEntity) => (
+        <Typography
+          className="px-2 py-1 rounded-md text-center font-medium text-xs"
+          color={row.dealVisibility === "PUBLIC" ? "success" : "warning"}
+          style={{
+            backgroundColor:
+              row.dealVisibility === "PUBLIC" ? "#dcfce7" : "#fef3c7",
+          }}
+        >
+          {row.dealVisibility === "PUBLIC" ? "Public" : "Private"}
+        </Typography>
+      ),
+    },
+    {
+      field: "dealStatus",
+      headerName: "Status",
+      cellRenderer: (row: DealEntity) => {
+        const status = row.dealStatus;
         return (
           <Typography
             color={
               status === "ACTIVE"
                 ? "success"
                 : status === "PENDING"
-                ? "warning"
-                : status === "REJECTED"
-                ? "error"
-                : "primary"
+                  ? "warning"
+                  : status === "REJECTED"
+                    ? "error"
+                    : "primary"
             }
             className={`${
               status === "ACTIVE"
                 ? "bg-green-100"
                 : status === "PENDING"
-                ? "bg-orange-100"
-                : status === "REJECTED"
-                ? "bg-red-100"
-                : ""
+                  ? "bg-orange-100"
+                  : status === "REJECTED"
+                    ? "bg-red-100"
+                    : ""
             } px-2 text-center`}
           >
             {status}
@@ -174,9 +153,9 @@ export default function AdminModerationContent() {
 
   const rowOptions: BaseDataGridProps["rowOptions"] = [
     {
-      label: "Approve Deal",
-      icon: CheckCircle,
-      onClick(row) {
+      optionName: "Approve Deal",
+      onClick(data) {
+        const row = data as unknown as DealEntity;
         confirm.show({
           title: "Approve Deal",
           description:
@@ -189,7 +168,7 @@ export default function AdminModerationContent() {
 
             if (BaseUtil.isApiResponseSuccessful(response)) {
               toast.success(
-                response?.responseMessage || "Approved Deal Successfully."
+                response?.responseMessage || "Approved Deal Successfully.",
               );
             }
           },
@@ -200,9 +179,9 @@ export default function AdminModerationContent() {
       },
     },
     {
-      label: "Reject Deal",
-      icon: XCircle,
-      onClick(row) {
+      optionName: "Reject Deal",
+      onClick(data) {
+        const row = data as unknown as DealEntity;
         confirm.show({
           title: "Reject Deal",
           description:
@@ -215,7 +194,7 @@ export default function AdminModerationContent() {
 
             if (BaseUtil.isApiResponseSuccessful(response)) {
               toast.success(
-                response?.responseMessage || "Rejected Deal Successfully."
+                response?.responseMessage || "Rejected Deal Successfully.",
               );
             }
           },
@@ -235,13 +214,11 @@ export default function AdminModerationContent() {
       <div className="mt-6">
         <BaseDataGrid
           ref={gridRef}
-          data={response?.data || []}
+          rows={response?.data || []}
           columns={columns}
-          rowId="dealId"
-          pageSizeOptions={[10, 25]}
-          onRefresh={refetch}
-          mode="client"
-          loading={isLoading}
+          uniqueRowId="dealId"
+          paginationMode="client"
+          isLoading={isLoading}
           colActions={colActions}
           rowOptions={rowOptions}
         />

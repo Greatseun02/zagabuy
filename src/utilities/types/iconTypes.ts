@@ -7,41 +7,28 @@ import React, { FunctionComponent, JSX, SVGProps } from "react";
 export type UniversalSVGProps = Omit<React.SVGProps<SVGSVGElement>, "ref"> & {
   ref?: React.Ref<SVGSVGElement> | React.LegacyRef<SVGSVGElement> | string;
 };
-
 /**
  * Smart SVG props type that adapts to React 18/19 differences
  */
-export type SmartSVGProps = Omit<React.SVGProps<SVGSVGElement>, "ref"> & {
-  ref?: React.Ref<SVGSVGElement> | React.LegacyRef<SVGSVGElement> | string;
-};
+export type SmartSVGProps =
+  | (Omit<React.SVGProps<SVGSVGElement>, "ref"> & {
+      ref?: React.Ref<SVGSVGElement> | React.LegacyRef<SVGSVGElement> | string;
+    })
+  | unknown;
 
-/**
- * Flexible icon type supporting multiple formats
- * - string: URL or base64 encoded image
- * - ReactElement: Pre-rendered element like <Icon />
- * - FunctionComponent: Icon component
- * - Function: Dynamic icon renderer
- * - IconSpec object: { icon: Component, className?: string, style?: CSSProperties }
- */
 export type IconType<P = SVGProps<SVGSVGElement>> =
   | string
   | React.ReactElement
   | FunctionComponent<P>
-  | ((props: P) => JSX.Element)
-  | {
-      icon: FunctionComponent<P> | ((props: P) => JSX.Element);
-      className?: string;
-      style?: React.CSSProperties;
-      [key: string]: any;
-    }
-  | null
-  | undefined;
+  | ((props: P) => JSX.Element);
 
 /**
  * Props for configuring icon rendering
  */
-export interface IconRenderProps
-  extends Omit<SmartSVGProps, "width" | "height"> {
+export interface IconRenderProps extends Omit<
+  SmartSVGProps,
+  "width" | "height"
+> {
   /** Icon size - applies to both width and height */
   size?: string | number;
   /** Explicit width (overrides size) */
@@ -52,7 +39,7 @@ export interface IconRenderProps
   className?: string;
   /** Additional styles */
   style?: React.CSSProperties;
-  /** Alt text for string-based icons (URLs/images) */
+  /** Alt text for string-based icons */
   alt?: string;
 }
 

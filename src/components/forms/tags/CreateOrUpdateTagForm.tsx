@@ -13,7 +13,7 @@ import {
   useCreateTagsMutation,
   useUpdateTagsMutation,
 } from "@/services/tagService";
-import { Input } from "@/components/ui/input";
+import { Input as BaseInput } from "@/components/ui/input";
 import { Formik } from "@/utilities/types";
 import {
   CreateTagValidationSchema,
@@ -44,7 +44,7 @@ export const CreateOrUpdateTagForm = ({
   ) => (
     <div className="space-y-4">
       <div>
-        <Input
+        <BaseInput
           label="Tag Name"
           id="tagName"
           name="tagName"
@@ -62,7 +62,7 @@ export const CreateOrUpdateTagForm = ({
       </div>
 
       <div>
-        <Input
+        <BaseInput
           label="Tag Slug"
           id="tagSlug"
           name="tagSlug"

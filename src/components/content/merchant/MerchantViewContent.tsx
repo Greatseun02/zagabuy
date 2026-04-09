@@ -3,7 +3,7 @@
 import DashboardPageLayout from "@/components/layouts/DashboardPageLayout";
 import DealLayout from "@/components/layouts/DealLayout";
 import { ConfirmationModal } from "@/components/modals/ConfirmationModal";
-import { Button } from "@/components/ui/button";
+import { Button as BaseButton } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -48,7 +48,7 @@ export default function MerchantViewContent() {
           asNode: (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button
+                <BaseButton
                   variant="transparent"
                   startIcon={<EllipsisVertical />}
                 />
@@ -105,7 +105,7 @@ export default function MerchantViewContent() {
         },
       ]}
       headerLeft={
-        <Button
+        <BaseButton
           onClick={() => router.back()}
           startIcon={<ChevronLeft />}
           children="Back to Deals"

@@ -12,7 +12,7 @@ import {
   useUpdatecategoryMutation,
 } from "@/services/categoryService";
 import * as yup from "yup";
-import { Input } from "@/components/ui/input";
+import { Input as BaseInput } from "@/components/ui/input";
 import { FormikValues } from "formik";
 import { Formik } from "@/utilities/types";
 import {
@@ -76,7 +76,7 @@ export const CreateOrUpdateCategoryForm = ({
             <label className="block text-sm font-medium text-gray-700 mb-1">
               Category Name
             </label>
-            <Input
+            <BaseInput
               id="categoryName"
               name="categoryName"
               type="text"
@@ -96,7 +96,7 @@ export const CreateOrUpdateCategoryForm = ({
             <label className="block text-sm font-medium text-gray-700 mb-1">
               Category Slug
             </label>
-            <Input
+            <BaseInput
               id="categorySlug"
               name="categorySlug"
               type="text"

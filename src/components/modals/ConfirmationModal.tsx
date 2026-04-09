@@ -1,7 +1,7 @@
 "use client";
 
 import { createAppModal } from "@/utilities/modalUtils/createAppModal";
-import { Button } from "@/components/ui/button";
+import { Button as BaseButton } from "@/components/ui/button";
 import Typography from "@/components/ui/typography";
 import { useAppModal } from "@/hooks/useAppModal";
 import { Info, AlertTriangle, Trash2, CheckCircle } from "lucide-react";
@@ -105,7 +105,7 @@ export const ConfirmationModal = createAppModal<ConfirmationModalProps>(
         )}
 
         <div className="flex gap-3 justify-end pt-4">
-          <Button
+          <BaseButton
             variant="ghost"
             onClick={() => {
               onCancel?.();
@@ -114,8 +114,8 @@ export const ConfirmationModal = createAppModal<ConfirmationModalProps>(
             {...cancelButtonProps}
           >
             {cancelText ?? "Cancel"}
-          </Button>
-          <Button
+          </BaseButton>
+          <BaseButton
             variant={
               resolvedVariant === "destructive"
                 ? "destructive"
@@ -134,7 +134,7 @@ export const ConfirmationModal = createAppModal<ConfirmationModalProps>(
             {...confirmButtonProps}
           >
             {confirmText ?? "Confirm"}
-          </Button>
+          </BaseButton>
         </div>
       </div>
     );

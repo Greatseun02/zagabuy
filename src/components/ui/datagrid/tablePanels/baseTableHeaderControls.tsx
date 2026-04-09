@@ -1,14 +1,18 @@
 "use client";
 
-import React, {useEffect, useRef, useState} from "react";
-import BaseButton from "@/components/ui/button/baseButton";
-import RefreshIcon from "@/components/icon/refreshIcon";
-import DownloadIcon from "@/components/icon/downloadIcon";
-import Typography from "@/components/ui/typography/typography";
-import FilterIcon from "@/components/icon/filterIcon";
-import PlusIcon from "@/components/icon/plusIcon";
+import React, { useEffect, useRef, useState } from "react";
+import { Button as BaseButton } from "@/components/ui/button";
+import {
+  RefreshCw,
+  Download,
+  Filter,
+  Plus,
+  Upload,
+  UploadIcon,
+} from "lucide-react";
+import Typography from "@/components/ui/typography";
 import { GridOptions } from "ag-grid-community";
-import { UploadIcon, ChevronDown } from "lucide-react";
+import { ChevronDown } from "lucide-react";
 
 /* =====================
    TYPES
@@ -127,8 +131,7 @@ export default function BaseTableHeaderControls<
         <div className="flex items-center gap-2 flex-wrap">
           {onRefresh && (
             <BaseButton
-              type="icon"
-              textIcon={RefreshIcon}
+              startIcon={<RefreshCw className="w-4 h-4" />}
               variant="secondary"
               size="small"
               onClick={onRefresh}
@@ -139,8 +142,7 @@ export default function BaseTableHeaderControls<
           {onFilterClick && (
             <div className="relative">
               <BaseButton
-                type="icon"
-                textIcon={FilterIcon}
+                startIcon={<Filter className="w-4 h-4" />}
                 variant={hasActiveFilters ? "primary" : "secondary"}
                 size="small"
                 onClick={onFilterClick}
@@ -156,12 +158,12 @@ export default function BaseTableHeaderControls<
             <div className="relative" ref={exportRef}>
               <BaseButton
                 text="Download"
-                textIcon={DownloadIcon}
+                startIcon={<Download className="w-4 h-4" />}
                 variant="secondary"
                 size="small"
                 disabled={isExporting}
                 endIcon={<ChevronDown className="size-3.5" />}
-                onClick={() => setExportOpen(prev => !prev)}
+                onClick={() => setExportOpen((prev) => !prev)}
               />
               {exportOpen && (
                 <div className="absolute right-0 top-full mt-1 z-50 min-w-[160px] bg-card border border-border rounded-md shadow-lg py-1">
@@ -203,7 +205,7 @@ export default function BaseTableHeaderControls<
           {onCreateClick && (
             <BaseButton
               text={createBtnText || "Create"}
-              textIcon={PlusIcon}
+              startIcon={<Plus className="w-4 h-4" />}
               variant="primary"
               size="small"
               onClick={onCreateClick}
@@ -215,7 +217,8 @@ export default function BaseTableHeaderControls<
       {onSelectRows && (selectedRows?.length ?? 0) > 0 && (
         <div className="flex items-center gap-3 px-3 py-2 bg-primary/10 rounded-md">
           <Typography size="sm" weight="medium">
-            {(selectedRows?.length ?? 0)} row{(selectedRows?.length ?? 0) !== 1 ? "s" : ""} selected
+            {selectedRows?.length ?? 0} row
+            {(selectedRows?.length ?? 0) !== 1 ? "s" : ""} selected
           </Typography>
           <BaseButton
             text="Perform Action"

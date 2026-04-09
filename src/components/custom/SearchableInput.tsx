@@ -6,8 +6,8 @@
 
 "use client";
 
-import { Input, InputProps } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
+import { Input as BaseInput, InputProps } from "@/components/ui/input";
+import { Button as BaseButton } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { Search, X } from "lucide-react";
 
@@ -27,11 +27,11 @@ export function SearchableInput({
   };
 
   return (
-    <Input
+    <BaseInput
       startIcon={<Search className="h-4 w-4 text-muted-foreground" />}
       {...(value && {
         endIcon: (
-          <Button
+          <BaseButton
             type="button"
             variant="secondary"
             size="icon"
@@ -40,7 +40,7 @@ export function SearchableInput({
             data-testid="button-clear-search"
           >
             <X className="h-4 w-4" />
-          </Button>
+          </BaseButton>
         ),
       })}
       type="search"

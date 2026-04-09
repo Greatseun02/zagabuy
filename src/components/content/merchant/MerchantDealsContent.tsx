@@ -3,9 +3,10 @@
 import React, { useMemo, useRef } from "react";
 import {
   BaseDataGrid,
-  BaseDataGridProps,
   type BaseDataGridRef,
-} from "@/components/BaseDataGrid";
+  type BaseDataGridProps,
+} from "@/components/ui/datagrid/baseDataGrid";
+import { ColumnType } from "@/components/ui/datagrid/types";
 import {
   useDeleteDealMutation,
   useReadDealByUserQuery,
@@ -22,160 +23,154 @@ import { StringUtil } from "@/utilities/stringUtil";
 import { BarChart2, Globe, PlusIcon } from "lucide-react";
 import { RouteConstant } from "@/utilities/constants/routeConstant";
 import { ExpiryDisplay } from "@/components/custom/countdown/ExpiryDisplay";
-import { CreateDealRequest } from "@/models/requests/dealRequest";
 import { BaseUtil } from "@/utilities/baseUtil";
+import { ICellRendererParams } from "ag-grid-community";
 
 export default function MerchantDealsContent() {
   const gridRef = useRef<BaseDataGridRef>(null);
-  // const [filter, setFilter] = useState<Record<string, string>>({})
-  // const { data: response, isLoading, refetch } = useReadDealQuery({item: filter.item});
   const { data: response, isLoading, refetch } = useReadDealByUserQuery();
   const [deleteDeal] = useDeleteDealMutation();
   const confirm = useAppModal(ConfirmationModal);
   const router = useRouter();
 
-  const columns: BaseDataGridProps["columns"] = [
-    {
-      id: "dealImages" as keyof DealEntity,
-      accessorKey: "dealImages" as keyof DealEntity,
-      header: "Image",
-      cell(props) {
-        const url = props.getValue<string[]>();
-        return (
-          <div className="w-12 h-12 overflow-hidden rounded-md ">
-            <img
-              src={`${url[0]}`}
-              alt="Deal Image"
-              className="w-full h-full object-cover"
-            />
-          </div>
-        );
+  const columns: ColumnType[] = useMemo(
+    () => [
+      {
+        field: "dealImages",
+        headerName: "Image",
+        cellRenderer: (params: ICellRendererParams) => {
+          const urls = params.value as string[];
+          return (
+            <div className="w-12 h-12 overflow-hidden rounded-md">
+              <img
+                src={urls?.[0]}
+                alt="Deal Image"
+                className="w-full h-full object-cover"
+              />
+            </div>
+          );
+        },
       },
-    },
-    {
-      id: "deal",
-      accessorKey: "deal",
-      header: "Deal",
-      cell(props) {
-        const title = props.row.original.dealTitle;
-        const description = props.row.original.dealDescription;
-        return (
-          <div>
-            <Typography weight="medium">{title}</Typography>
-            <Typography size="sm" color="muted-foreground">
-              {description}
-            </Typography>
-          </div>
-        );
+      {
+        field: "dealTitle",
+        headerName: "Deal",
+        cellRenderer: (params: ICellRendererParams) => {
+          const row = params.data as DealEntity;
+          return (
+            <div>
+              <Typography weight="medium">{row.dealTitle}</Typography>
+              <Typography size="sm" color="muted-foreground">
+                {row.dealDescription}
+              </Typography>
+            </div>
+          );
+        },
       },
-    },
-    {
-      id: "price",
-      accessorKey: "price",
-      header: "Price",
-      cell(props) {
-        const oldPrice = props.row.original.dealOldPrice;
-        const newPrice = props.row.original.dealPrice;
-
-        return (
-          <div>
-            <Typography weight="semibold">
-              {StringUtil.formatCurrency(newPrice)}
-            </Typography>
+      {
+        field: "dealPrice",
+        headerName: "Price",
+        cellRenderer: (params: ICellRendererParams) => {
+          const row = params.data as DealEntity;
+          return (
+            <div>
+              <Typography weight="semibold">
+                {StringUtil.formatCurrency(String(row?.dealOldPrice))}
+              </Typography>
+              <Typography
+                weight="regular"
+                color="muted-foreground"
+                className="line-through leading-0 mt-2"
+                size="xs"
+              >
+                {StringUtil.formatCurrency(String(row.dealOldPrice))}
+              </Typography>
+            </div>
+          );
+        },
+      },
+      {
+        field: "dealExpiryDate",
+        headerName: "Expiry Date",
+        cellRenderer: (params: ICellRendererParams) => {
+          return <ExpiryDisplay expiresAt={params.value as string} />;
+        },
+      },
+      {
+        field: "dealVisibility",
+        headerName: "Visibility",
+        cellRenderer: (params: ICellRendererParams) => {
+          const visibility = params.value as "PUBLIC" | "PRIVATE";
+          return (
             <Typography
-              weight="regular"
-              color="muted-foreground"
-              className="line-through leading-0 mt-2"
-              size="xs"
+              className="px-2 py-1 rounded-md text-center font-medium text-xs"
+              color={visibility === "PUBLIC" ? "success" : "warning"}
+              style={{
+                backgroundColor:
+                  visibility === "PUBLIC" ? "#dcfce7" : "#fef3c7",
+              }}
             >
-              {StringUtil.formatCurrency(oldPrice)}
+              {visibility === "PUBLIC" ? "Public" : "Private"}
             </Typography>
-          </div>
-        );
+          );
+        },
       },
-    },
-
-    {
-      id: "dealExpiryDate" as keyof DealEntity,
-      accessorKey: "dealExpiryDate" as keyof DealEntity,
-      header: "Expiry Date",
-      cell(props) {
-        const expiry = props.getValue();
-        return <ExpiryDisplay expiresAt={expiry as string} />;
+      {
+        field: "dealStatus",
+        headerName: "Status",
+        cellRenderer: (params: ICellRendererParams) => {
+          const status = params.value as "PENDING" | "ACTIVE" | "REJECTED";
+          return (
+            <Typography
+              color={
+                status === "ACTIVE"
+                  ? "success"
+                  : status === "PENDING"
+                    ? "warning"
+                    : status === "REJECTED"
+                      ? "error"
+                      : "primary"
+              }
+              className={`${
+                status === "ACTIVE"
+                  ? "bg-green-100"
+                  : status === "PENDING"
+                    ? "bg-orange-100"
+                    : status === "REJECTED"
+                      ? "bg-red-100"
+                      : ""
+              } px-2 text-center`}
+            >
+              {status}
+            </Typography>
+          );
+        },
       },
-    },
-    {
-      id: "dealVisibility" as keyof CreateDealRequest,
-      accessorKey: "dealVisibility" as keyof CreateDealRequest,
-      header: "Visibility",
-      cell(props) {
-        const visibility = props.getValue<"PUBLIC" | "PRIVATE">();
-        return (
-          <Typography
-            className="px-2 py-1 rounded-md text-center font-medium text-xs"
-            color={visibility === "PUBLIC" ? "success" : "warning"}
-            style={{
-              backgroundColor: visibility === "PUBLIC" ? "#dcfce7" : "#fef3c7",
-            }}
-          >
-            {visibility === "PUBLIC" ? "Public" : "Private"}
-          </Typography>
-        );
-      },
-    },
-    {
-      id: "status",
-      accessorKey: "dealStatus",
-      header: "Status",
-      cell(props) {
-        const status = props.getValue<"PENDING" | "ACTIVE" | "REJECTED">();
-
-        return (
-          <Typography
-            color={
-              status === "ACTIVE"
-                ? "success"
-                : status === "PENDING"
-                  ? "warning"
-                  : status === "REJECTED"
-                    ? "error"
-                    : "primary"
-            }
-            className={`${
-              status === "ACTIVE"
-                ? "bg-green-100"
-                : status === "PENDING"
-                  ? "bg-orange-100"
-                  : status === "REJECTED"
-                    ? "bg-red-100"
-                    : ""
-            } px-2 text-center`}
-          >
-            {status}
-          </Typography>
-        );
-      },
-    },
-  ];
+    ],
+    [],
+  );
 
   const colActions: BaseDataGridProps["colActions"] = {
     edit: {
-      onClick(row: DealEntity) {
+      autoRefresh: false,
+      onClick(data) {
+        const row = data as unknown as DealEntity;
         router.push(
           `${RouteConstant.merchant.deals.editDeal.path}/${row.dealId}`,
         );
       },
     },
     delete: {
-      onClick(row) {
+      autoRefresh: false,
+      async onClick(data) {
+        const row = data as unknown as DealEntity;
         confirm.show({
           title: "Delete Deal",
           description: `Are you sure you want to delete the deal "${row.dealTitle}"?`,
           onConfirm: async () => {
-            const response = await deleteDeal({
+            const res = await deleteDeal({
               dealId: row.dealId,
             }).unwrap();
-            if (BaseUtil.isApiResponseSuccessful(response)) {
+            if (BaseUtil.isApiResponseSuccessful(res)) {
               toast.success("Deal deleted successfully");
             }
             refetch();
@@ -188,7 +183,9 @@ export default function MerchantDealsContent() {
       },
     },
     view: {
-      onClick(row) {
+      autoRefresh: false,
+      onClick(data) {
+        const row = data as unknown as DealEntity;
         router.push(
           `${RouteConstant.merchant.deals.viewDeal.path}/${row.dealId}`,
         );
@@ -198,18 +195,17 @@ export default function MerchantDealsContent() {
 
   const rowOptions: BaseDataGridProps["rowOptions"] = [
     {
-      label: "View Analytics",
-      icon: BarChart2,
-      onClick(row) {
+      optionName: "View Analytics",
+      onClick(data) {
+        const row = data as unknown as DealEntity;
         router.push(
           `${RouteConstant.merchant.deals.viewDealAnalytics.path}/${row.dealId}`,
         );
       },
     },
     {
-      label: "Change Visibility",
-      icon: Globe,
-      onClick(row) {
+      optionName: "Change Visibility",
+      onClick(data) {
         console.log("click");
       },
     },
@@ -231,15 +227,15 @@ export default function MerchantDealsContent() {
       <div className="mt-6">
         <BaseDataGrid
           ref={gridRef}
-          data={response?.data || []}
+          rows={response?.data || []}
           columns={columns}
-          rowId="dealId"
-          pageSizeOptions={[10, 25]}
-          onRefresh={refetch}
-          mode="client"
-          loading={isLoading}
+          uniqueRowId="dealId"
+          paginationMode="client"
+          isLoading={isLoading}
           colActions={colActions}
           rowOptions={rowOptions}
+          autogenerateColumns={false}
+          showSerialNumberColumn={false}
         />
       </div>
     </DashboardPageLayout>

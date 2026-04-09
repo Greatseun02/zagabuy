@@ -1,6 +1,6 @@
 import React from "react";
 import { RotateCw } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Button as BaseButton } from "@/components/ui/button";
 
 export default function TableToolbar({
   search,
@@ -27,7 +27,7 @@ export default function TableToolbar({
         />
       </div>
       <div className="flex items-center gap-2">
-        <Button
+        <BaseButton
           type="button"
           onClick={onRefetch}
           disabled={loading}
@@ -35,7 +35,7 @@ export default function TableToolbar({
           variant={"outline"}
         >
           <RotateCw size={18} className={loading ? "animate-spin" : ""} />
-        </Button>
+        </BaseButton>
       </div>
     </div>
   );

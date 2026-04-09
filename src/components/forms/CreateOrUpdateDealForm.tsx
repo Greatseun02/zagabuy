@@ -22,7 +22,7 @@ import {
   CreateDealValidationSchema,
   UpdateDealValidationSchema,
 } from "@/models/validations/dealValidation";
-import { Input } from "../ui/input";
+import { Input as BaseInput } from "../ui/input";
 import ModernDatePicker from "../ui/modernDatePicker/ModernDatePicker";
 import { FileUploadUtil } from "@/utilities/fileUploadUtil";
 import { useUploadFileHandler } from "@/utilities/hooks/useUploadFileHandler";
@@ -76,38 +76,38 @@ export default function CreateOrUpdateDealForm({
     formik: Formik<CreateDealRequest | UpdateDealRequest>
   ) => (
     <>
-      <Input
+      <BaseInput
         label="Deal Name"
         placeholder="Enter name"
         formik={formik}
         name={"dealTitle"}
       />
-      <Input
+      <BaseInput
         label="Description"
         placeholder="Enter description"
         formik={formik}
         name={"dealDescription"}
         maxLength={250}
       />
-      <Input
+      <BaseInput
         label="Price"
         placeholder="Enter price"
         formik={formik}
         name={"dealPrice"}
       />
-      <Input
+      <BaseInput
         label="Old Price"
         placeholder="Enter old price"
         formik={formik}
         name={"dealOldPrice"}
       />
-      <Input
+      <BaseInput
         label="Promo Code"
         placeholder="Enter promo code e.g MYPROMOCODE"
         formik={formik}
         name={"dealPromoCode"}
       />
-      <Input
+      <BaseInput
         label="Deal Url"
         placeholder="https://www.deal.com/123"
         formik={formik}

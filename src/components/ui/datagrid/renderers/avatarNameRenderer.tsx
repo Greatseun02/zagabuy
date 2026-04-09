@@ -2,8 +2,8 @@
 
 import React from "react";
 import type {ICellRendererParams} from "ag-grid-community";
-import {cn} from "@/utilities/helpers/cn";
-import Typography from "@/components/ui/typography/typography";
+import {cn} from "@/lib/utils";
+import Typography from "@/components/ui/typography";
 
 /**
  * Type-safe parameters for AvatarNameRenderer

@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
-import { Button } from "@/components/ui/button";
+import { Button as BaseButton } from "@/components/ui/button";
 import {
   Sheet,
   SheetContent,
@@ -59,7 +59,7 @@ export default function DealsContent() {
     allDeals,
     filters.minPrice,
     filters.maxPrice,
-    filters.sortBy
+    filters.sortBy,
   );
 
   const updateFilter = (updates: Partial<DealFilters>) => {
@@ -115,7 +115,7 @@ export default function DealsContent() {
             {hasActiveFilters && (
               <>
                 <Separator />
-                <Button
+                <BaseButton
                   variant="outline"
                   className="w-full"
                   onClick={resetFilters}
@@ -123,7 +123,7 @@ export default function DealsContent() {
                 >
                   <X className="h-4 w-4 mr-2" />
                   Reset Filters
-                </Button>
+                </BaseButton>
               </>
             )}
           </div>
@@ -160,9 +160,9 @@ export default function DealsContent() {
                 onOpenChange={setMobileFiltersOpen}
               >
                 <SheetTrigger asChild className="lg:hidden">
-                  <Button variant="outline" size="icon">
+                  <BaseButton variant="outline" size="icon">
                     <SlidersHorizontal className="h-4 w-4" />
-                  </Button>
+                  </BaseButton>
                 </SheetTrigger>
                 <SheetContent side="left" className="w-80">
                   <SheetHeader>
@@ -197,7 +197,7 @@ export default function DealsContent() {
                     />
 
                     {hasActiveFilters && (
-                      <Button
+                      <BaseButton
                         variant="outline"
                         className="w-full"
                         onClick={() => {
@@ -207,7 +207,7 @@ export default function DealsContent() {
                       >
                         <X className="h-4 w-4 mr-2" />
                         Reset Filters
-                      </Button>
+                      </BaseButton>
                     )}
                   </div>
                 </SheetContent>

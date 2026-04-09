@@ -1,4 +1,4 @@
-import { Button } from "@/components/ui/button";
+import { Button as BaseButton } from "@/components/ui/button";
 import FormikSelect from "@/components/ui/formik-select";
 import { Select } from "@/components/ui/select";
 import Typography from "@/components/ui/typography";
@@ -41,7 +41,7 @@ export default function TablePagination({
             value: s,
           }))}
         />
-        <Button
+        <BaseButton
           onClick={() => onPageChange(Math.max(0, pageIndex - 1))}
           size="medium"
           variant="ghost"
@@ -49,8 +49,8 @@ export default function TablePagination({
           disabled={!canGoPrev}
         >
           Prev
-        </Button>
-        <Button
+        </BaseButton>
+        <BaseButton
           onClick={() => onPageChange(pageIndex + 1)}
           size="medium"
           variant="ghost"
@@ -58,7 +58,7 @@ export default function TablePagination({
           disabled={!canGoNext}
         >
           Next
-        </Button>
+        </BaseButton>
       </div>
     </div>
   );

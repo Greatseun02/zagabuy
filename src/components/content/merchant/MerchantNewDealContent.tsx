@@ -9,8 +9,10 @@ import { toast } from "sonner";
 export default function MerchantNewDealContent() {
   return (
     <DashboardPageLayout title="Create Deal" description="Create new deal">
-      <div className="mt-6 max-w-3xl">
-        <CreateOrUpdateDealForm isUpdate={false} />
+      <div className="mt-6 max-w-3xl ">
+        <div>
+          <CreateOrUpdateDealForm isUpdate={false} />
+        </div>
       </div>
     </DashboardPageLayout>
   );

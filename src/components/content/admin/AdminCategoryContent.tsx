@@ -9,12 +9,12 @@ import {
   BaseDataGrid,
   BaseDataGridProps,
   type BaseDataGridRef,
-} from "@/components/BaseDataGrid";
+} from "@/components/ui/datagrid/baseDataGrid";
 import { ColumnDef } from "@tanstack/react-table";
 import { CategoryEntity } from "@/models/responses/categoryResponse";
 import { UpdateCategoryRequest } from "@/models/requests/categoryRequest";
 import DashboardPageLayout from "@/components/layouts/DashboardPageLayout";
-import { Button } from "@/components/ui/button";
+import { Button as BaseButton } from "@/components/ui/button";
 import { PlusIcon } from "lucide-react";
 import { useAppModal } from "@/hooks/useAppModal";
 import {
@@ -125,7 +125,7 @@ export default function AdminCategoryContent() {
       title="Categories"
       description="Manage your product categories here."
       actions={[
-        <Button
+        <BaseButton
           startIcon={<PlusIcon />}
           className="rounded-sm"
           onClick={() => {
@@ -138,7 +138,7 @@ export default function AdminCategoryContent() {
           key="add-category"
         >
           Add Category
-        </Button>,
+        </BaseButton>,
       ]}
     >
       <div className="mt-6">
