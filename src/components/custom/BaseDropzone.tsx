@@ -35,7 +35,7 @@ const BaseDropzone = ({
   });
 
   return (
-    <div className={"flex flex-col gap-3"} style={containerStyle}>
+    <div className={"flex flex-col gap-3 p-2"} style={containerStyle}>
       {label && <label className="label subtitle">{label}</label>}
 
       <section
@@ -47,10 +47,10 @@ const BaseDropzone = ({
         <input {...getInputProps()} aria-label={label || "Upload Files"} />
 
         {previewContent || (
-          <div className={"flex flex-col items-center gap-2.5"}>
+          <div className={"flex flex-col items-center gap-2.5 py-4"}>
             {showCloudIcon && <CloudUploadIcon className="text-foreground" />}
             <Typography
-              className={"text-center flex flex-col gap  "}
+              className={"text-center flex flex-col gap "}
               style={helperTextStyle}
               dangerouslySetInnerHTML={{ __html: helperText }}
               // dangerouslySetInnerHTML={{__html: DOMPurify.sanitize(helperText)}}

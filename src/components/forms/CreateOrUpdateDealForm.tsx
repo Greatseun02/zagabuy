@@ -27,6 +27,7 @@ import ModernDatePicker from "../ui/modernDatePicker/ModernDatePicker";
 import { FileUploadUtil } from "@/utilities/fileUploadUtil";
 import { useUploadFileHandler } from "@/utilities/hooks/useUploadFileHandler";
 import { BaseUtil } from "@/utilities/baseUtil";
+import { toast } from "sonner";
 
 export type CreateOrUdpdateDealFormRequest =
   | CreateDealRequest
@@ -43,6 +44,7 @@ export type CreateOrUpdateDealFormProps = Partial<
 export default function CreateOrUpdateDealForm({
   initialValues,
   isUpdate = false,
+  submitBtnProps,
   onSuccessfulSubmission,
   ...rest
 }: CreateOrUpdateDealFormProps) {
@@ -62,7 +64,9 @@ export default function CreateOrUpdateDealForm({
     [getPresignedUrl],
   );
 
-  const { uploadFileHandler } = useUploadFileHandler(handleGetPresignedUrl);
+  const { uploadFileHandler, isUploading } = useUploadFileHandler(
+    handleGetPresignedUrl,
+  );
 
   const [files, setFiles] = useState<FileItem[]>(
     initialValues?.dealImagesUrl?.map((url, index) => ({
@@ -75,50 +79,54 @@ export default function CreateOrUpdateDealForm({
   const renderFields = (
     formik: Formik<CreateDealRequest | UpdateDealRequest>,
   ) => (
-    <div className="flex flex-wrap gap-4 items-start">
-      <BaseInput
-        label="Deal Name"
-        placeholder="Enter name"
-        formik={formik}
-        name={"dealTitle"}
-        containerClassName="flex-1 basis-250px"
-      />
-      <BaseInput
-        label="Price"
-        placeholder="Enter price"
-        formik={formik}
-        name={"dealPrice"}
-        containerClassName="flex-1"
-      />
-      <BaseInput
-        label="Old Price"
-        placeholder="Enter old price"
-        formik={formik}
-        name={"dealOldPrice"}
-        containerClassName="flex-1"
-      />
-      <BaseInput
-        label="Promo Code"
-        placeholder="Enter promo code e.g MYPROMOCODE"
-        formik={formik}
-        name={"dealPromoCode"}
-        containerClassName="flex-1"
-      />
-      <BaseInput
-        label="Deal Url"
-        placeholder="https://www.deal.com/123"
-        formik={formik}
-        name={"dealUrl"}
-        containerClassName="flex-1"
-      />
-      <ModernDatePicker
-        label="Expiry Date"
-        placeholder="Enter expiry date"
-        formik={formik}
-        dateFormat={"date-only"}
-        name={"dealExpiryDate"}
-        className="flex-1"
-      />
+    <>
+      <div className="grid sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-5 gap-4">
+        <BaseInput
+          label="Deal Name"
+          placeholder="Enter name"
+          formik={formik}
+          name={"dealTitle"}
+          containerClassName="flex-1 basis-250px"
+        />
+        <BaseInput
+          label="Old Price"
+          placeholder="Enter old price"
+          formik={formik}
+          name={"dealOldPrice"}
+          containerClassName="flex-1"
+          formatDecimalNumberWithCommas
+        />
+        <BaseInput
+          label="New Price"
+          placeholder="Enter price"
+          formik={formik}
+          name={"dealPrice"}
+          containerClassName="flex-1"
+          formatDecimalNumberWithCommas
+        />
+        <BaseInput
+          label="Promo Code"
+          placeholder="Enter promo code e.g MYPROMOCODE"
+          formik={formik}
+          name={"dealPromoCode"}
+          containerClassName="flex-1"
+        />
+        <BaseInput
+          label="Deal Url"
+          placeholder="https://www.deal.com/123"
+          formik={formik}
+          name={"dealUrl"}
+          containerClassName="flex-1"
+        />
+        <ModernDatePicker
+          label="Expiry Date"
+          placeholder="Enter expiry date"
+          formik={formik}
+          dateFormat={"date-only"}
+          name={"dealExpiryDate"}
+          className="flex-1"
+        />
+      </div>
       <BaseInput
         label="Description"
         placeholder="Enter description"
@@ -160,7 +168,7 @@ export default function CreateOrUpdateDealForm({
           }
         }}
       />
-    </div>
+    </>
   );
 
   const baseCreateOrUpdateDealFormConfig: BaseCreateOrUpdateFormProps<
@@ -169,7 +177,11 @@ export default function CreateOrUpdateDealForm({
     UpdateDealRequest
   > = {
     isUpdate,
-    onSuccessfulSubmission,
+    onSuccessfulSubmission: () => {
+      setFiles([]);
+      onSuccessfulSubmission?.();
+      toast.success("Success");
+    },
     createAction: (request) => {
       return createDeal(request).unwrap();
     },
@@ -187,6 +199,10 @@ export default function CreateOrUpdateDealForm({
       : CreateDealValidationSchema) as AnyObjectSchema,
     createBtnText: "Create Deal",
     updateBtnText: "Update Deal",
+    submitBtnProps: {
+      isLoading: isUploading,
+      ...submitBtnProps,
+    },
     ...rest,
   };
 

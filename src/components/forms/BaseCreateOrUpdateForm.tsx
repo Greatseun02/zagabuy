@@ -115,8 +115,8 @@ const BaseCreateOrUpdateForm = <
       <div className="flex items-center gap-3">
         <BaseButton
           type="submit"
-          isLoading={isLoading}
           {...submitBtnProps}
+          isLoading={isLoading || submitBtnProps?.isLoading}
           variant={submitBtnProps?.variant ?? "primary"}
           width={submitBtnProps?.width ?? "auto"}
         >
@@ -126,7 +126,7 @@ const BaseCreateOrUpdateForm = <
         {submitBtnProps?.variant !== "ghost" && (
           <BaseButton
             type="button"
-            variant="ghost"
+            variant="secondary"
             onClick={() => formik.resetForm()}
           >
             Reset
