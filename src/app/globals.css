@@ -445,23 +445,4 @@
   .padding {
     @apply px-5 laptop-large:px-10;
   }
-
-  /* AG-Grid Column Resize Handle - Custom styling for better visibility */
-  .ag-header-cell-resize {
-    width: 4px !important;
-    background-color: hsl(var(--primary-foreground) / 0.3) !important;
-    cursor: col-resize;
-    opacity: 0.3;
-    transition: all 0.2s ease-in-out;
-  }
-
-  .ag-header-cell-resize:hover {
-    opacity: 0.8;
-    background-color: hsl(var(--primary-foreground) / 0.4) !important;
-  }
-
-  .ag-header-cell-resize:active {
-    opacity: 1;
-    background-color: hsl(var(--primary-foreground) / 0.6) !important;
-  }
 }
