@@ -127,6 +127,7 @@ export const {
   useReadDealQuery,
   useLazyReadDealQuery,
   useReadDealByUserQuery,
+  useLazyReadDealByUserQuery,
   useReadDealByDealIdQuery,
   useReadDealByStatusQuery,
   useDeleteDealMutation,

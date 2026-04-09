@@ -9,6 +9,7 @@ import {
 import { ColumnType } from "@/components/ui/datagrid/types";
 import {
   useDeleteDealMutation,
+  useLazyReadDealByUserQuery,
   useReadDealByUserQuery,
 } from "@/services/dealService";
 import { useAppModal } from "@/hooks/useAppModal";
@@ -19,8 +20,12 @@ import { useRouter } from "next/navigation";
 import { DealEntity } from "@/models/responses/dealResponse";
 import Typography from "@/components/ui/typography";
 import { StringUtil } from "@/utilities/stringUtil";
+import {
+  StatusRenderer,
+  type StatusMap,
+} from "@/components/ui/datagrid/renderers/statusRenderer";
 
-import { BarChart2, Globe, PlusIcon } from "lucide-react";
+import { PlusIcon } from "lucide-react";
 import { RouteConstant } from "@/utilities/constants/routeConstant";
 import { ExpiryDisplay } from "@/components/custom/countdown/ExpiryDisplay";
 import { BaseUtil } from "@/utilities/baseUtil";
@@ -28,12 +33,21 @@ import { ICellRendererParams } from "ag-grid-community";
 
 export default function MerchantDealsContent() {
   const gridRef = useRef<BaseDataGridRef>(null);
-  const { data: response, isLoading, refetch } = useReadDealByUserQuery();
+  // const { data: response, isLoading, refetch } = useReadDealByUserQuery();
+  const [fetchDeals] = useLazyReadDealByUserQuery();
   const [deleteDeal] = useDeleteDealMutation();
   const confirm = useAppModal(ConfirmationModal);
   const router = useRouter();
 
-  const columns: ColumnType[] = useMemo(
+  const handleFetchRows: BaseDataGridProps["fetchRows"] = async () => {
+    const response = await fetchDeals().unwrap();
+
+    return {
+      data: response?.data || [],
+    };
+  };
+
+  const columns: BaseDataGridProps["columns"] = useMemo(
     () => [
       {
         field: "dealImages",
@@ -41,7 +55,7 @@ export default function MerchantDealsContent() {
         cellRenderer: (params: ICellRendererParams) => {
           const urls = params.value as string[];
           return (
-            <div className="w-12 h-12 overflow-hidden rounded-md">
+            <div className="w-16 h-10 overflow-hidden rounded-md">
               <img
                 src={urls?.[0]}
                 alt="Deal Image"
@@ -72,9 +86,9 @@ export default function MerchantDealsContent() {
         cellRenderer: (params: ICellRendererParams) => {
           const row = params.data as DealEntity;
           return (
-            <div>
+            <div className="py-4">
               <Typography weight="semibold">
-                {StringUtil.formatCurrency(String(row?.dealOldPrice))}
+                {StringUtil.formatCurrency(String(row?.dealPrice))}
               </Typography>
               <Typography
                 weight="regular"
@@ -98,51 +112,55 @@ export default function MerchantDealsContent() {
       {
         field: "dealVisibility",
         headerName: "Visibility",
-        cellRenderer: (params: ICellRendererParams) => {
-          const visibility = params.value as "PUBLIC" | "PRIVATE";
-          return (
-            <Typography
-              className="px-2 py-1 rounded-md text-center font-medium text-xs"
-              color={visibility === "PUBLIC" ? "success" : "warning"}
-              style={{
-                backgroundColor:
-                  visibility === "PUBLIC" ? "#dcfce7" : "#fef3c7",
-              }}
-            >
-              {visibility === "PUBLIC" ? "Public" : "Private"}
-            </Typography>
-          );
-        },
+        cellRenderer: (params: ICellRendererParams) => (
+          <StatusRenderer
+            statusMap={
+              {
+                public: {
+                  color: "hsl(var(--success))",
+                  backgroundColor:
+                    "color-mix(in srgb, hsl(var(--success)) 10%, transparent)",
+                  label: "Public",
+                },
+                private: {
+                  color: "hsl(var(--warning))",
+                  backgroundColor:
+                    "color-mix(in srgb, hsl(var(--warning)) 10%, transparent)",
+                  label: "Private",
+                },
+              } satisfies StatusMap
+            }
+            className="py-1.5 px-6 text-xs"
+            {...params}
+          />
+        ),
       },
       {
         field: "dealStatus",
         headerName: "Status",
-        cellRenderer: (params: ICellRendererParams) => {
-          const status = params.value as "PENDING" | "ACTIVE" | "REJECTED";
-          return (
-            <Typography
-              color={
-                status === "ACTIVE"
-                  ? "success"
-                  : status === "PENDING"
-                    ? "warning"
-                    : status === "REJECTED"
-                      ? "error"
-                      : "primary"
-              }
-              className={`${
-                status === "ACTIVE"
-                  ? "bg-green-100"
-                  : status === "PENDING"
-                    ? "bg-orange-100"
-                    : status === "REJECTED"
-                      ? "bg-red-100"
-                      : ""
-              } px-2 text-center`}
-            >
-              {status}
-            </Typography>
-          );
+        cellRenderer: StatusRenderer,
+        cellRendererParams: {
+          statusMap: {
+            active: {
+              color: "hsl(var(--success))",
+              backgroundColor:
+                "color-mix(in srgb, hsl(var(--success)) 10%, transparent)",
+              label: "Active",
+            },
+            pending: {
+              color: "hsl(var(--warning))",
+              backgroundColor:
+                "color-mix(in srgb, hsl(var(--warning)) 10%, transparent)",
+              label: "Pending",
+            },
+            rejected: {
+              color: "hsl(var(--destructive))",
+              backgroundColor:
+                "color-mix(in srgb, hsl(var(--destructive)) 10%, transparent)",
+              label: "Rejected",
+            },
+          } satisfies StatusMap,
+          className: "py-1.5 px-6 text-xs",
         },
       },
     ],
@@ -173,7 +191,6 @@ export default function MerchantDealsContent() {
             if (BaseUtil.isApiResponseSuccessful(res)) {
               toast.success("Deal deleted successfully");
             }
-            refetch();
             confirm.hide();
           },
           onCancel() {
@@ -227,11 +244,10 @@ export default function MerchantDealsContent() {
       <div className="mt-6">
         <BaseDataGrid
           ref={gridRef}
-          rows={response?.data || []}
+          fetchRows={handleFetchRows}
           columns={columns}
           uniqueRowId="dealId"
           paginationMode="client"
-          isLoading={isLoading}
           colActions={colActions}
           rowOptions={rowOptions}
           autogenerateColumns={false}
