@@ -1,7 +1,7 @@
 "use client";
 
 import React, { CSSProperties } from "react";
-import { cn } from "@/utilities/helpers/cn";
+import { cn } from "@/lib/utils";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
 export interface CalendarProps {

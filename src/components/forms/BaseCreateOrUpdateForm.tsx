@@ -17,11 +17,11 @@ export interface BaseCreateOrUpdateFormProps<
   CreateRequest extends T = T,
   UpdateRequest extends T = T,
   CreateResponse extends BaseResponse = BaseResponse,
-  UpdateResponse extends BaseResponse = BaseResponse
+  UpdateResponse extends BaseResponse = BaseResponse,
 > extends Pick<BaseFormLayoutProps, "title" | "description"> {
   initialValues: T;
   onSuccessfulSubmission?: () => void;
-  submitBtnProps?: React.ComponentProps<typeof Button>;
+  submitBtnProps?: React.ComponentProps<typeof BaseButton>;
   isUpdate?: boolean;
   validationSchema: AnyObjectSchema;
   createAction: (request: CreateRequest) => Promise<CreateResponse>;
@@ -38,7 +38,7 @@ const BaseCreateOrUpdateForm = <
   CreateRequest extends T = T,
   UpdateRequest extends T = T,
   CreateResponse extends BaseResponse = BaseResponse,
-  UpdateResponse extends BaseResponse = BaseResponse
+  UpdateResponse extends BaseResponse = BaseResponse,
 >({
   initialValues,
   onSuccessfulSubmission,
@@ -65,7 +65,7 @@ const BaseCreateOrUpdateForm = <
 
   const handleSubmit: FormikConfig<T>["onSubmit"] = async (
     values,
-    formikHelper
+    formikHelper,
   ) => {
     try {
       const castedValues = validationSchema?.cast?.(values, {
@@ -120,7 +120,7 @@ const BaseCreateOrUpdateForm = <
           variant={submitBtnProps?.variant ?? "primary"}
           width={submitBtnProps?.width ?? "auto"}
         >
-          {isUpdate ? updateBtnText ?? "Update" : createBtnText ?? "Create"}
+          {isUpdate ? (updateBtnText ?? "Update") : (createBtnText ?? "Create")}
         </BaseButton>
 
         {submitBtnProps?.variant !== "ghost" && (

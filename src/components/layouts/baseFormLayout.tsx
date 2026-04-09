@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import Typography from "../ui/typography";
 
 export type BaseFormLayoutProps = React.DetailedHTMLProps<
   React.FormHTMLAttributes<HTMLFormElement>,
@@ -22,23 +23,17 @@ const BaseFormLayout = ({
   return (
     <form
       {...props}
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        gap: "1.5rem",
-        ...style,
-      }}
-      className={`w-full p-4 rounded-lg  ${className ?? ""}`}
+      className={`w-full p-6  rounded-2xl border flex gap-6 flex-col ${className ?? ""} backdrop-blur-2xl`}
     >
       {title && (
         <header className="mb-2">
-          <h3 className="text-lg font-semibold text-slate-900 dark:text-slate-50">
+          <Typography weight="semibold" size="2xl" color="foreground">
             {title}
-          </h3>
+          </Typography>
           {description && (
-            <p className="mt-1 text-sm text-slate-500 dark:text-slate-300">
+            <Typography color="muted-foreground" size="sm" className="mt-1">
               {description}
-            </p>
+            </Typography>
           )}
         </header>
       )}

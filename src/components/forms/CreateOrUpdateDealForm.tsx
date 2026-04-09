@@ -59,7 +59,7 @@ export default function CreateOrUpdateDealForm({
 
       return response ?? {};
     },
-    [getPresignedUrl]
+    [getPresignedUrl],
   );
 
   const { uploadFileHandler } = useUploadFileHandler(handleGetPresignedUrl);
@@ -69,49 +69,47 @@ export default function CreateOrUpdateDealForm({
       url,
       id: String(index),
       name: `image-${index}`,
-    })) || []
+    })) || [],
   );
 
   const renderFields = (
-    formik: Formik<CreateDealRequest | UpdateDealRequest>
+    formik: Formik<CreateDealRequest | UpdateDealRequest>,
   ) => (
-    <>
+    <div className="flex flex-wrap gap-4 items-start">
       <BaseInput
         label="Deal Name"
         placeholder="Enter name"
         formik={formik}
         name={"dealTitle"}
-      />
-      <BaseInput
-        label="Description"
-        placeholder="Enter description"
-        formik={formik}
-        name={"dealDescription"}
-        maxLength={250}
+        containerClassName="flex-1 basis-250px"
       />
       <BaseInput
         label="Price"
         placeholder="Enter price"
         formik={formik}
         name={"dealPrice"}
+        containerClassName="flex-1"
       />
       <BaseInput
         label="Old Price"
         placeholder="Enter old price"
         formik={formik}
         name={"dealOldPrice"}
+        containerClassName="flex-1"
       />
       <BaseInput
         label="Promo Code"
         placeholder="Enter promo code e.g MYPROMOCODE"
         formik={formik}
         name={"dealPromoCode"}
+        containerClassName="flex-1"
       />
       <BaseInput
         label="Deal Url"
         placeholder="https://www.deal.com/123"
         formik={formik}
         name={"dealUrl"}
+        containerClassName="flex-1"
       />
       <ModernDatePicker
         label="Expiry Date"
@@ -119,6 +117,16 @@ export default function CreateOrUpdateDealForm({
         formik={formik}
         dateFormat={"date-only"}
         name={"dealExpiryDate"}
+        className="flex-1"
+      />
+      <BaseInput
+        label="Description"
+        placeholder="Enter description"
+        formik={formik}
+        name={"dealDescription"}
+        multiline
+        className="h-25"
+        containerClassName="w-full"
       />
       <BaseFileUpload
         label="Deal Images"
@@ -131,7 +139,7 @@ export default function CreateOrUpdateDealForm({
           FileUploadUtil.handleUploadComplete(
             result,
             formik as Formik<CreateOrUdpdateDealFormRequest>,
-            "dealImagesUrl"
+            "dealImagesUrl",
           );
         }}
         value={files}
@@ -140,7 +148,7 @@ export default function CreateOrUpdateDealForm({
           FileUploadUtil.handleFileRemove<CreateOrUdpdateDealFormRequest>(
             file,
             formik as Formik<CreateOrUdpdateDealFormRequest>,
-            "dealImagesUrl"
+            "dealImagesUrl",
           );
         }}
         validate={(value) => {
@@ -152,7 +160,7 @@ export default function CreateOrUpdateDealForm({
           }
         }}
       />
-    </>
+    </div>
   );
 
   const baseCreateOrUpdateDealFormConfig: BaseCreateOrUpdateFormProps<
@@ -179,7 +187,7 @@ export default function CreateOrUpdateDealForm({
       : CreateDealValidationSchema) as AnyObjectSchema,
     createBtnText: "Create Deal",
     updateBtnText: "Update Deal",
-    // ...rest,
+    ...rest,
   };
 
   return <BaseCreateOrUpdateForm {...baseCreateOrUpdateDealFormConfig} />;

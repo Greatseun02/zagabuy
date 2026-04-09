@@ -2,7 +2,7 @@
 
 import React, { CSSProperties, useRef, useState } from "react";
 import { CalendarIcon, X } from "lucide-react";
-import { cn } from "@/utilities/helpers/cn";
+import { cn } from "@/lib/utils";
 import { Calendar } from "@/components/ui/calendar";
 import { format } from "date-fns";
 

@@ -15,8 +15,10 @@ import { IconType, IconRenderProps } from "@/utilities/types/iconTypes";
 import { renderIcon } from "@/utilities/helpers/iconRenderer";
 import type { Formik } from "@/utilities/types";
 
-export interface InputProps<T extends FormikValues = any>
-  extends Omit<React.InputHTMLAttributes<HTMLInputElement>, "name"> {
+export interface InputProps<T extends FormikValues = any> extends Omit<
+  React.InputHTMLAttributes<HTMLInputElement>,
+  "name"
+> {
   // Icon props
   startIcon?: IconType;
   endIcon?: IconType;
@@ -71,10 +73,10 @@ export interface InputProps<T extends FormikValues = any>
   // Non-formik state management
   value?: string | number;
   onChange?: (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => void;
   onBlur?: (
-    e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>
+    e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => void;
 }
 
@@ -143,7 +145,7 @@ const InputComponent = React.forwardRef<HTMLInputElement, InputProps<any>>(
       type,
       ...props
     },
-    ref
+    ref,
   ) => {
     const [isPasswordVisible, setIsPasswordVisible] = useState(false);
     const [isCopiedClicked, setIsCopiedClicked] = useState(false);
@@ -172,7 +174,7 @@ const InputComponent = React.forwardRef<HTMLInputElement, InputProps<any>>(
 
     // Handle whole number formatting
     const handleWholeNumberChange = (
-      e: React.ChangeEvent<HTMLInputElement>
+      e: React.ChangeEvent<HTMLInputElement>,
     ) => {
       let inputValue = e.target.value;
       const cursorPosition = e.target.selectionStart || 0;
@@ -221,7 +223,7 @@ const InputComponent = React.forwardRef<HTMLInputElement, InputProps<any>>(
             if (inputRef.current) {
               inputRef.current.setSelectionRange(
                 cursorPosition,
-                cursorPosition
+                cursorPosition,
               );
             }
           });
@@ -263,7 +265,7 @@ const InputComponent = React.forwardRef<HTMLInputElement, InputProps<any>>(
         if (name)
           formik?.setFieldValue(
             name as string,
-            `0.${"0".repeat(decimalPlaces)}`
+            `0.${"0".repeat(decimalPlaces)}`,
           );
         return;
       }
@@ -284,7 +286,7 @@ const InputComponent = React.forwardRef<HTMLInputElement, InputProps<any>>(
       }
 
       const formattedIntegerPart = FormUtil.formatNumberWithCommas(
-        integerPart.replace("-", "")
+        integerPart.replace("-", ""),
       );
       const formattedValue = `${
         isNegative ? "-" : ""
@@ -294,7 +296,7 @@ const InputComponent = React.forwardRef<HTMLInputElement, InputProps<any>>(
         if (name)
           formik?.setFieldValue(
             name as string,
-            `0.${"0".repeat(decimalPlaces)}`
+            `0.${"0".repeat(decimalPlaces)}`,
           );
         return;
       }
@@ -329,7 +331,7 @@ const InputComponent = React.forwardRef<HTMLInputElement, InputProps<any>>(
 
           newPosition = Math.max(
             decimalDigitStart,
-            Math.min(newPosition + 1, endOfDecimal)
+            Math.min(newPosition + 1, endOfDecimal),
           );
         }
 
@@ -379,7 +381,7 @@ const InputComponent = React.forwardRef<HTMLInputElement, InputProps<any>>(
 
     // Unified change handler
     const handleChange = (
-      e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+      e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
     ) => {
       if (formik) {
         formik?.handleChange(name)(e);
@@ -390,7 +392,7 @@ const InputComponent = React.forwardRef<HTMLInputElement, InputProps<any>>(
 
     // Unified blur handler
     const handleBlur = (
-      e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>
+      e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>,
     ) => {
       if (formik) {
         name && formik?.handleBlur(name)?.(e);
@@ -435,7 +437,7 @@ const InputComponent = React.forwardRef<HTMLInputElement, InputProps<any>>(
         "pl-10": resolvedStartIcon,
         "pr-10": EndIcon || copyTextOnly || type === "password",
         "border-destructive": isError,
-      }
+      },
     );
 
     return (
@@ -443,7 +445,7 @@ const InputComponent = React.forwardRef<HTMLInputElement, InputProps<any>>(
         className={cn(
           "flex flex-col gap-1.5",
           isError && "text-destructive",
-          containerClassName
+          containerClassName,
         )}
         style={containerStyle}
       >
@@ -453,7 +455,7 @@ const InputComponent = React.forwardRef<HTMLInputElement, InputProps<any>>(
             className={cn(
               "text-sm font-medium",
               isError && "text-destructive",
-              labelClassName
+              labelClassName,
             )}
             style={labelStyle}
           >
@@ -481,7 +483,8 @@ const InputComponent = React.forwardRef<HTMLInputElement, InputProps<any>>(
             <textarea
               className={cn(
                 baseInputClasses,
-                "min-h-96 resize-vertical font-mono"
+                "resize-vertical font-mono",
+                className,
               )}
               name={name as string}
               value={getValue()}
@@ -536,16 +539,16 @@ const InputComponent = React.forwardRef<HTMLInputElement, InputProps<any>>(
                 formatDecimalNumberWithCommas
                   ? formatDisplayValue(getValue())
                   : formatNumberWithCommas
-                  ? formatWholeNumberDisplay(getValue())
-                  : getValue()
+                    ? formatWholeNumberDisplay(getValue())
+                    : getValue()
               }
               onBlur={handleBlur}
               onChange={
                 formatDecimalNumberWithCommas
                   ? handleNumberChange
                   : formatNumberWithCommas
-                  ? handleWholeNumberChange
-                  : handleChange
+                    ? handleWholeNumberChange
+                    : handleChange
               }
               {...props}
               className={cn(baseInputClasses, className)}
@@ -568,7 +571,7 @@ const InputComponent = React.forwardRef<HTMLInputElement, InputProps<any>>(
                 className={cn(
                   "inline-flex items-center justify-center p-1 rounded",
                   "hover:bg-accent transition-colors cursor-pointer",
-                  "focus:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                  "focus:outline-none focus-visible:ring-2 focus-visible:ring-ring",
                 )}
                 onClick={async () => {
                   const valueToCopy = (getValue() as string).toString();
@@ -591,7 +594,7 @@ const InputComponent = React.forwardRef<HTMLInputElement, InputProps<any>>(
                 className={cn(
                   "inline-flex items-center justify-center p-1 rounded",
                   "hover:bg-accent transition-colors cursor-pointer",
-                  "focus:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                  "focus:outline-none focus-visible:ring-2 focus-visible:ring-ring",
                 )}
                 onClick={() => setIsPasswordVisible(!isPasswordVisible)}
               >
@@ -626,7 +629,7 @@ const InputComponent = React.forwardRef<HTMLInputElement, InputProps<any>>(
             className={cn(
               "text-xs mt-1",
               isError && "text-destructive",
-              helperTextClassName
+              helperTextClassName,
             )}
           >
             {error ||
@@ -636,7 +639,7 @@ const InputComponent = React.forwardRef<HTMLInputElement, InputProps<any>>(
         )}
       </div>
     );
-  }
+  },
 );
 
 InputComponent.displayName = "Input";
