@@ -8,6 +8,8 @@ import {
   EyeIcon,
   SquareArrowOutUpRight,
   Trash as TrashIcon,
+  DotIcon,
+  Minus,
 } from "lucide-react";
 import { FormUtil } from "@/utilities/formUtil";
 import { Progress } from "../ui/progress";
@@ -270,19 +272,22 @@ const FilePreview: React.FC<FilePreviewProps> = ({
 
   return (
     <div
-      className={`flex flex-col rounded-lg transition-all duration-200 overflow-hidden hover:-translate-y-[1px] hover:shadow-sm ${className}`}
+      className={` flex flex-col rounded-lg transition-all duration-200 overflow-hidden hover:-translate-y-[1px] hover:shadow-sm ${className}`}
       style={containerStyle}
     >
       <div
         className={`
-          flex items-start gap-3 p-3 sm:p-4 border rounded-lg transition-colors duration-200
+          grid gap-6 p-3 border rounded-lg transition-colors duration-200
           ${statusConfig.containerClass}
         `}
       >
         {/* File Format Icon Wrapper */}
         {fileInfo?.url ? (
-          <div className="max-h-40 flex-1">
-            <img src={fileInfo.url} />
+          <div className="max-h-40">
+            <img
+              src={fileInfo.url}
+              className="w-auto h-full object-center object-cover"
+            />
           </div>
         ) : (
           <div className="shrink-0 flex items-center justify-center rounded-md bg-muted/50 w-9 h-9 sm:w-10 sm:h-10">
@@ -290,7 +295,7 @@ const FilePreview: React.FC<FilePreviewProps> = ({
           </div>
         )}
         {/* File information */}
-        <div className="flex-1 min-w-0 flex flex-col gap-2">
+        <div className="min-w-0 flex items-center gap-2  sm:gap-6">
           <div className="flex flex-col gap-1 min-w-0">
             <Typography
               weight="medium"
@@ -326,9 +331,9 @@ const FilePreview: React.FC<FilePreviewProps> = ({
               </div>
             )}
           </div>
-
+          <Minus className="rotate-90 text-muted-foreground" />
           {/* Action buttons */}
-          <div className="flex items-center gap-1 sm:gap-2 shrink-0 ml-auto mt-1 sm:mt-0 w-full sm:w-auto justify-end">
+          <div className="flex items-center gap-1 sm:gap-2 shrink-0 mt-1 sm:mt-0 sm:w-auto justify-end">
             {/* Status icon */}
             {statusConfig.icon && (
               <div className="flex items-center justify-center w-5 h-5 [&>svg]:w-4 [&>svg]:h-4">
