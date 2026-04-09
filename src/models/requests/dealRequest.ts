@@ -1,3 +1,5 @@
+import { dealVisibilityEnum } from "@/utilities/enums/dealVisibilityEnum";
+
 export type CreateDealRequest = {
   dealDescription: string;
   dealExpiryDate: string;
@@ -40,7 +42,7 @@ export const CreateDealInit: CreateDealRequest = {
   dealPromoCode: "",
   dealTitle: "",
   dealUrl: "",
-  dealVisibility: "",
+  dealVisibility: dealVisibilityEnum.PRIVATE,
 };
 
 export const UpdateDealInit: UpdateDealRequest = {

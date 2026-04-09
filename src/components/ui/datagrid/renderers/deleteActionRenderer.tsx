@@ -26,7 +26,7 @@ export function DeleteActionRenderer({
       className={cn(
         "flex justify-center w-full text-muted-foreground",
         "transition-colors duration-150",
-        onClick && "cursor-pointer hover:text-error dark:hover:text-error",
+        onClick && "cursor-pointer hover:text-red-400 dark:hover:text-red-400",
       )}
       onClick={handleClick}
       title={title}

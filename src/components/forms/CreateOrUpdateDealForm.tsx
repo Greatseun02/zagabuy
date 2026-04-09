@@ -26,8 +26,8 @@ import { Input as BaseInput } from "../ui/input";
 import ModernDatePicker from "../ui/modernDatePicker/ModernDatePicker";
 import { FileUploadUtil } from "@/utilities/fileUploadUtil";
 import { useUploadFileHandler } from "@/utilities/hooks/useUploadFileHandler";
-import { BaseUtil } from "@/utilities/baseUtil";
 import { toast } from "sonner";
+import DealUtil from "@/utilities/dealUtil";
 
 export type CreateOrUdpdateDealFormRequest =
   | CreateDealRequest
@@ -72,7 +72,7 @@ export default function CreateOrUpdateDealForm({
     initialValues?.dealImagesUrl?.map((url, index) => ({
       url,
       id: String(index),
-      name: `image-${index}`,
+      name: DealUtil.getFileNameFromUrl(url),
     })) || [],
   );
 

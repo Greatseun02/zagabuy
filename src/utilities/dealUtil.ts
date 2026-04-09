@@ -280,6 +280,17 @@ export class DealUtil {
 
     return result;
   }
+  static getFileNameFromUrl(url: string) {
+    if (url && typeof url === "string") {
+      const arrayFromUrl = url.split("-");
+      const lastItemFromUrl = arrayFromUrl[arrayFromUrl.length - 1];
+      const imageExtensions = [".jpg", ".jpeg", ".png", ".gif", ".webp", ".svg", ".bmp", ".ico"];
+      if (lastItemFromUrl && imageExtensions.some((ext) => lastItemFromUrl.toLowerCase().includes(ext))) {
+        return lastItemFromUrl;
+      }
+    }
+    return url;
+  }
 }
 
 export default DealUtil;

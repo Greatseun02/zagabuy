@@ -31,7 +31,7 @@ export default function RowOptionsMenu({
         <DropdownMenuContent className="p-1 divide-y ">
           {options.map((o, i) => (
             <DropdownMenuItem variant={o.danger ? "destructive" : "default"}>
-              <Button
+              <BaseButton
                 {...(o.icon && { startIcon: <o.icon /> })}
                 key={i}
                 onClick={() => {
@@ -43,7 +43,7 @@ export default function RowOptionsMenu({
                 className="gap-4 rounded-none px-1"
               >
                 <Typography>{o.label}</Typography>
-              </Button>
+              </BaseButton>
             </DropdownMenuItem>
           ))}
         </DropdownMenuContent>

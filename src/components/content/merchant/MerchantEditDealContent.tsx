@@ -35,9 +35,13 @@ export default function MerchantEditDealContent() {
   }
 
   return (
-    <DashboardPageLayout title={`Edit: ${data?.data?.dealTitle}`}>
-      <div className="mt-6 max-w-3xl">
+    <DashboardPageLayout
+      title={`Edit Deal`}
+      description="Edit deal information."
+    >
+      <div className="mt-6 max-w-6xl mx-auto">
         <CreateOrUpdateDealForm
+          title={`Edit ${data?.data?.dealTitle}`}
           isUpdate
           initialValues={{
             ...data?.data,

@@ -247,7 +247,6 @@ export default function MerchantDealsContent() {
           fetchRows={handleFetchRows}
           columns={columns}
           uniqueRowId="dealId"
-          paginationMode="client"
           colActions={colActions}
           rowOptions={rowOptions}
           autogenerateColumns={false}

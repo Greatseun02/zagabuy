@@ -85,7 +85,7 @@ const FilePreview: React.FC<FilePreviewProps> = ({
 
     if (typeof file === "string") {
       const name = StringUtil.convertToSentenceCase(
-        file.slice(file.lastIndexOf("/") + 1)
+        file.slice(file.lastIndexOf("/") + 1),
       );
       const extension = file?.slice(file.lastIndexOf(".") + 1);
       return {
@@ -280,10 +280,15 @@ const FilePreview: React.FC<FilePreviewProps> = ({
         `}
       >
         {/* File Format Icon Wrapper */}
-        <div className="shrink-0 flex items-center justify-center rounded-md bg-muted/50 w-9 h-9 sm:w-10 sm:h-10">
-          <FileFormatsIcon fileFormatType={fileFormat as FileFormatTypes} />
-        </div>
-
+        {fileInfo?.url ? (
+          <div className="max-h-40 flex-1">
+            <img src={fileInfo.url} />
+          </div>
+        ) : (
+          <div className="shrink-0 flex items-center justify-center rounded-md bg-muted/50 w-9 h-9 sm:w-10 sm:h-10">
+            <FileFormatsIcon fileFormatType={fileFormat as FileFormatTypes} />
+          </div>
+        )}
         {/* File information */}
         <div className="flex-1 min-w-0 flex flex-col gap-2">
           <div className="flex flex-col gap-1 min-w-0">
