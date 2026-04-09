@@ -8,7 +8,10 @@ export const CreateDealValidationSchema = yup.object({
     .max(250, "Description cannot exceed 250 characters"),
   dealExpiryDate: yup.date().required(),
   dealImagesUrl: yup.array().of(yup.string()).required(),
-  dealOldPrice: yup.number().required(),
+  dealOldPrice: yup
+    .number()
+    .required()
+    .moreThan(0, "Old price must be greater than 0"),
   dealPrice: yup.number().required(),
   dealPromoCode: yup.string().required(),
   dealTitle: yup.string().required(),
@@ -24,7 +27,10 @@ export const UpdateDealValidationSchema = yup.object({
     .max(250, "Description cannot exceed 250 characters"),
   dealExpiryDate: yup.string().required(),
   dealId: yup.number().required(),
-  dealOldPrice: yup.number().required(),
+  dealOldPrice: yup
+    .number()
+    .required()
+    .moreThan(0, "Old price must be greater than 0"),
   dealPrice: yup.number().required(),
   dealStatus: yup.string().required(),
   dealTitle: yup.string().required(),
