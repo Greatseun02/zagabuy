@@ -1,22 +1,24 @@
 "use client";
 
-import React, { useMemo, useRef } from "react";
+import { useMemo, useRef } from "react";
 import {
   BaseDataGrid,
   type BaseDataGridRef,
   type BaseDataGridProps,
 } from "@/components/ui/datagrid/baseDataGrid";
-import { ColumnType } from "@/components/ui/datagrid/types";
 import {
   useDeleteDealMutation,
   useLazyReadDealByUserQuery,
-  useReadDealByUserQuery,
 } from "@/services/dealService";
 import { useAppModal } from "@/hooks/useAppModal";
 import { ConfirmationModal } from "@/components/modals/ConfirmationModal";
+import { ViewMerchantDealModal } from "@/components/modals/ViewMerchantDealModal";
+import { CreateMerchantDealModal } from "@/components/modals/CreateMerchantDealModal";
+import { UpdateMerchantDealModal } from "@/components/modals/UpdateMerchantDealModal";
+import { UpdateMerchantDealVisibilityModal } from "@/components/modals/UpdateMerchantDealVisibilityModal";
+import { ViewMerchantDealAnalyticsModal } from "@/components/modals/ViewMerchantDealAnalyticsModal";
 import DashboardPageLayout from "@/components/layouts/DashboardPageLayout";
 import { toast } from "sonner";
-import { useRouter } from "next/navigation";
 import { DealEntity } from "@/models/responses/dealResponse";
 import Typography from "@/components/ui/typography";
 import { StringUtil } from "@/utilities/stringUtil";
@@ -26,18 +28,20 @@ import {
 } from "@/components/ui/datagrid/renderers/statusRenderer";
 
 import { PlusIcon } from "lucide-react";
-import { RouteConstant } from "@/utilities/constants/routeConstant";
 import { ExpiryDisplay } from "@/components/custom/countdown/ExpiryDisplay";
 import { BaseUtil } from "@/utilities/baseUtil";
 import { ICellRendererParams } from "ag-grid-community";
 
 export default function MerchantDealsContent() {
   const gridRef = useRef<BaseDataGridRef>(null);
-  // const { data: response, isLoading, refetch } = useReadDealByUserQuery();
   const [fetchDeals] = useLazyReadDealByUserQuery();
   const [deleteDeal] = useDeleteDealMutation();
   const confirm = useAppModal(ConfirmationModal);
-  const router = useRouter();
+  const viewDealModal = useAppModal(ViewMerchantDealModal);
+  const createDealModal = useAppModal(CreateMerchantDealModal);
+  const updateDealModal = useAppModal(UpdateMerchantDealModal);
+  const visibilityModal = useAppModal(UpdateMerchantDealVisibilityModal);
+  const analyticsModal = useAppModal(ViewMerchantDealAnalyticsModal);
 
   const handleFetchRows: BaseDataGridProps["fetchRows"] = async () => {
     const response = await fetchDeals().unwrap();
@@ -176,9 +180,12 @@ export default function MerchantDealsContent() {
       autoRefresh: false,
       onClick(data) {
         const row = data as unknown as DealEntity;
-        router.push(
-          `${RouteConstant.merchant.deals.editDeal.path}/${row.dealId}`,
-        );
+        updateDealModal.show({
+          title: `Edit "${row.dealTitle}"`,
+          maxWidth: "default",
+          deal: row,
+          onSuccess: () => gridRef.current?.actions.refresh(),
+        });
       },
     },
     delete: {
@@ -186,6 +193,7 @@ export default function MerchantDealsContent() {
       async onClick(data) {
         const row = data as unknown as DealEntity;
         confirm.show({
+          maxWidth: "md",
           title: "Delete Deal",
           description: `Are you sure you want to delete the deal "${row.dealTitle}"?`,
           onConfirm: async () => {
@@ -194,6 +202,7 @@ export default function MerchantDealsContent() {
             }).unwrap();
             if (BaseUtil.isApiResponseSuccessful(res)) {
               toast.success("Deal deleted successfully");
+              gridRef.current?.actions.refresh();
             }
             confirm.hide();
           },
@@ -207,9 +216,11 @@ export default function MerchantDealsContent() {
       autoRefresh: false,
       onClick(data) {
         const row = data as unknown as DealEntity;
-        router.push(
-          `${RouteConstant.merchant.deals.viewDeal.path}/${row.dealId}`,
-        );
+        viewDealModal.show({
+          title: row.dealTitle,
+          deal: row,
+          maxWidth: "default",
+        });
       },
     },
   };
@@ -219,15 +230,23 @@ export default function MerchantDealsContent() {
       optionName: "View Analytics",
       onClick(data) {
         const row = data as unknown as DealEntity;
-        router.push(
-          `${RouteConstant.merchant.deals.viewDealAnalytics.path}/${row.dealId}`,
-        );
+        analyticsModal.show({
+          title: `${row.dealTitle} — Analytics`,
+          maxWidth: "2xl",
+          deal: row,
+        });
       },
     },
     {
       optionName: "Change Visibility",
       onClick(data) {
-        console.log("click");
+        const row = data as unknown as DealEntity;
+        visibilityModal.show({
+          title: `Visibility — ${row.dealTitle}`,
+          maxWidth: "md",
+          deal: row,
+          onSuccess: () => gridRef.current?.actions.refresh(),
+        });
       },
     },
   ];
@@ -241,7 +260,11 @@ export default function MerchantDealsContent() {
           text: "Create Deal",
           startIcon: <PlusIcon />,
           onClick: () =>
-            router.push(RouteConstant.merchant.deals.createDeal.path),
+            createDealModal.show({
+              title: "Create Deal",
+              maxWidth: "2xl",
+              onSuccess: () => gridRef.current?.actions.refresh(),
+            }),
         },
       ]}
     >

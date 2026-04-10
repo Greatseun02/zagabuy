@@ -205,7 +205,7 @@ export class StringUtil {
   static shortenWord(
     word: string,
     replace: string = "...",
-    length: number = 28
+    length: number = 28,
   ): string {
     return word.length >= length
       ? word.replace(/(\r\n|\n|\r)/gm, "").slice(0, length) + replace
@@ -216,7 +216,7 @@ export class StringUtil {
    * Format a number as a compact representation (1.2K, 3.4M)
    */
   static compact(value: number): string {
-    if (value < 1000) return value.toString();
+    if (value < 1000) return value?.toString();
     return new Intl.NumberFormat("en-US", {
       notation: "compact",
       maximumFractionDigits: 1,

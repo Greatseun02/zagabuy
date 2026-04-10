@@ -1,7 +1,7 @@
 "use client";
 
 import { createAppModal } from "@/utilities/modalUtils/createAppModal";
-import { Button as BaseButton } from "@/components/ui/button";
+import { Button as BaseButton, Button } from "@/components/ui/button";
 import Typography from "@/components/ui/typography";
 import { useAppModal } from "@/hooks/useAppModal";
 import { Info, AlertTriangle, Trash2, CheckCircle } from "lucide-react";
@@ -32,8 +32,7 @@ export interface ConfirmationModalProps {
   confirmVariant?: "default" | "destructive" | "warning" | "info" | "success";
   onConfirm?: () => void | Promise<void>;
   onCancel?: () => void;
-  maxWidth?: "sm" | "md" | "lg";
-  confirmButtonProps?: React.ComponentProps<typeof Button>;
+  confirmButtonProps?: React.ComponentProps<typeof BaseButton>;
   cancelButtonProps?: React.ComponentProps<typeof Button>;
 }
 
@@ -68,22 +67,15 @@ export const ConfirmationModal = createAppModal<ConfirmationModalProps>(
       confirmVariant,
       onConfirm,
       onCancel,
-      maxWidth,
       confirmButtonProps,
       cancelButtonProps,
     },
-    modal
+    modal,
   ) => {
-    const widthClass =
-      maxWidth === "sm"
-        ? "max-w-sm"
-        : maxWidth === "lg"
-        ? "max-w-lg"
-        : "max-w-md";
     const resolvedVariant = variant ?? confirmVariant ?? "default";
 
     return (
-      <div className={`p-4 ${widthClass}`}>
+      <div className={`p-2`}>
         {title && (
           <div className="flex items-start gap-3">
             <IconForVariant variant={resolvedVariant} />
@@ -106,7 +98,7 @@ export const ConfirmationModal = createAppModal<ConfirmationModalProps>(
 
         <div className="flex gap-3 justify-end pt-4">
           <BaseButton
-            variant="ghost"
+            variant="secondary"
             onClick={() => {
               onCancel?.();
               modal.hide();
@@ -120,12 +112,12 @@ export const ConfirmationModal = createAppModal<ConfirmationModalProps>(
               resolvedVariant === "destructive"
                 ? "destructive"
                 : resolvedVariant === "warning"
-                ? "secondary"
-                : resolvedVariant === "info"
-                ? "outline"
-                : resolvedVariant === "success"
-                ? "primary"
-                : "primary"
+                  ? "secondary"
+                  : resolvedVariant === "info"
+                    ? "outline"
+                    : resolvedVariant === "success"
+                      ? "primary"
+                      : "primary"
             }
             onClick={async () => {
               await onConfirm?.();
@@ -138,7 +130,7 @@ export const ConfirmationModal = createAppModal<ConfirmationModalProps>(
         </div>
       </div>
     );
-  }
+  },
 );
 
 ConfirmationModal.displayName = "ConfirmationModal";

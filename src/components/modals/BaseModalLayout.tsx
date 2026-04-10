@@ -20,7 +20,7 @@ export interface BaseModalLayoutProps {
   description?: React.ReactNode;
   children?: React.ReactNode;
   variant?: ModalVariant;
-  maxWidth?: "sm" | "md" | "lg" | "xl" | "2xl";
+  maxWidth?: "sm" | "md" | "lg" | "xl" | "2xl" | "default";
   showCloseIcon?: boolean;
   closeOnBackdropClick?: boolean;
   backdropBlur?: boolean;
@@ -37,6 +37,7 @@ const maxWidthClasses: Record<string, string> = {
   lg: "max-w-lg",
   xl: "max-w-xl",
   "2xl": "max-w-2xl",
+  default: "",
 };
 
 const roundedClasses: Record<string, string> = {
@@ -54,9 +55,9 @@ const shadowClasses: Record<string, string> = {
 };
 
 const variantClasses: Record<ModalVariant, string> = {
-  default: "bg-white dark:bg-slate-800",
-  compact: "bg-white dark:bg-slate-800 p-4",
-  fullscreen: "bg-white dark:bg-slate-800 h-screen w-screen rounded-none",
+  default: "bg-background",
+  compact: "bg-background p-4",
+  fullscreen: "bg-background h-screen w-screen rounded-none",
 };
 
 export function BaseModalLayout({
@@ -65,8 +66,8 @@ export function BaseModalLayout({
   title,
   description,
   children,
-  variant = "default",
-  maxWidth = "lg",
+  variant = "fullscreen",
+  maxWidth = "md",
   showCloseIcon = true,
   closeOnBackdropClick = true,
   backdropBlur = true,
@@ -81,13 +82,13 @@ export function BaseModalLayout({
       <DialogContent
         showCloseButton={false}
         className={cn(
-          "p-0",
+          "py-4 px-2 max-h-[90vh] overflow-scroll",
           variantClasses[variant],
           maxWidthClasses[maxWidth],
           roundedClasses[rounded],
           shadowClasses[shadow],
           backdropBlur && "backdrop-blur-sm",
-          contentClassName
+          contentClassName,
         )}
         onInteractOutside={
           closeOnBackdropClick ? undefined : (e) => e.preventDefault()
@@ -95,21 +96,16 @@ export function BaseModalLayout({
       >
         {/* Header */}
         {(title || description || showCloseIcon) && (
-          <DialogHeader
-            className={cn(
-              "border-b border-slate-200 px-6 py-4 dark:border-slate-700",
-              headerClassName
-            )}
-          >
+          <DialogHeader className={cn(" px-6 py-4 mb-3", headerClassName)}>
             <div className="flex items-start justify-between gap-4">
               <div className="flex flex-col gap-2">
                 {title && (
-                  <DialogTitle className="text-lg font-semibold text-slate-900 dark:text-slate-50">
+                  <DialogTitle className="text-lg font-semibold text-foreground">
                     {title}
                   </DialogTitle>
                 )}
                 {description && (
-                  <DialogDescription className="text-sm text-slate-500 dark:text-slate-300">
+                  <DialogDescription className="text-sm text-muted-foreground">
                     {description}
                   </DialogDescription>
                 )}
@@ -117,7 +113,7 @@ export function BaseModalLayout({
               {showCloseIcon && (
                 <button
                   onClick={onClose}
-                  className="mt-1 shrink-0 text-slate-400 transition-colors hover:text-slate-600 dark:hover:text-slate-300"
+                  className="mt-1 shrink-0 text-muted-foreground transition-colors hover:text-foreground"
                   aria-label="Close modal"
                 >
                   <X className="h-5 w-5" />
@@ -132,7 +128,7 @@ export function BaseModalLayout({
           className={cn(
             "px-6 py-4",
             variant === "compact" && "p-0",
-            bodyClassName
+            bodyClassName,
           )}
         >
           {children}

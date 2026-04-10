@@ -2,7 +2,7 @@
 
 import { useRef, useMemo } from "react";
 import {
-  useReadcategoryQuery,
+  useLazyReadcategoryQuery,
   useDeletecategoryMutation,
 } from "@/services/categoryService";
 import {
@@ -10,9 +10,7 @@ import {
   BaseDataGridProps,
   type BaseDataGridRef,
 } from "@/components/ui/datagrid/baseDataGrid";
-import { ColumnDef } from "@tanstack/react-table";
 import { CategoryEntity } from "@/models/responses/categoryResponse";
-import { UpdateCategoryRequest } from "@/models/requests/categoryRequest";
 import DashboardPageLayout from "@/components/layouts/DashboardPageLayout";
 import { Button as BaseButton } from "@/components/ui/button";
 import { PlusIcon } from "lucide-react";
@@ -22,82 +20,89 @@ import {
   UpdateCategoryModal,
 } from "@/components/modals/CategoryModals";
 import { ConfirmationModal } from "@/components/modals/ConfirmationModal";
+import {
+  StatusRenderer,
+  type StatusMap,
+} from "@/components/ui/datagrid/renderers/statusRenderer";
 import { toast } from "sonner";
-import { StringUtil } from "@/utilities/stringUtil";
-import { Badge } from "@/components/ui/badge";
 
 export default function AdminCategoryContent() {
   const gridRef = useRef<BaseDataGridRef>(null);
-  const {
-    data: categoriesResponse,
-    refetch,
-    isLoading: isLoadingCategories,
-  } = useReadcategoryQuery();
+
+  const [fetchCategories] = useLazyReadcategoryQuery();
   const [deleteCategory] = useDeletecategoryMutation();
 
   const createModal = useAppModal(CreateCategoryModal);
   const updateModal = useAppModal(UpdateCategoryModal);
   const confirmDelete = useAppModal(ConfirmationModal);
 
-  const columns = useMemo<ColumnDef<CategoryEntity>[]>(
+  const handleFetchRows: BaseDataGridProps["fetchRows"] = async () => {
+    const response = await fetchCategories().unwrap();
+    return {
+      data: response?.data || [],
+    };
+  };
+
+  const columns: BaseDataGridProps["columns"] = useMemo(
     () => [
       {
-        id: "categoryName",
-        accessorKey: "categoryName",
-        header: "Category Name",
+        field: "categoryId",
+        headerName: "ID",
       },
       {
-        id: "categorySlug",
-        accessorKey: "categorySlug",
-        header: "Slug",
+        field: "categoryName",
+        headerName: "Name",
       },
       {
-        id: "categoryStatus",
-        accessorKey: "categoryStatus",
-        header: "Status",
-        cell: (info) => {
-          const status = info.getValue() as string;
-          return (
-            <Badge
-              variant={
-                status.toLowerCase() === "active"
-                  ? "success"
-                  : status.toLowerCase() === "inactive"
-                  ? "warning"
-                  : "default"
-              }
-            >
-              {StringUtil.toTitleCase(status)}
-            </Badge>
-          );
+        field: "categorySlug",
+        headerName: "Slug",
+      },
+      {
+        field: "categoryStatus",
+        headerName: "Status",
+        cellRenderer: StatusRenderer,
+        cellRendererParams: {
+          statusMap: {
+            active: {
+              color: "hsl(var(--success))",
+              backgroundColor:
+                "color-mix(in srgb, hsl(var(--success)) 10%, transparent)",
+              label: "Active",
+            },
+            inactive: {
+              color: "hsl(var(--muted-foreground))",
+              backgroundColor:
+                "color-mix(in srgb, hsl(var(--muted-foreground)) 10%, transparent)",
+              label: "Inactive",
+            },
+          } satisfies StatusMap,
+          className: "py-1.5 px-6 text-xs",
         },
       },
       {
-        id: "categoryCreatedAt",
-        accessorKey: "categoryCreatedAt",
-        header: "Created",
-        cell: (info) => {
-          const date = new Date(info.getValue() as string);
-          return date.toLocaleDateString();
-        },
+        field: "categoryCreatedAt",
+        headerName: "Created",
       },
     ],
-    [updateModal, confirmDelete, deleteCategory, refetch]
+    [],
   );
 
   const colActions: BaseDataGridProps["colActions"] = {
     edit: {
-      onClick(row) {
+      onClick(data, action) {
+        const row = data as unknown as CategoryEntity;
         updateModal.show({
           title: `Edit ${row.categoryName}`,
           maxWidth: "md",
           category: { ...row },
-          onSuccess: () => refetch(),
+          onSuccess: () => action?.refresh(),
         });
       },
     },
     delete: {
-      onClick(row) {
+      onClick(data, actions) {
+        const row = data as unknown as CategoryEntity;
+
         confirmDelete.show({
           title: `Delete "${row.categoryName}"?`,
           description:
@@ -110,7 +115,7 @@ export default function AdminCategoryContent() {
                 categoryId: row.categoryId,
               }).unwrap();
               toast.success("Category deleted successfully");
-              refetch();
+              actions?.refresh();
             } catch (error) {
               toast.error("Failed to delete category");
             }
@@ -132,7 +137,7 @@ export default function AdminCategoryContent() {
             createModal.show({
               title: "Create New Category",
               maxWidth: "md",
-              onSuccess: () => refetch(),
+              onSuccess: () => gridRef.current?.actions.refresh(),
             });
           }}
           key="add-category"
@@ -142,17 +147,13 @@ export default function AdminCategoryContent() {
       ]}
     >
       <div className="mt-6">
-        <BaseDataGrid<CategoryEntity>
+        <BaseDataGrid
           ref={gridRef}
-          data={categoriesResponse?.data || []}
-          onRefresh={refetch}
+          fetchRows={handleFetchRows}
           columns={columns}
-          autoGenerateColumns={false}
-          rowId="categoryId"
-          pageSizeOptions={[10, 25, 50]}
-          className="rounded-md border"
+          uniqueRowId="categoryId"
+          autogenerateColumns={false}
           colActions={colActions}
-          loading={isLoadingCategories}
         />
       </div>
     </DashboardPageLayout>

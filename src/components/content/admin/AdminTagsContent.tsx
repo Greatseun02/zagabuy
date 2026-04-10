@@ -1,97 +1,100 @@
 "use client";
 
-import { useRef, useMemo, useState, useCallback } from "react";
-import { useReadTagsQuery, useDeleteTagsMutation } from "@/services/tagService";
+import { useRef, useMemo } from "react";
+import {
+  useLazyReadTagsQuery,
+  useDeleteTagsMutation,
+} from "@/services/tagService";
 import {
   BaseDataGrid,
   BaseDataGridProps,
   type BaseDataGridRef,
 } from "@/components/ui/datagrid/baseDataGrid";
-import { ColumnDef } from "@tanstack/react-table";
 import { TagsEntity } from "@/models/responses/tagResponse";
-import { UpdateTagRequest } from "@/models/requests/tagRequest";
 import DashboardPageLayout from "@/components/layouts/DashboardPageLayout";
 import { Button as BaseButton } from "@/components/ui/button";
 import { PlusIcon } from "lucide-react";
 import { useAppModal } from "@/hooks/useAppModal";
 import { CreateTagModal, UpdateTagModal } from "@/components/modals/TagModals";
 import { ConfirmationModal } from "@/components/modals/ConfirmationModal";
+import { StatusRenderer, type StatusMap } from "@/components/ui/datagrid/renderers/statusRenderer";
 import { toast } from "sonner";
-import { TimeUtil } from "@/utilities/timeUtil";
-import { Badge } from "@/components/ui/badge";
-import { StringUtil } from "@/utilities/stringUtil";
 
 export default function AdminTagsContent() {
   const gridRef = useRef<BaseDataGridRef>(null);
 
-  // External state for RTK Query integration
-
-  const { data: tagsResponse, isLoading, refetch } = useReadTagsQuery();
+  const [fetchTags] = useLazyReadTagsQuery();
   const [deleteTag] = useDeleteTagsMutation();
 
   const createModal = useAppModal(CreateTagModal);
   const updateModal = useAppModal(UpdateTagModal);
   const confirmDelete = useAppModal(ConfirmationModal);
 
-  const columns = useMemo<ColumnDef<TagsEntity>[]>(
+  const handleFetchRows: BaseDataGridProps["fetchRows"] = async () => {
+    const response = await fetchTags().unwrap();
+    return {
+      data: response?.data || [],
+    };
+  };
+
+  const columns: BaseDataGridProps["columns"] = useMemo(
     () => [
       {
-        id: "tagName",
-        accessorKey: "tagName",
-        header: "Tag Name",
+        field: "tagId",
+        headerName: "ID",
       },
       {
-        id: "tagSlug",
-        accessorKey: "tagSlug",
-        header: "Slug",
+        field: "tagName",
+        headerName: "Name",
       },
       {
-        id: "tagStatus",
-        accessorKey: "tagStatus",
-        header: "Status",
-        cell: (data) => {
-          const status = data.getValue() as string;
-          return (
-            <Badge
-              variant={
-                status.toLowerCase() === "active"
-                  ? "success"
-                  : status.toLowerCase() === "inactive"
-                  ? "warning"
-                  : "default"
-              }
-            >
-              {StringUtil.toTitleCase(status)}
-            </Badge>
-          );
+        field: "tagSlug",
+        headerName: "Slug",
+      },
+      {
+        field: "tagStatus",
+        headerName: "Status",
+        cellRenderer: StatusRenderer,
+        cellRendererParams: {
+          statusMap: {
+            active: {
+              color: "hsl(var(--success))",
+              backgroundColor:
+                "color-mix(in srgb, hsl(var(--success)) 10%, transparent)",
+              label: "Active",
+            },
+            inactive: {
+              color: "hsl(var(--muted-foreground))",
+              backgroundColor:
+                "color-mix(in srgb, hsl(var(--muted-foreground)) 10%, transparent)",
+              label: "Inactive",
+            },
+          } satisfies StatusMap,
+          className: "py-1.5 px-6 text-xs",
         },
       },
       {
-        id: "tagCreatedAt",
-        accessorKey: "tagCreatedAt",
-        header: "Created",
-        cell: (data) => {
-          const date = new Date(data.getValue() as string);
-          return TimeUtil.timeAgo(date);
-        },
+        field: "tagCreatedAt",
+        headerName: "Created",
       },
     ],
-    [updateModal, confirmDelete, deleteTag, refetch]
+    [],
   );
 
   const colActions: BaseDataGridProps["colActions"] = {
     edit: {
-      onClick(row, actions) {
+      onClick(row, action) {
         updateModal.show({
           title: `Edit ${row.tagName}`,
           maxWidth: "md",
           tag: row as TagsEntity,
-          onSuccess: () => actions?.refetch(),
+          onSuccess: () => action?.refresh(),
         });
       },
     },
     delete: {
-      onClick(row, actions) {
+      onClick(data, actions) {
+        const row = data as unknown as TagsEntity;
         confirmDelete.show({
           title: `Delete "${row.tagName}"?`,
           description:
@@ -104,7 +107,7 @@ export default function AdminTagsContent() {
                 tagId: row.tagId,
               }).unwrap();
               toast.success("Tag deleted successfully");
-              refetch();
+              actions?.refresh();
             } catch (error) {
               toast.error("Failed to delete tag");
             }
@@ -125,8 +128,8 @@ export default function AdminTagsContent() {
           onClick={() => {
             createModal.show({
               title: "Create New Tag",
-              maxWidth: "md",
-              onSuccess: () => refetch(),
+              maxWidth: "lg",
+              onSuccess: () => gridRef.current?.actions.refresh(),
             });
           }}
           key="add-tag"
@@ -136,17 +139,13 @@ export default function AdminTagsContent() {
       ]}
     >
       <div className="mt-6">
-        <BaseDataGrid<TagsEntity>
+        <BaseDataGrid
           ref={gridRef}
-          data={tagsResponse?.data ?? []}
+          fetchRows={handleFetchRows}
           columns={columns}
-          autoGenerateColumns={false}
-          rowId="tagId"
-          pageSizeOptions={[10, 25, 50]}
-          loading={isLoading}
-          onRefresh={() => refetch()}
+          uniqueRowId="tagId"
+          autogenerateColumns={false}
           colActions={colActions}
-          mode="client"
         />
       </div>
     </DashboardPageLayout>

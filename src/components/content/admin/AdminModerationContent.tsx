@@ -183,6 +183,7 @@ export default function AdminModerationContent() {
       onClick(data) {
         const row = data as unknown as DealEntity;
         confirm.show({
+          maxWidth: "sm",
           title: "Reject Deal",
           description:
             "Are you sure you want to reject this deal? This action cannot be undone.",

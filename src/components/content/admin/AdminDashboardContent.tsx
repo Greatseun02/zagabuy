@@ -38,26 +38,34 @@ import { useReadAuditLogQuery } from "@/services/auditLogService";
 import { TimeUtil } from "@/utilities/timeUtil";
 import { StringUtil } from "@/utilities/stringUtil";
 import { useReadAdminDashboardQuery } from "@/services/adminDashboardService";
-import { useReadDealQuery } from "@/services/dealService";
+import {
+  useReadDealByStatusQuery,
+  useReadDealQuery,
+} from "@/services/dealService";
 
 export default function AdminDashboardContent() {
   const { data: adminDashboardData, isLoading: isLoadingAdminDashboard } =
     useReadAdminDashboardQuery();
   const { data: deals, isLoading: isLoadingDeals } = useReadDealQuery();
+  const { data: recentActivities, isLoading: isLoadingAuditLogs } =
+    useReadAuditLogQuery();
+
+  const { data } = useReadDealByStatusQuery("a");
 
   const pendingReviews = useMemo(() => {
-    return deals?.data?.filter(
-      (deal) => deal.dealStatus.toLowerCase().trim() === "pending",
-    ).length;
+    return adminDashboardData?.data?.[0]?.totalPending;
+    // return deals?.data?.filter(
+    //   (deal) => deal.dealStatus.toLowerCase().trim() === "pending",
+    // ).length;
   }, [deals?.data]);
 
   const dashboardOverviewCardsConfig: DashboardOverviewCardsProps[] = [
     {
-      header: "Total Deals",
-      text:
-        isLoadingAdminDashboard || isLoadingDeals
-          ? "Loading..."
-          : deals?.data && StringUtil.compact(deals?.data?.length),
+      header: "Total Active Deals",
+      text: isLoadingAdminDashboard
+        ? "Loading..."
+        : adminDashboardData?.data &&
+          StringUtil.compact(adminDashboardData?.data?.[0]?.totalDeals),
 
       Icon: ShoppingBag,
     },
@@ -79,56 +87,12 @@ export default function AdminDashboardContent() {
     },
     {
       header: "Pending Review",
-      text:
-        isLoadingAdminDashboard || isLoadingDeals
-          ? "Loading..."
-          : StringUtil.compact(pendingReviews || 0),
+      text: isLoadingAdminDashboard
+        ? "Loading..."
+        : StringUtil.compact(adminDashboardData?.data?.[0]?.totalPending || 0),
       Icon: Clock,
     },
   ];
-
-  // const dashboardPerformanceStatsCardConfig: DashboardPerformanceStatsCardProps[] =
-  //   [
-  //     {
-  //       header: {
-  //         children: "Click Performance",
-  //         startIcon: <MousePointerClick />,
-  //       },
-  //       contents: [
-  //         {
-  //           label: {
-  //             children: "Today",
-  //           },
-  //           text: {
-  //             children: isLoadingAdminDashboard
-  //               ? "Loading..."
-  //               : adminDashboardData?.data?.[0].clicksToday
-  //                 ? StringUtil.compact(
-  //                     adminDashboardData?.data?.[0].clicksToday,
-  //                   )
-  //                 : 0,
-  //           },
-  //         },
-  //         {
-  //           label: {
-  //             children: "This Month",
-  //           },
-  //           text: {
-  //             children: isLoadingAdminDashboard
-  //               ? "Loading..."
-  //               : adminDashboardData?.data?.[0].clicksThisMonth
-  //                 ? StringUtil.compact(
-  //                     adminDashboardData?.data?.[0].clicksThisMonth,
-  //                   )
-  //                 : 0,
-  //           },
-  //         },
-  //       ],
-  //     },
-  //   ];
-
-  const { data: recentActivities, isLoading: isLoadingAuditLogs } =
-    useReadAuditLogQuery();
 
   const quickActions: {
     title: string;
@@ -193,12 +157,15 @@ export default function AdminDashboardContent() {
           size={"lg"}
           isLoading={isLoadingAuditLogs}
         >
-          <CardHeader title="Recent Activities">
+          <CardHeader
+            className="border rounded-md p-4 bg-sidebar"
+            title="Recent Activities"
+          >
             <CardTitle children="Recent Activities" />
             <CardDescription children="Latest platform events" />
           </CardHeader>
 
-          <div className="space-y-3">
+          <div className="space-y-3 divide-y ">
             {recentActivities?.data?.map((activity, index) => (
               <RecentActivityItem
                 key={index}

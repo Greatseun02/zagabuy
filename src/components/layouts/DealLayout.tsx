@@ -202,7 +202,7 @@ export default function DealLayout({
             <Typography size="xs" color="muted-foreground">
               Posted{" "}
               {TimeUtil.timeAgo(
-                TimeUtil.parseDateTime(dealCreatedAt).toJSDate()
+                TimeUtil.parseDateTime(dealCreatedAt).toJSDate(),
               )}
             </Typography>
           </div>
@@ -212,7 +212,7 @@ export default function DealLayout({
         <div className="grid grid-cols-2 gap-3 text-center">
           <div className="p-3 rounded-md bg-muted/50">
             <Typography size="2xl" weight="bold" className=" tabular-nums">
-              {StringUtil.compact(clickCount)}
+              {StringUtil.compact(clickCount || 0)}
             </Typography>
             <Typography color="muted-foreground" size="xs">
               Clicks
@@ -220,7 +220,7 @@ export default function DealLayout({
           </div>
           <div className="p-3 rounded-md bg-muted/50">
             <Typography size="2xl" weight="bold" className=" tabular-nums">
-              {StringUtil.compact(dealViews)}
+              {StringUtil.compact(dealViews || 0)}
             </Typography>
             <Typography color="muted-foreground" size="xs">
               Views
