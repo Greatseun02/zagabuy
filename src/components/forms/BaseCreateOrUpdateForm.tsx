@@ -20,7 +20,7 @@ export interface BaseCreateOrUpdateFormProps<
   UpdateResponse extends BaseResponse = BaseResponse,
 > extends Pick<BaseFormLayoutProps, "title" | "description"> {
   initialValues: T;
-  onSuccessfulSubmission?: () => void;
+  onSuccessfulSubmission?: (response: CreateResponse | UpdateResponse) => void;
   submitBtnProps?: React.ComponentProps<typeof BaseButton>;
   isUpdate?: boolean;
   validationSchema: AnyObjectSchema;
@@ -81,7 +81,7 @@ const BaseCreateOrUpdateForm = <
         // toast.success("Operation successful");
         formikHelper.resetForm();
         if (readAction) await readAction();
-        onSuccessfulSubmission?.();
+        onSuccessfulSubmission?.(response);
       } else {
         toast.error(response?.responseMessage ?? "Operation failed");
       }

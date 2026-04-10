@@ -283,10 +283,14 @@ const FilePreview: React.FC<FilePreviewProps> = ({
       >
         {/* File Format Icon Wrapper */}
         {fileInfo?.url ? (
-          <div className="max-h-40">
+          <div
+            className="w-full max-h-40 overflow-hidden rounded-md cursor-pointer"
+            onClick={onView}
+          >
             <img
               src={fileInfo.url}
-              className="w-auto h-full object-center object-cover"
+              alt={fileInfo.name}
+              className="w-full max-h-40 object-contain rounded-md"
             />
           </div>
         ) : (

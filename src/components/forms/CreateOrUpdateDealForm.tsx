@@ -177,9 +177,9 @@ export default function CreateOrUpdateDealForm({
     UpdateDealRequest
   > = {
     isUpdate,
-    onSuccessfulSubmission: () => {
+    onSuccessfulSubmission: (response) => {
       setFiles([]);
-      onSuccessfulSubmission?.();
+      onSuccessfulSubmission?.(response);
       toast.success("Success");
     },
     createAction: (request) => {

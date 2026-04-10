@@ -36,7 +36,7 @@ export const UpdateDealValidationSchema = yup.object({
   dealPromoCode: yup.string().required(),
   dealTitle: yup.string().required(),
   dealUrl: yup.string().required(),
-  dealStatus: yup.string().required(),
+  // dealStatus: yup.string().required(),
   // userDisplayName: yup.string().required(),
   // userEmail: yup.string().required(),
   // userFirstName: yup.string().required(),

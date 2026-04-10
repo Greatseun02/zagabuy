@@ -50,6 +50,10 @@ export default function MerchantDealsContent() {
   const columns: BaseDataGridProps["columns"] = useMemo(
     () => [
       {
+        field: "dealId",
+        headerName: "ID",
+      },
+      {
         field: "dealImages",
         headerName: "Image",
         cellRenderer: (params: ICellRendererParams) => {
