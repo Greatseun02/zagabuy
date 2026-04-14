@@ -20,12 +20,9 @@ export enum UserStatusEnum {
  * Determines visibility and actions available.
  */
 export enum DealStatusEnum {
-  DRAFT = "draft", // Not submitted for review
-  PENDING = "pending", // Awaiting moderation
-  APPROVED = "approved", // Live on platform
-  REJECTED = "rejected", // Moderation failed
-  PAUSED = "paused", // Temporarily hidden by owner
-  EXPIRED = "expired", // Past expiry date
+  PENDING = "PENDING",
+  ACTIVE = "ACTIVE",
+  REJECTED = "REJECTED",
 }
 
 /**
