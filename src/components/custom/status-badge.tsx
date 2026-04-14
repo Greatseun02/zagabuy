@@ -27,39 +27,6 @@ interface StatusConfig {
   icon: LucideIcon;
 }
 
-const dealStatusConfig: Record<DealStatus, StatusConfig> = {
-  [DealStatusEnum.DRAFT]: {
-    label: UI_TEXT.DEAL_STATUS.draft,
-    variant: "secondary",
-    icon: FileEdit,
-  },
-  [DealStatusEnum.PENDING]: {
-    label: UI_TEXT.DEAL_STATUS.pending,
-    variant: "outline",
-    icon: Clock,
-  },
-  [DealStatusEnum.APPROVED]: {
-    label: UI_TEXT.DEAL_STATUS.approved,
-    variant: "default",
-    icon: CheckCircle2,
-  },
-  [DealStatusEnum.REJECTED]: {
-    label: UI_TEXT.DEAL_STATUS.rejected,
-    variant: "destructive",
-    icon: XCircle,
-  },
-  [DealStatusEnum.PAUSED]: {
-    label: UI_TEXT.DEAL_STATUS.paused,
-    variant: "outline",
-    icon: Pause,
-  },
-  [DealStatusEnum.EXPIRED]: {
-    label: UI_TEXT.DEAL_STATUS.expired,
-    variant: "secondary",
-    icon: AlertTriangle,
-  },
-};
-
 const accountStatusConfig: Record<AccountStatus, StatusConfig> = {
   [AccountStatusEnum.PENDING]: {
     label: UI_TEXT.ACCOUNT_STATUS.pending,
@@ -82,38 +49,6 @@ const accountStatusConfig: Record<AccountStatus, StatusConfig> = {
     icon: XCircle,
   },
 };
-
-interface DealStatusBadgeProps {
-  status: DealStatus | string;
-  showIcon?: boolean;
-  size?: "xs" | "sm" | "md" | "lg";
-  className?: string;
-}
-
-export function DealStatusBadge({
-  status,
-  showIcon = true,
-  size = "sm",
-  className,
-}: DealStatusBadgeProps) {
-  const config =
-    dealStatusConfig[status as DealStatus] ||
-    dealStatusConfig[DealStatusEnum.DRAFT];
-  const Icon = config.icon;
-
-  return (
-    <Badge
-      variant={config.variant}
-      size={size}
-      rounded="md"
-      startIcon={showIcon ? <Icon /> : undefined}
-      className={className}
-      data-testid={`badge-deal-status-${status}`}
-    >
-      {config.label}
-    </Badge>
-  );
-}
 
 interface AccountStatusBadgeProps {
   status: AccountStatus | string;
