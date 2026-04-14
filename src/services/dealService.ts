@@ -144,6 +144,7 @@ export const {
   useLazyReadDealQuery,
   useReadDealByUserQuery,
   useLazyReadDealAdminQuery,
+  useReadDealAdminQuery,
   useLazyReadDealByUserQuery,
   useReadDealByDealIdQuery,
   useReadDealByStatusQuery,

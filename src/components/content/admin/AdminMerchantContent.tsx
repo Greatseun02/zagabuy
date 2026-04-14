@@ -10,6 +10,7 @@ import DashboardPageLayout from "@/components/layouts/DashboardPageLayout";
 import {
   useLazyReadUsersByRoleIdQuery,
   useUpdateUserMutation,
+  useReadUsersByRoleIdQuery,
 } from "@/services/userService";
 import { RoleEnum } from "@/utilities/enums/roleEnum";
 import { UserEntity } from "@/models/responses/user/ReadAllUsersResponse";
@@ -22,6 +23,11 @@ import {
 } from "@/components/ui/datagrid/renderers/statusRenderer";
 import { useAppModal } from "@/hooks/useAppModal";
 import { ConfirmationModal } from "@/components/modals/ConfirmationModal";
+import DashboardOverviewCards, {
+  DashboardOverviewCardsProps,
+} from "@/components/ui/dashboardOverviewCards";
+import { Users, UserCheck, UserX } from "lucide-react";
+import { StringUtil } from "@/utilities/stringUtil";
 
 export default function AdminMerchantContent() {
   const gridRef = useRef<BaseDataGridRef>(null);
@@ -29,6 +35,7 @@ export default function AdminMerchantContent() {
 
   const [fetchMerchants] = useLazyReadUsersByRoleIdQuery();
   const [updateUser] = useUpdateUserMutation();
+  const { data: merchantsData, isLoading: isLoadingMerchants } = useReadUsersByRoleIdQuery(RoleEnum.MERCHANT);
 
   const handleFetchRows: BaseDataGridProps["fetchRows"] = async () => {
     const response = await fetchMerchants(RoleEnum.MERCHANT).unwrap();
@@ -36,6 +43,23 @@ export default function AdminMerchantContent() {
       data: response?.data || [],
     };
   };
+
+  // Calculate merchant stats
+  const stats = useMemo(() => {
+    const merchants = merchantsData?.data || [];
+    const activeMerchants = merchants.filter(
+      (m) => m.userStatus?.toLowerCase() === "active"
+    );
+    const inactiveMerchants = merchants.filter(
+      (m) => m.userStatus?.toLowerCase() === "inactive"
+    );
+
+    return {
+      totalMerchants: merchants.length,
+      activeMerchants: activeMerchants.length,
+      inactiveMerchants: inactiveMerchants.length,
+    };
+  }, [merchantsData?.data]);
 
   const columns: BaseDataGridProps["columns"] = useMemo(
     () => [
@@ -145,11 +169,34 @@ export default function AdminMerchantContent() {
     },
   ];
 
+  const statsCards: DashboardOverviewCardsProps[] = [
+    {
+      header: "Total Merchants",
+      text: StringUtil.compact(stats.totalMerchants),
+      Icon: Users,
+    },
+    {
+      header: "Active Merchants",
+      text: StringUtil.compact(stats.activeMerchants),
+      Icon: UserCheck,
+    },
+    {
+      header: "Inactive Merchants",
+      text: StringUtil.compact(stats.inactiveMerchants),
+      Icon: UserX,
+    },
+  ];
+
   return (
     <DashboardPageLayout
       title="View all Merchants"
       description="Manage and view all merchants in the system."
     >
+      <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-3 gap-4 mb-6">
+        {statsCards.map((card, index) => (
+          <DashboardOverviewCards key={index} {...card} isLoading={isLoadingMerchants} />
+        ))}
+      </div>
       <div className="mt-6">
         <BaseDataGrid
           ref={gridRef}

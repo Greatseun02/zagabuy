@@ -17,6 +17,7 @@ import {
   useUpdateDealMutation,
   useDeleteDealMutation,
   useLazyReadDealAdminQuery,
+  useReadDealAdminQuery,
 } from "@/services/dealService";
 import { BaseUtil } from "@/utilities/baseUtil";
 import { DealStatusEnum } from "@/utilities/enums/dealStatusEnum";
@@ -27,6 +28,11 @@ import {
 import { StringUtil } from "@/utilities/stringUtil";
 import { toast } from "sonner";
 import { ICellRendererParams } from "ag-grid-community";
+import DashboardOverviewCards, {
+  DashboardOverviewCardsProps,
+} from "@/components/ui/dashboardOverviewCards";
+import DashboardBarChart from "@/components/ui/dashboardBarChart";
+import { DollarSign, Eye, EyeOff, ShoppingBag, TrendingUp } from "lucide-react";
 
 export default function AdminDealsContent() {
   const gridRef = useRef<BaseDataGridRef>(null);
@@ -35,6 +41,7 @@ export default function AdminDealsContent() {
   const [fetchDealsAdmin] = useLazyReadDealAdminQuery();
   const [updateDeal] = useUpdateDealMutation();
   const [deleteDeal] = useDeleteDealMutation();
+  const { data: allDealsData, isLoading: isLoadingAllDeals } = useReadDealAdminQuery();
 
   const confirm = useAppModal(ConfirmationModal);
   const viewDeal = useAppModal(ViewAdminDealModal);
@@ -46,6 +53,49 @@ export default function AdminDealsContent() {
 
     return { data: deals || [] };
   };
+
+  // Calculate stats from all deals
+  const stats = useMemo(() => {
+    const deals = allDealsData?.data || [];
+    const publicDeals = deals.filter(
+      (d) => d.dealVisibility?.toLowerCase() === "public",
+    );
+    const privateDeals = deals.filter(
+      (d) => d.dealVisibility?.toLowerCase() === "private",
+    );
+    const activeDeals = deals.filter(
+      (d) => d.dealStatus?.toLowerCase() === "active",
+    );
+    const pendingDeals = deals.filter(
+      (d) => d.dealStatus?.toLowerCase() === "pending",
+    );
+    const deactivatedDeals = deals.filter(
+      (d) =>
+        d.dealStatus?.toLowerCase() === "deactivated" ||
+        d.dealStatus?.toLowerCase() === "rejected",
+    );
+
+    const totalAmount = deals.reduce(
+      (sum, deal) => sum + (parseFloat(String(deal.dealPrice)) || 0),
+      0,
+    );
+    const totalDiscount = deals.reduce((sum, deal) => {
+      const oldPrice = parseFloat(String(deal.dealOldPrice)) || 0;
+      const currentPrice = parseFloat(String(deal.dealPrice)) || 0;
+      return sum + (oldPrice - currentPrice);
+    }, 0);
+
+    return {
+      totalDeals: deals.length,
+      totalPublic: publicDeals.length,
+      totalPrivate: privateDeals.length,
+      totalActive: activeDeals.length,
+      totalPending: pendingDeals.length,
+      totalDeactivated: deactivatedDeals.length,
+      totalAmount,
+      totalDiscount,
+    };
+  }, [allDealsData?.data]);
 
   const columns: BaseDataGridProps["columns"] = useMemo(
     () => [
@@ -271,12 +321,106 @@ export default function AdminDealsContent() {
     },
   ];
 
+  const statsCards: DashboardOverviewCardsProps[] = [
+    {
+      header: "Total Deals",
+      text: StringUtil.compact(stats.totalDeals),
+      Icon: ShoppingBag,
+    },
+    {
+      header: "Total Public",
+      text: StringUtil.compact(stats.totalPublic),
+      Icon: Eye,
+    },
+    {
+      header: "Total Private",
+      text: StringUtil.compact(stats.totalPrivate),
+      Icon: EyeOff,
+    },
+    {
+      header: "Total Active",
+      text: StringUtil.compact(stats.totalActive),
+      Icon: TrendingUp,
+    },
+    {
+      header: "Total Pending",
+      text: StringUtil.compact(stats.totalPending),
+      Icon: ShoppingBag,
+    },
+    {
+      header: "Total Rejected",
+      text: StringUtil.compact(stats.totalDeactivated),
+      Icon: ShoppingBag,
+    },
+    {
+      header: "Total Amount",
+      text: StringUtil.formatCurrency(String(stats.totalAmount)),
+      Icon: DollarSign,
+    },
+    {
+      header: "Total Discounts",
+      text: StringUtil.formatCurrency(String(stats.totalDiscount)),
+      Icon: DollarSign,
+    },
+  ];
+
   return (
     <DashboardPageLayout
       title="Deals"
       description="Manage and view all deals in the system."
     >
-      <div className="mt-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        {statsCards.map((card, index) => (
+          <DashboardOverviewCards key={index} {...card} isLoading={isLoadingAllDeals} />
+        ))}
+      </div>
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <DashboardBarChart
+          title="Deal Status Overview"
+          description="Current distribution of deals by approval status"
+          isLoading={isLoadingAllDeals}
+          items={[
+            {
+              label: "Active",
+              value: stats.totalActive,
+              total: stats.totalDeals || 1,
+              color: "hsl(var(--success))",
+            },
+            {
+              label: "Pending Review",
+              value: stats.totalPending,
+              total: stats.totalDeals || 1,
+              color: "hsl(var(--warning))",
+            },
+            {
+              label: "Deactivated",
+              value: stats.totalDeactivated,
+              total: stats.totalDeals || 1,
+              color: "hsl(var(--destructive))",
+            },
+          ]}
+        />
+        <DashboardBarChart
+          title="Deal Visibility Split"
+          description="Proportion of deals visible to the public vs. private"
+          isLoading={isLoadingAllDeals}
+          items={[
+            {
+              label: "Public",
+              value: stats.totalPublic,
+              total: stats.totalDeals || 1,
+              color: "hsl(var(--primary))",
+            },
+            {
+              label: "Private",
+              value: stats.totalPrivate,
+              total: stats.totalDeals || 1,
+              color: "hsl(var(--muted-foreground))",
+            },
+          ]}
+        />
+      </div>
+      <div>
         <BaseDataGrid
           title={`${total} Total Deals`}
           ref={gridRef}

@@ -15,6 +15,7 @@ import { DealEntity } from "@/models/responses/dealResponse";
 import {
   useLazyReadDealByStatusQuery,
   useUpdateDealMutation,
+  useReadDealAdminQuery,
 } from "@/services/dealService";
 import { BaseUtil } from "@/utilities/baseUtil";
 import { DealStatusEnum } from "@/utilities/enums/dealStatusEnum";
@@ -24,6 +25,17 @@ import { toast } from "sonner";
 import { ICellRendererParams } from "ag-grid-community";
 import { StatusMap } from "@/components/custom/statusIndicator";
 import StatusRenderer from "@/components/ui/datagrid/renderers/statusRenderer";
+import DashboardOverviewCards, {
+  DashboardOverviewCardsProps,
+} from "@/components/ui/dashboardOverviewCards";
+import {
+  DollarSign,
+  Eye,
+  EyeOff,
+  ShoppingBag,
+  TrendingUp,
+  Users,
+} from "lucide-react";
 
 export default function AdminModerationContent() {
   const gridRef = useRef<BaseDataGridRef>(null);
@@ -32,6 +44,7 @@ export default function AdminModerationContent() {
   const [fetchDealsByStatus] = useLazyReadDealByStatusQuery();
   const [updateDeal, { isLoading: isLoadingUpdateDealMutation }] =
     useUpdateDealMutation();
+  const { data: allDealsData, isLoading: isLoadingAllDeals } = useReadDealAdminQuery();
 
   const confirm = useAppModal(ConfirmationModal);
   const viewDeal = useAppModal(ViewAdminDealModal);
@@ -43,6 +56,40 @@ export default function AdminModerationContent() {
       data: response?.data || [],
     };
   };
+
+  // Calculate stats for PENDING deals only
+  const stats = useMemo(() => {
+    const allDeals = allDealsData?.data || [];
+    // Filter only pending deals
+    const pendingDeals = allDeals.filter(
+      (d) => d.dealStatus?.toLowerCase() === "pending"
+    );
+
+    const publicPendingDeals = pendingDeals.filter(
+      (d) => d.dealVisibility?.toLowerCase() === "public"
+    );
+    const privatePendingDeals = pendingDeals.filter(
+      (d) => d.dealVisibility?.toLowerCase() === "private"
+    );
+
+    const totalAmount = pendingDeals.reduce(
+      (sum, deal) => sum + (parseFloat(String(deal.dealPrice)) || 0),
+      0
+    );
+    const totalDiscount = pendingDeals.reduce((sum, deal) => {
+      const oldPrice = parseFloat(String(deal.dealOldPrice)) || 0;
+      const currentPrice = parseFloat(String(deal.dealPrice)) || 0;
+      return sum + (oldPrice - currentPrice);
+    }, 0);
+
+    return {
+      totalPendingReview: pendingDeals.length,
+      totalPublic: publicPendingDeals.length,
+      totalPrivate: privatePendingDeals.length,
+      totalAmount,
+      totalDiscount,
+    };
+  }, [allDealsData?.data]);
 
   const columns: BaseDataGridProps["columns"] = useMemo(
     () => [
@@ -239,11 +286,44 @@ export default function AdminModerationContent() {
     },
   ];
 
+  const statsCards: DashboardOverviewCardsProps[] = [
+    {
+      header: "Total Pending Review",
+      text: StringUtil.compact(stats.totalPendingReview),
+      Icon: ShoppingBag,
+    },
+    {
+      header: "Total Public",
+      text: StringUtil.compact(stats.totalPublic),
+      Icon: Eye,
+    },
+    {
+      header: "Total Private",
+      text: StringUtil.compact(stats.totalPrivate),
+      Icon: EyeOff,
+    },
+    {
+      header: "Total Amount",
+      text: StringUtil.formatCurrency(String(stats.totalAmount)),
+      Icon: DollarSign,
+    },
+    {
+      header: "Total Discounts",
+      text: StringUtil.formatCurrency(String(stats.totalDiscount)),
+      Icon: DollarSign,
+    },
+  ];
+
   return (
     <DashboardPageLayout
       title="Moderation Queue"
       description="Approve or Reject deals"
     >
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 xl:grid-cols-5 gap-4 mb-6">
+        {statsCards.map((card, index) => (
+          <DashboardOverviewCards key={index} {...card} isLoading={isLoadingAllDeals} />
+        ))}
+      </div>
       <div className="mt-6">
         <BaseDataGrid
           title={`${total} Pending Approval`}

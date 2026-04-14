@@ -3,6 +3,12 @@
 import * as React from "react";
 import { Button as BaseButton } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import DashboardOverviewCards, {
+  DashboardOverviewCardsProps,
+} from "@/components/ui/dashboardOverviewCards";
+import DashboardBarChart, {
+  DashboardBarChartProps,
+} from "@/components/ui/dashboardBarChart";
 
 export type ActionConfig = {
   key?: string | number;
@@ -30,6 +36,11 @@ export interface DashboardPageLayoutProps {
   headerLeft?: React.ReactNode;
   headerClassName?: string;
   containerClassName?: string;
+  /** Auto-renders a responsive grid of stat cards above children */
+  statsCards?: DashboardOverviewCardsProps[];
+  statsCardsIsLoading?: boolean;
+  /** Auto-renders a row of bar chart cards below stats */
+  barCharts?: DashboardBarChartProps[];
 }
 
 export default function DashboardPageLayout({
@@ -42,6 +53,9 @@ export default function DashboardPageLayout({
   headerLeft,
   headerClassName,
   containerClassName,
+  statsCards,
+  statsCardsIsLoading = false,
+  barCharts,
 }: DashboardPageLayoutProps) {
   return (
     <div className={cn("w-full", containerClassName)}>
@@ -103,7 +117,31 @@ export default function DashboardPageLayout({
         </div>
       </div>
 
-      <div className="w-full space-y-6">{children}</div>
+      <div className="w-full space-y-6">
+        {/* Auto-rendered stat cards */}
+        {statsCards && statsCards.length > 0 && (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            {statsCards.map((card, i) => (
+              <DashboardOverviewCards
+                key={i}
+                {...card}
+                isLoading={statsCardsIsLoading}
+              />
+            ))}
+          </div>
+        )}
+
+        {/* Auto-rendered bar charts */}
+        {barCharts && barCharts.length > 0 && (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {barCharts.map((chart, i) => (
+              <DashboardBarChart key={i} {...chart} />
+            ))}
+          </div>
+        )}
+
+        {children}
+      </div>
     </div>
   );
 }
