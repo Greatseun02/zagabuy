@@ -115,7 +115,7 @@ export default function AdminMerchantContent() {
     {
       autoRefresh: false,
       optionName: "Deactivate Account",
-      onClick: async (data) => {
+      onClick: async (data, tableAction) => {
         const row = data as unknown as UserEntity;
         confirmDeactivate.show({
           title: `Deactivate "${row.userDisplayName}"?`,
@@ -134,8 +134,10 @@ export default function AdminMerchantContent() {
               } else {
                 toast.success("Deactivated User Successfully.");
               }
+              tableAction?.refresh();
             } catch {
               toast.error("Failed to deactivate account");
+              tableAction?.refresh();
             }
           },
         });
