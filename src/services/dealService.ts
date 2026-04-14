@@ -62,6 +62,22 @@ export const dealService = BaseService.appClient.injectEndpoints({
             ]
           : [{ type: ApiTagsEnum.Deal, id: "LIST" }],
     }),
+    readDealAdmin: builder.query<ReadDealResponse, void>({
+      query: () => ({
+        url: `/${controller}/read/admin`,
+        method: ApiRequestMethodsEnum.GET,
+      }),
+      providesTags: (results) =>
+        results && results.data
+          ? [
+              ...results.data.map((result) => ({
+                type: ApiTagsEnum.Deal,
+                id: result.dealId,
+              })),
+              { type: ApiTagsEnum.Deal, id: "LIST" },
+            ]
+          : [{ type: ApiTagsEnum.Deal, id: "LIST" }],
+    }),
     readDealByStatus: builder.query<ReadDealResponse, string>({
       query: (dealStatus) => ({
         url: `/${controller}/read-by-deal-status/${dealStatus}`,
@@ -127,9 +143,11 @@ export const {
   useReadDealQuery,
   useLazyReadDealQuery,
   useReadDealByUserQuery,
+  useLazyReadDealAdminQuery,
   useLazyReadDealByUserQuery,
   useReadDealByDealIdQuery,
   useReadDealByStatusQuery,
+  useLazyReadDealByStatusQuery,
   useDeleteDealMutation,
   useGetDealImagesPresignedUrlMutation,
 } = dealService;

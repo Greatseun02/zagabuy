@@ -1,4 +1,10 @@
-import { ClipboardCheck, LayoutDashboard, Store, Users } from "lucide-react";
+import {
+  ClipboardCheck,
+  LayoutDashboard,
+  Store,
+  Users,
+  Package,
+} from "lucide-react";
 import { RouteConstant } from "../constants/routeConstant";
 import { sidebarDataType } from "../types";
 
@@ -13,6 +19,11 @@ export const adminSideBarData: sidebarDataType[] = [
     href: RouteConstant.admin.moderation.path,
     icon: ClipboardCheck,
     showBadge: true,
+  },
+  {
+    label: "Deals",
+    href: RouteConstant.admin.deals.path,
+    icon: Package,
   },
   {
     label: "Merchants",

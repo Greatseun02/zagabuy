@@ -86,6 +86,11 @@ export const RouteConstant = {
       name: "Tags",
       moduleName: "admin",
     } as RouteConfig,
+    deals: {
+      path: "/admin/deals",
+      name: "Deals",
+      moduleName: "admin",
+    } as RouteConfig,
   },
   merchant: {
     dashboard: {
