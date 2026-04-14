@@ -34,7 +34,20 @@ export function CopyButton({
 
   const handleCopy = async () => {
     try {
-      await navigator.clipboard.writeText(value);
+      if (navigator?.clipboard?.writeText) {
+        await navigator.clipboard.writeText(value);
+      } else {
+        // Fallback for non-HTTPS or unsupported browsers
+        const textarea = document.createElement("textarea");
+        textarea.value = value;
+        textarea.style.position = "fixed";
+        textarea.style.opacity = "0";
+        document.body.appendChild(textarea);
+        textarea.focus();
+        textarea.select();
+        document.execCommand("copy");
+        document.body.removeChild(textarea);
+      }
       setCopied(true);
       toast.success(successMessage);
       setTimeout(() => setCopied(false), 2000);

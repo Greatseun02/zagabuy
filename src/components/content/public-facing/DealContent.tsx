@@ -43,7 +43,7 @@ export default function DealContent() {
     <DashboardPageLayout
       actionConfigs={[
         {
-          onClick() {},
+          onClick() { router.back(); },
           startIcon: <ChevronLeft />,
           text: "Back to Deals",
           variant: "transparent",

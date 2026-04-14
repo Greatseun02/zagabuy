@@ -20,11 +20,11 @@ export const merchantSideBarData: sidebarDataType[] = [
     href: RouteConstant.merchant.deals.path,
     icon: Users,
   },
-  {
-    label: "Analytics",
-    href: RouteConstant.merchant.analytics.path,
-    icon: ChartColumn,
-  },
+  // {
+  //   label: "Analytics",
+  //   href: RouteConstant.merchant.analytics.path,
+  //   icon: ChartColumn,
+  // },
   {
     label: "Profile",
     href: RouteConstant.merchant.profile.path,

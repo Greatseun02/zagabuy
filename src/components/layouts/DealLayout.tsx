@@ -153,7 +153,7 @@ export default function DealLayout({
           >
             {UI_TEXT.CTA.VISIT_DEAL}
           </BaseButton>
-          <ShareButton size={"large"} variant={"secondary"} />
+          {/* <ShareButton size={"large"} variant={"secondary"} /> */}
         </div>
 
         {/* Engagement Stats */}

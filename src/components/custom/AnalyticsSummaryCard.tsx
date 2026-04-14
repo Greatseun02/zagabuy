@@ -11,11 +11,11 @@ export default function AnalyticsSummaryCard({
   summary,
 }: AnalyticsSummaryCardProps) {
   return (
-    <Card title={title} className="space-y-7" rounded={"lg"} size={"lg"}>
+    <Card title={title} className="space-y-4.5" rounded={"lg"} size={"lg"}>
       <Typography size="md" weight="medium">
         {title}
       </Typography>
-      <div className="space-y-4">
+      <div className="space-y-3">
         {summary.map((item, index) => (
           <div key={index} className="flex justify-between">
             <Typography size="sm">{item.label}</Typography>

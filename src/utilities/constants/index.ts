@@ -153,6 +153,7 @@ export const UI_TEXT = {
     rejected: "Rejected",
   },
   SORT_OPTIONS: {
+    default: "Default",
     newest: "Newest First",
     trending: "Trending",
     price_low: "Price: Low to High",

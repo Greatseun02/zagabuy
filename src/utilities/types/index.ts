@@ -115,7 +115,7 @@ export interface DealFilters {
   minPrice?: number;
   maxPrice?: number;
   merchantId?: string;
-  sortBy?: "newest" | "trending" | "price_low" | "price_high" | "discount";
+  sortBy?: "default" | "newest" | "trending" | "price_low" | "price_high" | "discount";
 }
 
 export interface DateRange {

@@ -18,7 +18,8 @@ export interface TopDealsChartProps {
 }
 
 export function TopDealsChart({ deals, className }: TopDealsChartProps) {
-  const chartData = deals.slice(0, 5).map((d) => ({
+  const chartData = deals.slice(0, 5).map((d, i) => ({
+    rowKey: i,
     name: StringUtil.shortenWord(d.title, "...", 20),
     fullName: d.title,
     clicks: d.clicks,
@@ -48,7 +49,8 @@ export function TopDealsChart({ deals, className }: TopDealsChartProps) {
             />
             <YAxis
               type="category"
-              dataKey="name"
+              dataKey="rowKey"
+              tickFormatter={(value) => chartData[value]?.name ?? ""}
               tick={{ fontSize: 11 }}
               tickLine={false}
               axisLine={false}
