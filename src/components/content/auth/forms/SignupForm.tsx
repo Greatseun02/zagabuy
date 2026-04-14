@@ -104,7 +104,7 @@ export default function SignupForm() {
         name="userPassword"
         type="password"
       />
-      <FormikSelect
+      {/* <FormikSelect
         label="Role"
         placeholder="Merchant | Affiliate"
         formik={formik}
@@ -119,7 +119,7 @@ export default function SignupForm() {
           },
         ]}
         name="userRoleId"
-      />
+      /> */}
       <BaseInput
         label="Merchant display name (optional)"
         placeholder="Enter display name (e.g Zagabuy Store)"

@@ -1,3 +1,5 @@
+import { RoleEnum } from "@/utilities/enums/roleEnum";
+
 export type InitiateEnrollmentRequest = {
   userEmail: string;
   userPassword: string;
@@ -12,6 +14,6 @@ export const initiateEnrollmentRequestInit: InitiateEnrollmentRequest = {
   userPassword: "",
   userFirstName: "",
   userLastName: "",
-  userRoleId: "",
+  userRoleId: String(RoleEnum.MERCHANT),
   userDisplayName: "",
 };

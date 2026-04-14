@@ -30,11 +30,11 @@ export const adminSideBarData: sidebarDataType[] = [
     href: RouteConstant.admin.merchants.path,
     icon: Store,
   },
-  {
-    label: "Affiliates",
-    href: RouteConstant.admin.affiliates.path,
-    icon: Users,
-  },
+  // {
+  //   label: "Affiliates",
+  //   href: RouteConstant.admin.affiliates.path,
+  //   icon: Users,
+  // },
   {
     label: "Categories",
     href: RouteConstant.admin.categories.path,
