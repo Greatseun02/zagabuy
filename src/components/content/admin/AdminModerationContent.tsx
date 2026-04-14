@@ -1,152 +1,182 @@
 "use client";
 
-import BaseDataGrid, {
+import {
+  BaseDataGrid,
   BaseDataGridProps,
-  BaseDataGridRef,
+  type BaseDataGridRef,
 } from "@/components/ui/datagrid/baseDataGrid";
 import { ExpiryDisplay } from "@/components/custom/countdown/ExpiryDisplay";
 import DashboardPageLayout from "@/components/layouts/DashboardPageLayout";
 import { ConfirmationModal } from "@/components/modals/ConfirmationModal";
+import { ViewAdminDealModal } from "@/components/modals/ViewAdminDealModal";
 import Typography from "@/components/ui/typography";
 import { useAppModal } from "@/hooks/useAppModal";
 import { DealEntity } from "@/models/responses/dealResponse";
 import {
-  useReadDealByStatusQuery,
-  useReadDealQuery,
+  useLazyReadDealByStatusQuery,
   useUpdateDealMutation,
 } from "@/services/dealService";
 import { BaseUtil } from "@/utilities/baseUtil";
-import { RouteConstant } from "@/utilities/constants/routeConstant";
 import { DealStatusEnum } from "@/utilities/enums/dealStatusEnum";
 import { StringUtil } from "@/utilities/stringUtil";
-import { CheckCircle, XCircle } from "lucide-react";
-import { useRouter } from "next/navigation";
-import { useRef, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import { toast } from "sonner";
-import { ColumnType } from "@/components/ui/datagrid/types";
+import { ICellRendererParams } from "ag-grid-community";
+import { StatusMap } from "@/components/custom/statusIndicator";
+import StatusRenderer from "@/components/ui/datagrid/renderers/statusRenderer";
 
 export default function AdminModerationContent() {
   const gridRef = useRef<BaseDataGridRef>(null);
+  const [total, setTotal] = useState(0);
 
-  const {
-    data: response,
-    isLoading,
-    refetch,
-  } = useReadDealByStatusQuery("PENDING");
-
+  const [fetchDealsByStatus] = useLazyReadDealByStatusQuery();
   const [updateDeal, { isLoading: isLoadingUpdateDealMutation }] =
     useUpdateDealMutation();
 
   const confirm = useAppModal(ConfirmationModal);
-  const router = useRouter();
+  const viewDeal = useAppModal(ViewAdminDealModal);
 
-  const columns: ColumnType[] = [
-    {
-      field: "dealImageUrl",
-      headerName: "Image",
-      cellRenderer: (row: DealEntity) => (
-        <div className="w-12 h-12 overflow-hidden rounded-md">
-          <img
-            src={`${row.dealUrl}`}
-            alt="Deal Image"
-            className="w-full h-full object-cover"
-          />
-        </div>
-      ),
-    },
-    {
-      field: "dealTitle",
-      headerName: "Deal",
-      cellRenderer: (row: DealEntity) => (
-        <div>
-          <Typography weight="medium">{row.dealTitle}</Typography>
-          <Typography size="sm" color="muted-foreground">
-            {row.dealDescription}
-          </Typography>
-        </div>
-      ),
-    },
-    {
-      field: "dealPrice",
-      headerName: "Price",
-      isCurrency: true,
-      cellRenderer: (row: DealEntity) => (
-        <div>
-          <Typography weight="semibold">
-            {StringUtil.formatCurrency(String(row.dealPrice))}
-          </Typography>
-          <Typography
-            weight="regular"
-            color="muted-foreground"
-            className="line-through leading-0 mt-2"
-            size="xs"
-          >
-            {StringUtil.formatCurrency(String(row.dealOldPrice))}
-          </Typography>
-        </div>
-      ),
-    },
-    {
-      field: "dealExpiryDate",
-      headerName: "Expiry Date",
-      isDate: true,
-      cellRenderer: (row: DealEntity) => (
-        <ExpiryDisplay expiresAt={row.dealExpiryDate} />
-      ),
-    },
-    {
-      field: "dealVisibility",
-      headerName: "Visibility",
-      cellRenderer: (row: DealEntity) => (
-        <Typography
-          className="px-2 py-1 rounded-md text-center font-medium text-xs"
-          color={row.dealVisibility === "PUBLIC" ? "success" : "warning"}
-          style={{
-            backgroundColor:
-              row.dealVisibility === "PUBLIC" ? "#dcfce7" : "#fef3c7",
-          }}
-        >
-          {row.dealVisibility === "PUBLIC" ? "Public" : "Private"}
-        </Typography>
-      ),
-    },
-    {
-      field: "dealStatus",
-      headerName: "Status",
-      cellRenderer: (row: DealEntity) => {
-        const status = row.dealStatus;
-        return (
-          <Typography
-            color={
-              status === "ACTIVE"
-                ? "success"
-                : status === "PENDING"
-                  ? "warning"
-                  : status === "REJECTED"
-                    ? "error"
-                    : "primary"
-            }
-            className={`${
-              status === "ACTIVE"
-                ? "bg-green-100"
-                : status === "PENDING"
-                  ? "bg-orange-100"
-                  : status === "REJECTED"
-                    ? "bg-red-100"
-                    : ""
-            } px-2 text-center`}
-          >
-            {status}
-          </Typography>
-        );
+  const handleFetchRows: BaseDataGridProps["fetchRows"] = async () => {
+    const response = await fetchDealsByStatus("PENDING").unwrap();
+    setTotal(response?.data?.length ?? 0);
+    return {
+      data: response?.data || [],
+    };
+  };
+
+  const columns: BaseDataGridProps["columns"] = useMemo(
+    () => [
+      {
+        field: "dealId",
+        headerName: "ID",
       },
-    },
-  ];
+      {
+        field: "dealImages",
+        headerName: "Image",
+        cellRenderer: (params: ICellRendererParams) => {
+          const urls = params.value as string[];
+          return (
+            <div className="w-16 h-10 overflow-hidden rounded-md">
+              <img
+                src={urls?.[0]}
+                alt="Deal Image"
+                className="w-full h-full object-cover"
+              />
+            </div>
+          );
+        },
+      },
+      {
+        field: "dealTitle",
+        headerName: "Deal",
+        cellRenderer: (params: ICellRendererParams) => {
+          const row = params.data as DealEntity;
+          return (
+            <div>
+              <Typography weight="medium">{row.dealTitle}</Typography>
+              <Typography size="sm" color="muted-foreground">
+                {row.dealDescription}
+              </Typography>
+            </div>
+          );
+        },
+      },
+      {
+        field: "dealPrice",
+        headerName: "Price",
+        cellRenderer: (params: ICellRendererParams) => {
+          const row = params.data as DealEntity;
+          return (
+            <div className="py-4">
+              <Typography weight="semibold">
+                {StringUtil.formatCurrency(String(row?.dealPrice))}
+              </Typography>
+              <Typography
+                weight="regular"
+                color="muted-foreground"
+                className="line-through leading-0 mt-2"
+                size="xs"
+              >
+                {StringUtil.formatCurrency(String(row.dealOldPrice))}
+              </Typography>
+            </div>
+          );
+        },
+      },
+      {
+        field: "dealExpiryDate",
+        headerName: "Expiry Date",
+        cellRenderer: (params: ICellRendererParams) => {
+          return <ExpiryDisplay expiresAt={params.value as string} />;
+        },
+      },
+      {
+        field: "dealVisibility",
+        headerName: "Visibility",
+        cellRenderer: (params: ICellRendererParams) => (
+          <StatusRenderer
+            statusMap={
+              {
+                public: {
+                  color: "hsl(var(--success))",
+                  backgroundColor:
+                    "color-mix(in srgb, hsl(var(--success)) 10%, transparent)",
+                  label: "Public",
+                },
+                private: {
+                  color: "hsl(var(--warning))",
+                  backgroundColor:
+                    "color-mix(in srgb, hsl(var(--warning)) 10%, transparent)",
+                  label: "Private",
+                },
+              } satisfies StatusMap
+            }
+            className="py-1.5 px-6 text-xs"
+            {...params}
+          />
+        ),
+      },
+      {
+        field: "dealStatus",
+        headerName: "Status",
+        cellRenderer: StatusRenderer,
+        cellRendererParams: {
+          statusMap: {
+            active: {
+              color: "hsl(var(--success))",
+              backgroundColor:
+                "color-mix(in srgb, hsl(var(--success)) 10%, transparent)",
+              label: "Active",
+            },
+            pending: {
+              color: "hsl(var(--warning))",
+              backgroundColor:
+                "color-mix(in srgb, hsl(var(--warning)) 10%, transparent)",
+              label: "Pending",
+            },
+            rejected: {
+              color: "hsl(var(--destructive))",
+              backgroundColor:
+                "color-mix(in srgb, hsl(var(--destructive)) 10%, transparent)",
+              label: "Rejected",
+            },
+          } satisfies StatusMap,
+          className: "py-1.5 px-6 text-xs",
+        },
+      },
+    ],
+    [],
+  );
 
   const colActions: BaseDataGridProps["colActions"] = {
     view: {
       onClick(row) {
-        router.push(`${RouteConstant.deals.path}/${row.dealId}`);
+        const deal = row as unknown as DealEntity;
+        viewDeal.show({
+          title: deal.dealTitle,
+          maxWidth: "default",
+          deal: { ...deal },
+        });
       },
     },
   };
@@ -154,7 +184,7 @@ export default function AdminModerationContent() {
   const rowOptions: BaseDataGridProps["rowOptions"] = [
     {
       optionName: "Approve Deal",
-      onClick(data) {
+      onClick(data, tableAction) {
         const row = data as unknown as DealEntity;
         confirm.show({
           title: "Approve Deal",
@@ -171,6 +201,7 @@ export default function AdminModerationContent() {
                 response?.responseMessage || "Approved Deal Successfully.",
               );
             }
+            tableAction?.refresh();
           },
           confirmButtonProps: {
             isLoading: isLoadingUpdateDealMutation,
@@ -180,7 +211,7 @@ export default function AdminModerationContent() {
     },
     {
       optionName: "Reject Deal",
-      onClick(data) {
+      onClick(data, tableAction) {
         const row = data as unknown as DealEntity;
         confirm.show({
           maxWidth: "sm",
@@ -198,6 +229,7 @@ export default function AdminModerationContent() {
                 response?.responseMessage || "Rejected Deal Successfully.",
               );
             }
+            tableAction?.refresh();
           },
           confirmButtonProps: {
             isLoading: isLoadingUpdateDealMutation,
@@ -214,12 +246,12 @@ export default function AdminModerationContent() {
     >
       <div className="mt-6">
         <BaseDataGrid
+          title={`${total} Pending Approval`}
           ref={gridRef}
-          rows={response?.data || []}
+          fetchRows={handleFetchRows}
           columns={columns}
           uniqueRowId="dealId"
-          paginationMode="client"
-          isLoading={isLoading}
+          autogenerateColumns={false}
           colActions={colActions}
           rowOptions={rowOptions}
         />
