@@ -129,8 +129,22 @@ const DefaultFilterPanel: React.FC<FilterPanelProps> = ({
                                   typeof opt === "string"
                                     ? { value: opt, label: opt }
                                     : {
-                                        value: String(opt.value),
-                                        label: opt.label,
+                                        value: String(
+                                          (
+                                            opt as unknown as {
+                                              value?: string;
+                                              label?: string;
+                                            }
+                                          )?.value,
+                                        ),
+                                        label: String(
+                                          (
+                                            opt as unknown as {
+                                              value?: string;
+                                              label?: string;
+                                            }
+                                          )?.label,
+                                        ),
                                       },
                               ),
                             ]}

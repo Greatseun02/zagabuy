@@ -108,7 +108,7 @@ export const BooleanToggleRenderer = <
         cancelText: "Cancel",
         variant: "default",
         confirmButtonProps: {
-          onclick: async () => {
+          onClick: async () => {
             await onToggle(data, newValue);
           },
         },
