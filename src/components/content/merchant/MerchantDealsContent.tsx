@@ -14,7 +14,6 @@ import {
 import { useAppModal } from "@/hooks/useAppModal";
 import { ConfirmationModal } from "@/components/modals/ConfirmationModal";
 import { ViewMerchantDealModal } from "@/components/modals/ViewMerchantDealModal";
-import { CreateMerchantDealModal } from "@/components/modals/CreateMerchantDealModal";
 import { UpdateMerchantDealModal } from "@/components/modals/UpdateMerchantDealModal";
 import { UpdateMerchantDealVisibilityModal } from "@/components/modals/UpdateMerchantDealVisibilityModal";
 import { ViewMerchantDealAnalyticsModal } from "@/components/modals/ViewMerchantDealAnalyticsModal";
@@ -42,6 +41,8 @@ import {
 import { ExpiryDisplay } from "@/components/custom/countdown/ExpiryDisplay";
 import { BaseUtil } from "@/utilities/baseUtil";
 import { ICellRendererParams } from "ag-grid-community";
+import { useRouter } from "next/navigation";
+import { RouteConstant } from "@/utilities/constants/routeConstant";
 
 export default function MerchantDealsContent() {
   const gridRef = useRef<BaseDataGridRef>(null);
@@ -49,6 +50,7 @@ export default function MerchantDealsContent() {
   const [deleteDeal] = useDeleteDealMutation();
   const { data: dealsData, isLoading: isLoadingDeals } =
     useReadDealByUserQuery();
+  const router = useRouter();
 
   const stats = useMemo(() => {
     const deals = dealsData?.data || [];
@@ -93,7 +95,6 @@ export default function MerchantDealsContent() {
   }, [dealsData?.data]);
   const confirm = useAppModal(ConfirmationModal);
   const viewDealModal = useAppModal(ViewMerchantDealModal);
-  const createDealModal = useAppModal(CreateMerchantDealModal);
   const updateDealModal = useAppModal(UpdateMerchantDealModal);
   const visibilityModal = useAppModal(UpdateMerchantDealVisibilityModal);
   const analyticsModal = useAppModal(ViewMerchantDealAnalyticsModal);
@@ -349,11 +350,7 @@ export default function MerchantDealsContent() {
           text: "Create Deal",
           startIcon: <PlusIcon />,
           onClick: () =>
-            createDealModal.show({
-              title: "Create Deal",
-              maxWidth: "2xl",
-              onSuccess: () => gridRef.current?.actions.refresh(),
-            }),
+            router.push(RouteConstant.merchant.deals.createDeal.path),
         },
       ]}
     >
